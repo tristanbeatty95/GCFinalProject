@@ -16,7 +16,7 @@ import grandcircus.co.WebService.Models.Event;
 import grandcircus.co.WebService.Repo.EventRepo;
 
 @RestController
-public class HomeController {
+public class EventController {
 	@Autowired
 	private EventRepo event_repo;
 	
