@@ -50,17 +50,29 @@ nav {
 	text-align: center;
 }
 
-tbody{
-	border-width: 2px;
+table, th, td{
+	border: 1px solid black
+}
+
+th{
+	background-color: grey;
+	color: white;
+	font-size:20px;
 }
 
 td{
-	border-width: 2px;
-	
+	width:120px;
+	height:100px;
+	vertical-align: top;
 }
 
 table{
-	
+	margin: auto;
+	border-collapse: collapse;
+}
+
+h1{
+	text-align: center;
 }
 
 
