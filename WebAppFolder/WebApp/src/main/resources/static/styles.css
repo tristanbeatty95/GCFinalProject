@@ -1,0 +1,71 @@
+@charset "ISO-8859-1";
+
+.navbar{
+	display:flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+nav {
+  	width: 100%;
+  	padding-left: 10px;
+  	padding-right: 10px;
+  	background-color: #343333;
+}
+
+/* Container for navbar items */
+.nav-links {
+	margin-top:5px;
+  	margin-bottom:5px;
+  	list-style: none;
+  	display:flex;
+}
+
+/* 3 link buttons on navbar */
+.nav-item a {
+  	display: inline-block;
+  	padding: 10px 15px;
+  	margin-right: 5px;
+  	margin-left: 5px;
+  	text-decoration: none;
+  	color: white;
+}
+
+/* "[Company Name]" on navbar */
+.nav-item p{
+	display: inline-block;
+  	padding: 10px 15px;
+  	margin-right: 5px;
+  	margin-left: 5px;
+  	text-decoration: none;
+  	color: white;
+}
+
+#logoutButton{
+	border-radius: 26px;
+}
+
+#companyNameText{
+	font-size: 30px;
+	text-align: center;
+}
+
+tbody{
+	border-width: 2px;
+}
+
+td{
+	border-width: 2px;
+	
+}
+
+table{
+	
+}
+
+
+
+
+
+
+
