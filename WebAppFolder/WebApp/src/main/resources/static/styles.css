@@ -75,6 +75,33 @@ h1{
 	text-align: center;
 }
 
+.calendar-and-daily-info{
+	display:flex;
+	justify-content:space-around;
+	margin: 5% 2% 5% 2%;
+}
+
+.daily-info-section{
+	display:flex;
+	flex-direction: column;
+	justify-content:space-between;
+	background-color: lightgrey;
+	padding:20px;
+	width: 20%;
+}
+
+#day-info-header{
+	text-align:center;
+	font-size: 24px;
+}
+
+#delete-button{
+	background-color:#D15656;
+	padding:5px;
+	text-align:center;
+	display:inline;
+}
+
 
 
 

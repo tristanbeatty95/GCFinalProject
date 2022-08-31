@@ -36,76 +36,82 @@
 	</nav>
 	
 	<!-- Calendar Grid --> 
-	<h1>March 2020</h1>
-	
-	<table>
-	
-		<!-- Table Header (row 6) -->
-		<tr>
-			<th>Sunday</th>
-			<th>Monday</th>
-			<th>Tuesday</th>
-			<th>Wednesday</th>
-			<th>Thursday</th>
-			<th>Friday</th>
-			<th>Saturday</th>
-		</tr>
+	<div class="calendar-and-daily-info">
+		<div>
+			<h1>August 2022</h1>
+			<table>
+				<!-- Table Header (row 6) -->
+				<tr>
+					<th>Sunday</th>
+					<th>Monday</th>
+					<th>Tuesday</th>
+					<th>Wednesday</th>
+					<th>Thursday</th>
+					<th>Friday</th>
+					<th>Saturday</th>
+				</tr>
 		
-		<!-- Week 1 -->
-		<tr>
-			<td>1</td>
-			<td>2</td>
-			<td>3</td>
-			<td>4</td>
-			<td>5</td>
-			<td>6</td>
-			<td>7</td>
-		</tr>
+				<!-- Week 1 -->
+				<tr>
+					<td></td>
+					<td>1</td>
+					<td>2</td>
+					<td>3</td>
+					<td>4</td>
+					<td>5</td>
+					<td>6</td>
+				</tr>
 		
-		<!-- Week 2 -->
-		<tr>
-			<td>8</td>
-			<td>9</td>
-			<td>10</td>
-			<td>11</td>
-			<td>12</td>
-			<td>13</td>
-			<td>14</td>
-		</tr>
+				<!-- Week 2 -->
+				<tr>
+					<td>7</td>
+					<td>8</td>
+					<td>9</td>
+					<td>10</td>
+					<td>11</td>
+					<td>12</td>
+					<td>13</td>
+				</tr>
 		
-		<!-- Week 3 -->
-		<tr>
-			<td>15</td>
-			<td>16</td>
-			<td>17</td>
-			<td>18</td>
-			<td>19</td>
-			<td>20</td>
-			<td>21</td>
-		</tr>
+				<!-- Week 3 -->
+				<tr>
+					<td>14</td>
+					<td>15</td>
+					<td>16</td>
+					<td>17</td>
+					<td>18</td>
+					<td>19</td>
+					<td>20</td>
+				</tr>
 		
-		<!-- Week 4 -->
-		<tr>
-			<td>22</td>
-			<td>23</td>
-			<td>24</td>
-			<td>25</td>
-			<td>26</td>
-			<td>27</td>
-			<td>28</td>
-		</tr>
+				<!-- Week 4 -->
+				<tr>
+					<td>21</td>
+					<td>22</td>
+					<td>23</td>
+					<td>24</td>
+					<td>25</td>
+					<td>26</td>
+					<td>27</td>
+				</tr>
 		
-		<!-- Week 5 -->
-		<tr>
-			<td>29</td>
-			<td>30</td>
-			<td>31</td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-		</tr>
-	</table>
+				<!-- Week 5 -->
+				<tr>
+					<td>28</td>
+					<td>29</td>
+					<td>30</td>
+					<td>31</td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+		<div class="daily-info-section">
+			<h3 id="day-info-header">Day Info</h3>
+			<a href="/delete-event" id="delete-button">Delete</a>
+		</div>
+	</div>
 	
 </body>
 </html>
