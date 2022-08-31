@@ -1,15 +1,9 @@
-package grandcircus.co.WebService.Models;
+package grandcircus.co.WebApp.Models;
 
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-
-@Document("events")
 public class Event {
-	@Id
 	private String id;
 	private Date start;
 	private Date end;
@@ -78,3 +72,4 @@ public class Event {
 	}
 
 }
+

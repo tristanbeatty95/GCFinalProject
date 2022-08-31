@@ -47,15 +47,15 @@ public class EventController {
 	@ResponseBody
 	@ExceptionHandler(EventNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	String characterNotFoundHandler(EventNotFoundException ex) {
+	String eventNotFoundHandler(EventNotFoundException ex) {
 		return ex.getMessage();
 	}
 	
 	@PatchMapping("/event/{id}")
-	public Event patchEvent(@PathVariable("id") String id, @RequestBody Event event, @RequestParam(required=false) String name, 
-			@RequestParam(required=false) Date start,
-			@RequestParam(required=false) Date end,
-			@RequestParam(required=false) List<String> employees) {
+	public Event patchEvent(@PathVariable("id") String id, @RequestParam(required=false) String name, 
+														   @RequestParam(required=false) Date start,
+														   @RequestParam(required=false) Date end,
+														   @RequestParam(required=false) List<String> employees) {
 		Event updatedEvent = event_repo.findById(id).orElseThrow(()-> new EventNotFoundException(id));
 		if(name!=null) {
 			updatedEvent.setEventName(name);
