@@ -1,6 +1,7 @@
 package grandcircus.co.WebApp.Controllers;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.springframework.stereotype.Controller;
@@ -75,13 +76,26 @@ public class WebController {
 		String[] dayNums = new String[35];
 		Arrays.fill(dayNums, 0, dayNums.length, "");
 		int numDaysInMonth = numDaysInMonth(month, year);
-		int startDayOfWeek = calculateDayOfWeek(1, month, year); 
-		for(int i = startDayOfWeek; i < numDaysInMonth; i++) {
-			dayNums[i] = (i + 1 + "");
+		
+		//startDay is offset determined by the start day of the month
+		int startDay = calculateDayOfWeek(1, month, year);
+		
+		//Used for printing the correct day
+		int dayPointer = 1;
+		for(int i = startDay; i <= (numDaysInMonth+startDay-1); i++) {
+			dayNums[i] = dayPointer + "";
+			dayPointer++;
 		}
 		
+		// This is a representation of the dayNums array that is sent to the JSP -->
+		//["", "", "", "",  1,  2,  3,
+		//  4,  5,  6,  7,  8,  9, 10,
+		// 11, 12, 13, 14, 15, 16, 17,
+		// 18, 19, 20, 21, 22, 23, 24,
+		// 25, 26, 27, 28, 29, 30, ""]
+				
 		//Info used and displayed on monthly calendar
-		model.addAttribute("dayNums", dayNums);
+		model.addAttribute("dayNums", new ArrayList<String>(Arrays.asList(dayNums)));
 		model.addAttribute("year", year);
 		model.addAttribute("monthStr", monthStr);
 		model.addAttribute("monthNum", month);
