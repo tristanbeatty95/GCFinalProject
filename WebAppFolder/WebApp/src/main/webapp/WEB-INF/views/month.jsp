@@ -38,7 +38,7 @@
 	<!-- Calendar Grid --> 
 	<div class="calendar-and-daily-info">
 		<div>
-			<h1>August 2022</h1>
+			<h1><c:out value="${monthStr}"/> <c:out value="${year}"/></h1>
 			<table>
 				<!-- Table Header (row 6) -->
 				<tr>
