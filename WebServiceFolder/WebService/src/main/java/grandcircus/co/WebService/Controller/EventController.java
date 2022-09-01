@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.*;
 
+import grandcircus.co.WebService.Exceptions.EventCannotBeCreatedException;
 import grandcircus.co.WebService.Exceptions.EventNotFoundException;
 import grandcircus.co.WebService.Models.Event;
 import grandcircus.co.WebService.Repo.EventRepo;
@@ -21,13 +22,22 @@ public class EventController {
 	private EventRepo event_repo;
 	
 	@GetMapping("/event")
-	public List<Event> getAllEvents(){
+	public List<Event> getAllEvents(@RequestParam(required = false) String employees){
+		if (employees != null) {
+			return event_repo.findByEmployees(employees);
+		}
 		return event_repo.findAll();
 	}
 	@GetMapping("/event/{id}")
 	public Event getEventById(@PathVariable("id") String id) {
-		return event_repo.findById(id).orElseThrow(() -> new EventNotFoundException(id));
+		return event_repo.findById(id).orElseThrow(() -> new EventNotFoundException());
 	}
+	/*
+	 * @GetMapping("/event/{employees}") public List<Event>
+	 * getEventByEmployee(@PathVariable("employees") String employees) { return
+	 * event_repo.findByEmployees(employees); }
+	 */
+	
 	@PostMapping("/event")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Event createEvent(@RequestBody Event event) {
@@ -44,10 +54,17 @@ public class EventController {
 	public void deleteEvent(@PathVariable("id") String id) {
 		event_repo.deleteById(id);
 	}
+
 	@ResponseBody
 	@ExceptionHandler(EventNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	String eventNotFoundHandler(EventNotFoundException ex) {
+		return ex.getMessage();
+	}
+	@ResponseBody
+	@ExceptionHandler(EventCannotBeCreatedException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	String eventCannotBeCreatedHandler(EventCannotBeCreatedException ex) {
 		return ex.getMessage();
 	}
 	
@@ -56,7 +73,7 @@ public class EventController {
 														   @RequestParam(required=false) Date start,
 														   @RequestParam(required=false) Date end,
 														   @RequestParam(required=false) List<String> employees) {
-		Event updatedEvent = event_repo.findById(id).orElseThrow(()-> new EventNotFoundException(id));
+		Event updatedEvent = event_repo.findById(id).orElseThrow(()-> new EventNotFoundException());
 		if(name!=null) {
 			updatedEvent.setEventName(name);
 		}
@@ -72,5 +89,6 @@ public class EventController {
 		updatedEvent.setId(id);
 		return event_repo.save(updatedEvent);
 	}
+	
 
 }
