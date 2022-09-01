@@ -1,5 +1,6 @@
 package grandcircus.co.WebService.Controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,14 +21,28 @@ import grandcircus.co.WebService.Repo.EventRepo;
 public class EventController {
 	@Autowired
 	private EventRepo event_repo;
-	
+
 	@GetMapping("/event")
-	public List<Event> getAllEvents(@RequestParam(required = false) String employees){
+	public List<Event> getAllEvents(@RequestParam(required = false) String employees,
+			@RequestParam(required = false) Date start, @RequestParam(required = false) Date end) {
 		if (employees != null) {
 			return event_repo.findByEmployees(employees);
+			//code below needs to be checked because failed to convert value of type string to date.  
+		} else if (start != null && end != null) {
+			List<Event> events = event_repo.findAll();
+			List<Event> results = new ArrayList<>();
+			for (int i = 0; i < events.size(); i++) {
+				Event curr = events.get(i);
+				if (curr.getStart().after(start) && curr.getEnd().before(end))
+					results.add(curr);
+			}
+			return results;
+		} else {
+			return event_repo.findAll();
 		}
-		return event_repo.findAll();
+
 	}
+
 	@GetMapping("/event/{id}")
 	public Event getEventById(@PathVariable("id") String id) {
 		return event_repo.findById(id).orElseThrow(() -> new EventNotFoundException());
@@ -37,20 +52,22 @@ public class EventController {
 	 * getEventByEmployee(@PathVariable("employees") String employees) { return
 	 * event_repo.findByEmployees(employees); }
 	 */
-	
+
 	@PostMapping("/event")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Event createEvent(@RequestBody Event event) {
 		event_repo.insert(event);
 		return event;
 	}
+
 	@PutMapping("/event/{id}")
 	public Event updateEvent(@RequestBody Event event, @PathVariable("id") String id) {
 		event.setId(id);
 		return event_repo.save(event);
 	}
+
 	@DeleteMapping("/event/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT) 
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteEvent(@PathVariable("id") String id) {
 		event_repo.deleteById(id);
 	}
@@ -61,34 +78,33 @@ public class EventController {
 	String eventNotFoundHandler(EventNotFoundException ex) {
 		return ex.getMessage();
 	}
+
 	@ResponseBody
 	@ExceptionHandler(EventCannotBeCreatedException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	String eventCannotBeCreatedHandler(EventCannotBeCreatedException ex) {
 		return ex.getMessage();
 	}
-	
+
 	@PatchMapping("/event/{id}")
-	public Event patchEvent(@PathVariable("id") String id, @RequestParam(required=false) String name, 
-														   @RequestParam(required=false) Date start,
-														   @RequestParam(required=false) Date end,
-														   @RequestParam(required=false) List<String> employees) {
-		Event updatedEvent = event_repo.findById(id).orElseThrow(()-> new EventNotFoundException());
-		if(name!=null) {
+	public Event patchEvent(@PathVariable("id") String id, @RequestParam(required = false) String name,
+			@RequestParam(required = false) Date start, @RequestParam(required = false) Date end,
+			@RequestParam(required = false) List<String> employees) {
+		Event updatedEvent = event_repo.findById(id).orElseThrow(() -> new EventNotFoundException());
+		if (name != null) {
 			updatedEvent.setEventName(name);
 		}
-		if(start!=null) {
+		if (start != null) {
 			updatedEvent.setStart(start);
 		}
-		if(end!=null) {
+		if (end != null) {
 			updatedEvent.setEnd(end);
 		}
-		if(employees!=null) {
+		if (employees != null) {
 			updatedEvent.setEmployees(employees);
 		}
 		updatedEvent.setId(id);
 		return event_repo.save(updatedEvent);
 	}
-	
 
 }
