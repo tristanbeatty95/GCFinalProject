@@ -81,6 +81,8 @@
 						<td>${dayNum}</td>
 					</c:forEach>
 				</tr>
+				
+				
 			</table>
 		</div>
 		<div class="daily-info-section">

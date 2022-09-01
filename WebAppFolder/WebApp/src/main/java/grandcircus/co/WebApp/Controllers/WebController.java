@@ -82,7 +82,7 @@ public class WebController {
 		
 		//Used for printing the correct day
 		int dayPointer = 1;
-		for(int i = startDay; i <= (numDaysInMonth+startDay-1); i++) {
+		for(int i = startDay; i < (numDaysInMonth + startDay-1); i++) {
 			dayNums[i] = dayPointer + "";
 			dayPointer++;
 		}
