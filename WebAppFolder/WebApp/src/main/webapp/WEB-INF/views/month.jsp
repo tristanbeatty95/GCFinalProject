@@ -10,6 +10,7 @@
 <!-- Import link for tailwind --> 
 <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<script src="https://kit.fontawesome.com/aa77e8e357.js" crossorigin="anonymous"></script>
 <title>Monthly Calendar</title>
 </head>
 <body>
@@ -38,7 +39,14 @@
 	<!-- Calendar Grid --> 
 	<div class="calendar-and-daily-info">
 		<div>
-			<h1><c:out value="${monthStr}"/> <c:out value="${year}"/></h1>
+			<div class="month-navigation">
+				<a id="prevButton" href="/monthly-calendar?month=${prevMonth}&year=${prevYear}"><i class="fa-solid fa-arrow-left"></i></a>
+			
+				<p id="month-header-text"><c:out value="${monthStr}"/> <c:out value="${year}"/></p>
+			
+				<a id="nextButton" href="/monthly-calendar?month=${nextMonth}&year=${nextYear}"><i class="fa-solid fa-arrow-right"></i></a>
+			</div>
+			
 			<table>
 				<!-- Table Header (row 6) -->
 				<tr>
@@ -82,7 +90,11 @@
 					</c:forEach>
 				</tr>
 				
-				
+				<tr>
+					<c:forEach var="dayNum" items="${dayNums}" begin="35" end="41">
+						<td>${dayNum}</td>
+					</c:forEach>
+				</tr>
 			</table>
 		</div>
 		<div class="daily-info-section">

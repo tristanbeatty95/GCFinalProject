@@ -102,6 +102,29 @@ h1{
 	display:inline;
 }
 
+.month-navigation{
+	display:flex;
+	flex-direction:row;
+	justify-content:center;
+	margin-bottom: 2%;
+	margin-top: 2%;
+}
+
+#month-header-text{
+	text-align: center;
+	font-size:22px;
+	margin:0;
+	padding:0;
+}
+
+#prevButton{
+	margin-right:2%;	
+}
+
+#nextButton{
+	margin-left:2%;	
+}
+
 
 
 

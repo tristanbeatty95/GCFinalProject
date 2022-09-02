@@ -71,20 +71,40 @@ public class WebController {
 					 break;
 		}
 		
-		//Array stores the values of each gridpoint on the calendar...
-		//either an empty string if the gridpoint is not occupied, otherwise the day number
-		String[] dayNums = new String[35];
-		Arrays.fill(dayNums, 0, dayNums.length, "");
+		//find the number of days in the currently views month
 		int numDaysInMonth = numDaysInMonth(month, year);
-		
+				
 		//startDay is offset determined by the start day of the month
 		int startDay = calculateDayOfWeek(1, month, year);
 		
+		//Array stores the values of each gridpoint on the calendar...
+		//either an empty string if the gridpoint is not occupied, otherwise the day number
+		String[] dayNums;
+		if(numDaysInMonth + startDay > 35) dayNums = new String[42];
+		else dayNums = new String[35];
+		Arrays.fill(dayNums, 0, dayNums.length, "");
+		
 		//Used for printing the correct day
 		int dayNum = 1;
-		for(int i = startDay; i < (numDaysInMonth + startDay-1); i++) {
+		for(int i = startDay; i < (numDaysInMonth + startDay); i++) {
 			dayNums[i] = dayNum + "";
 			dayNum++;
+		}
+		
+		//Add first few days of next month to fill in whitespace
+		dayNum = 1;
+		for(int i = (numDaysInMonth + startDay); i < dayNums.length; i++) {
+			dayNums[i] = dayNum + "";
+			dayNum++;
+		}
+		
+		//Add last few days of previous month to fill in whitespace
+		if(month <= 1) dayNum = numDaysInMonth(12, year-1); 
+		else dayNum = numDaysInMonth(month - 1, year);
+		
+		for(int i = startDay - 1; i >= 0; i--) {
+			dayNums[i] = dayNum + "";
+			dayNum--;
 		}
 		
 		// This is a representation of the dayNums array that is sent to the JSP -->
@@ -93,8 +113,27 @@ public class WebController {
 		// 11, 12, 13, 14, 15, 16, 17,
 		// 18, 19, 20, 21, 22, 23, 24,
 		// 25, 26, 27, 28, 29, 30, ""]
+		
+		//Variables for switching between differnt months on the view
+		int prevYear = year;
+		int prevMonth = month - 1;
+		int nextYear = year;
+		int nextMonth = month + 1;
+		
+		if(prevMonth < 1) {
+			prevMonth = 12;
+			prevYear--;;
+		}
+		else if(nextMonth > 12) {
+			nextMonth = 1;
+			nextYear++;
+		}
 				
 		//Info used and displayed on monthly calendar
+		model.addAttribute("prevYear", prevYear);
+		model.addAttribute("nextYear", nextYear);
+		model.addAttribute("prevMonth", prevMonth);
+		model.addAttribute("nextMonth", nextMonth);
 		model.addAttribute("dayNums", new ArrayList<String>(Arrays.asList(dayNums)));
 		model.addAttribute("year", year);
 		model.addAttribute("monthStr", monthStr);
@@ -163,7 +202,7 @@ public class WebController {
 
 	@RequestMapping("/weekly-calendar")
 	public String displayWeek(Model model) {
-
+		
 		return "week";
 	}
 	
