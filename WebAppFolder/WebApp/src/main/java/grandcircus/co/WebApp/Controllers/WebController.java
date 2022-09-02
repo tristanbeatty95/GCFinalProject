@@ -3,9 +3,12 @@ package grandcircus.co.WebApp.Controllers;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -332,10 +335,18 @@ public class WebController {
 		return "week";
 	}
 	
-	@RequestMapping("/add-event")
-	public String displayAddEvent(Model model) {
-
-		return "add-event";
+	@PostMapping("/submitEvent")
+	public String submitEvent(
+			@RequestParam String eventName, @RequestParam Date start, @RequestParam Date end, 
+			@RequestParam String addEmployees, Model model) {
+		String str = addEmployees;
+		List<String> employees = new ArrayList<>(Arrays.asList(str.split(",")));
+//		model.addAttribute("eventName", eventName);
+//		model.addAttribute("start", start);
+//		model.addAttribute("end", end);
+//		model.addAttribute("addEmployees", addEmployees);
+//		model.addAttribute("employees", employees);
+		return "month";
 	}
 
 	@RequestMapping("/find-time")

@@ -42,14 +42,14 @@
 			<a href="#" class="close">&times;</a>
 			<div class="content">
 				<div class="container">
-					<form>
+					<form action="submitEvent" method="post">
 						<label for="eventName">Event Name</label>
-						<input type="text" id="eventName" placeholder="event name">
+						<input type="text" id="eventName" name="eventName" placeholder="Event name">
 						<label for="startTime">Start Time</label>
-						<input type="datetime-local" id="startTime">
+						<input type="datetime-local" name="start" id="startTime">
 						<br>
 						<label for="endTime">End Time</label> 
-						<input type="datetime-local" id="endTime">
+						<input type="datetime-local" name="end" id="endTime">
 						<br>
 						<label for="addEmployees">Add Employees</label>
 						<textarea id="addEmployees" name="addEmployees" placeholder="Add multiple employees by separating with a comma"

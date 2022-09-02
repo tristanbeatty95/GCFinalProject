@@ -9,13 +9,12 @@ import grandcircus.co.WebApp.Models.Event;
 @Service
 public class EventService {
 	private RestTemplate restTemplate = new RestTemplate();
-	
+
 	public Event getEventById(String id) {
-		//!!URL will change when project is hosted on AWS!!
+		// !!URL will change when project is hosted on AWS!!
 		String url = "http://localhost:8080/event/" + id;
 		Event thatEvent = restTemplate.getForObject(url, Event.class, id);
 		return thatEvent;
 	}
-	
-	
+
 }
