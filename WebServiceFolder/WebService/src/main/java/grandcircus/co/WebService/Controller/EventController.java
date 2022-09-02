@@ -1,9 +1,11 @@
 package grandcircus.co.WebService.Controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,13 +26,16 @@ public class EventController {
 
 	@GetMapping("/event")
 	public List<Event> getAllEvents(@RequestParam(required = false) String employees,
-			@RequestParam(required = false) Date start, @RequestParam(required = false) Date end) {
+			@RequestParam(required = false) String startTime, @RequestParam(required = false) String endTime) throws ParseException  {
 		if (employees != null) {
 			return event_repo.findByEmployees(employees);
-			//code below needs to be checked because failed to convert value of type string to date.  
-		} else if (start != null && end != null) {
+			//code below needs to be checked because failed to convert value of type 
+		} else if (startTime != null && endTime != null) {
 			List<Event> events = event_repo.findAll();
 			List<Event> results = new ArrayList<>();
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSSXXX\r\n", Locale.ENGLISH);
+			Date start = formatter.parse(startTime);
+			Date end = formatter.parse(endTime);
 			for (int i = 0; i < events.size(); i++) {
 				Event curr = events.get(i);
 				if (curr.getStart().after(start) && curr.getEnd().before(end))
