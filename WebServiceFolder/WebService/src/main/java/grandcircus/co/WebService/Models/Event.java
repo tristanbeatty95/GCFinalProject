@@ -1,5 +1,7 @@
 package grandcircus.co.WebService.Models;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -11,8 +13,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Event {
 	@Id
 	private String id;
-	private Date start;
-	private Date end;
+	private LocalDateTime start;
+	private LocalDateTime end;
 	private String eventName;
 	private Double duration;
 	private List<String> employees;
@@ -25,19 +27,19 @@ public class Event {
 		this.id = id;
 	}
 
-	public Date getStart() {
+	public LocalDateTime getStart() {
 		return start;
 	}
 
-	public void setStart(Date start) {
-		this.start = start;
+	public void setStart(LocalDateTime start2) {
+		this.start = start2;
 	}
 
-	public Date getEnd() {
+	public LocalDateTime getEnd() {
 		return end;
 	}
 
-	public void setEnd(Date end) {
+	public void setEnd(LocalDateTime end) {
 		this.end = end;
 	}
 
@@ -65,7 +67,7 @@ public class Event {
 		this.employees = employees;
 	}
 
-	public Event(Date start, Date end, String eventName, List<String> employees, Double duration) {
+	public Event(LocalDateTime start, LocalDateTime end, String eventName, List<String> employees, Double duration) {
 
 		this.start = start;
 		this.end = end;
@@ -76,5 +78,5 @@ public class Event {
 	public Event() {
 		
 	}
-
+	
 }

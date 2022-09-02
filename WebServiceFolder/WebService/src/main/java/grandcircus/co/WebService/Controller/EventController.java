@@ -2,6 +2,8 @@ package grandcircus.co.WebService.Controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,20 +28,26 @@ public class EventController {
 
 	@GetMapping("/event")
 	public List<Event> getAllEvents(@RequestParam(required = false) String employees,
-			@RequestParam(required = false) String startTime, @RequestParam(required = false) String endTime) throws ParseException  {
+			@RequestParam(required = false) String startTime, @RequestParam(required = false) String endTime) {
 		if (employees != null) {
 			return event_repo.findByEmployees(employees);
-			//code below needs to be checked because failed to convert value of type 
+			// code below needs to be checked because failed to convert value of type
 		} else if (startTime != null && endTime != null) {
 			List<Event> events = event_repo.findAll();
 			List<Event> results = new ArrayList<>();
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSSXXX\r\n", Locale.ENGLISH);
-			Date start = formatter.parse(startTime);
-			Date end = formatter.parse(endTime);
+			// SimpleDateFormat formatter = new
+			// SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSSXXX\r\n", Locale.ENGLISH);
+			LocalDateTime start = LocalDateTime.parse(startTime);
+			
+			System.out.println(start);
+			//LocalDateTime end = LocalDateTime.parse(endTime);
 			for (int i = 0; i < events.size(); i++) {
 				Event curr = events.get(i);
-				if (curr.getStart().after(start) && curr.getEnd().before(end))
+	
+				if (curr.getStart().isAfter(start)) {
 					results.add(curr);
+					return results;
+				}
 			}
 			return results;
 		} else {
@@ -93,7 +101,7 @@ public class EventController {
 
 	@PatchMapping("/event/{id}")
 	public Event patchEvent(@PathVariable("id") String id, @RequestParam(required = false) String name,
-			@RequestParam(required = false) Date start, @RequestParam(required = false) Date end,
+			@RequestParam(required = false) LocalDateTime start, @RequestParam(required = false) LocalDateTime end,
 			@RequestParam(required = false) List<String> employees) {
 		Event updatedEvent = event_repo.findById(id).orElseThrow(() -> new EventNotFoundException());
 		if (name != null) {
