@@ -1,8 +1,10 @@
 package grandcircus.co.WebApp.Controllers;
 
 import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.GregorianCalendar;
 import java.util.Date;
 import java.util.List;
 
@@ -204,7 +206,7 @@ public class WebController {
 	}
 
 	@RequestMapping("/weekly-calendar")
-	public String displayWeek(Model model, @RequestParam String month) {
+	public String displayWeek(Model model, @RequestParam String month, @RequestParam(required=false) Integer weekNum) {
 		//Create String Array that represents each week day
 		String[] dayNums = new String[7];
 		
@@ -214,7 +216,7 @@ public class WebController {
 		int month1 = currentDate.getMonthValue();
 		int year = currentDate.getYear();
 		
-		//ASK FOR HELP HERE...not sure if this is relevant
+		//Fill array with current info
 		Arrays.fill(dayNums, day, dayNums.length, "");
 		
 		//currentDay is calculated
@@ -222,6 +224,14 @@ public class WebController {
 		
 		//Used for printing the correct day number on the correct day of week
 		int dayNumber = currentDay;
+		
+		//Calculate the current week of the year\
+		Date date = new Date();
+		GregorianCalendar cal = new GregorianCalendar();
+		cal.setFirstDayOfWeek(GregorianCalendar.SUNDAY);
+		cal.setMinimalDaysInFirstWeek(1);
+		cal.setTime(date);
+		int weekOfYear = cal.get(GregorianCalendar.WEEK_OF_YEAR);
 		
 		//The following if statements place the day of the month into
 		//each day of the week on the view and return an empty string
@@ -327,7 +337,12 @@ public class WebController {
 						day++;
 					}
 				}
-		
+		int prevWeek = weekOfYear - 1;
+		int nextWeek= weekOfYear + 1;
+				
+		model.addAttribute("nextWeek", nextWeek);
+		model.addAttribute("weekOfYear", weekOfYear);
+		model.addAttribute("prevWeek", prevWeek);
 		model.addAttribute("monthStr", month);
 		model.addAttribute("year", year);
 		model.addAttribute("dayNums", new ArrayList<String>(Arrays.asList(dayNums)));
