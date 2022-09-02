@@ -82,10 +82,10 @@ public class WebController {
 		int startDay = calculateDayOfWeek(1, month, year);
 		
 		//Used for printing the correct day
-		int dayPointer = 1;
+		int dayNum = 1;
 		for(int i = startDay; i < (numDaysInMonth + startDay-1); i++) {
-			dayNums[i] = dayPointer + "";
-			dayPointer++;
+			dayNums[i] = dayNum + "";
+			dayNum++;
 		}
 		
 		// This is a representation of the dayNums array that is sent to the JSP -->
@@ -154,7 +154,9 @@ public class WebController {
 	public int numDaysInMonth(int monthNum, int year) {
 		int leapYearCode = 0;
 		int[] numDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-		if(((year % 4 == 0 && year % 100 != 0)|| year % 400 == 0) && (monthNum == 1))
+		
+		//Checks if its a leap year
+		if(((year % 4 == 0 && year % 100 != 0)|| year % 400 == 0) && (monthNum == 2))
 			leapYearCode = 1;
 		
 		return numDays[monthNum - 1] + leapYearCode;

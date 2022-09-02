@@ -19,8 +19,8 @@
 			<li style="background-color:#8D8D8D" class="nav-item">
 				<a href="/weekly-calendar?month=${monthStr}" style="color:#FFFFFF">Weekly View</a>
 			</li>
-			<li style="background-color:#8D8D8D" class="nav-item">
-				<a href="/add-event" style="color:#FFFFFF">Add Event</a>
+			<li style="background-color:#8D8D8D" class="nav-item" class="button">
+				<a href="#divOne" style="color:#FFFFFF">Add Event</a>
 			</li>
 		</ul>
 		<ul class="nav-links">
@@ -34,6 +34,31 @@
 			</li>
 		</ul>
 	</nav>
+	
+	<div class="overlay" id="divOne">
+		<div class="wrapper">
+			
+			<a href="#" class="close">&times;</a>
+			<div class="content">
+				<div class="container">
+					<form>
+						<label for="eventName">Event Name</label>
+						<input type="text" id="eventName" placeholder="event name">
+						<label for="startTime">Start Time</label>
+						<input type="datetime-local" id="startTime">
+						<br>
+						<label for="endTime">End Time</label> 
+						<input type="datetime-local" id="endTime">
+						<br>
+						<label for="addEmployees">Add Employees</label>
+						<textarea id="addEmployees" name="addEmployees" placeholder="Add multiple employees by separating with a comma"
+						rows="3" cols="30"></textarea>
+						<input type="submit" value="Submit"> 	
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 	
 	<!-- Calendar Grid --> 
 	<div class="calendar-and-daily-info">
