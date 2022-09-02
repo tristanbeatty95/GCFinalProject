@@ -1,5 +1,6 @@
 package grandcircus.co.WebApp.Controllers;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -160,8 +161,134 @@ public class WebController {
 	}
 
 	@RequestMapping("/weekly-calendar")
-	public String displayWeek(Model model) {
-
+	public String displayWeek(Model model, @RequestParam String month) {
+		//Create String Array that represents each week day
+		String[] dayNums = new String[7];
+		
+		//Calculate the current day to know which week to default to
+		LocalDate currentDate = LocalDate.now();
+		int day = currentDate.getDayOfMonth();
+		int month1 = currentDate.getMonthValue();
+		int year = currentDate.getYear();
+		
+		//ASK FOR HELP HERE...not sure if this is relevant
+		Arrays.fill(dayNums, day, dayNums.length, "");
+		
+		//currentDay is calculated
+		int currentDay = calculateDayOfWeek(day, month1, year);
+		
+		//Used for printing the correct day number on the correct day of week
+		int dayNumber = currentDay;
+		
+		//The following if statements place the day of the month into
+		//each day of the week on the view and return an empty string
+		//if the date goes out of range
+		
+		//if today is Sunday
+		if(dayNumber == 0) {
+			for(int i = dayNumber; i < 7; i++) {
+				dayNums[i] = day + "";
+				if(dayNums[i].equals("32")
+						|| dayNums[i].equals("33")|| dayNums[i].equals("34")
+						|| dayNums[i].equals("35")|| dayNums[i].equals("36")
+						|| dayNums[i].equals("37")) {
+					dayNums[i] = "";
+				}
+				dayNumber++;
+				day++;
+			}
+		}
+		//if today is Monday
+				if(dayNumber == 1) {
+					for(int i = dayNumber-1; i < 7; i++) {
+						dayNums[i] = day-1 + "";
+						if(dayNums[i].equals("0")|| dayNums[i].equals("32")
+								|| dayNums[i].equals("33")|| dayNums[i].equals("34")
+								|| dayNums[i].equals("35")|| dayNums[i].equals("36")) {
+							dayNums[i] = "";
+						}
+						dayNumber++;
+						day++;
+					}
+				}
+		//if today is Tuesday
+		if(dayNumber == 2) {
+			for(int i = dayNumber-2; i < 7; i++) {
+				dayNums[i] = day-2 + "";
+				if(dayNums[i].equals("0") 
+						|| dayNums[i].equals("-1")|| dayNums[i].equals("32")
+						|| dayNums[i].equals("33")|| dayNums[i].equals("34")
+						|| dayNums[i].equals("35")) {
+					dayNums[i] = "";
+				}
+				dayNumber++;
+				day++;
+			}
+		}
+		//if today is Wednesday
+				if(dayNumber == 3) {
+					for(int i = dayNumber-3; i < 7; i++) {
+						dayNums[i] = day-3 + "";
+						if(dayNums[i].equals("0") 
+								|| dayNums[i].equals("-1")|| dayNums[i].equals("32")
+								|| dayNums[i].equals("-2")|| dayNums[i].equals("33")
+								|| dayNums[i].equals("34")) {
+							dayNums[i] = "";
+						}
+						dayNumber++;
+						day++;
+					}
+				}
+		//if today is Thursday
+		if(dayNumber == 4) {
+			for(int i = dayNumber-4; i < 7; i++) {
+				dayNums[i] = day-4 + "";
+					if(dayNums[i].equals("0") 
+							|| dayNums[i].equals("-1")|| dayNums[i].equals("32")
+							|| dayNums[i].equals("-2")|| dayNums[i].equals("33") 
+							|| dayNums[i].equals("-3")) {
+						dayNums[i] = "";
+					}
+				dayNumber++;
+				day++;
+			}
+		}
+		//if today is Friday
+				if(dayNumber == 5) {
+					for(int i = dayNumber-5; i < 7; i++) {
+						dayNums[i] = day-5 + "";
+							if(dayNums[i].equals("0") 
+									|| dayNums[i].equals("-1")|| dayNums[i].equals("32")
+									|| dayNums[i].equals("-2") 
+									|| dayNums[i].equals("-3")
+									|| dayNums[i].equals("-4")) {
+								dayNums[i] = "";
+							}
+						dayNumber++;
+						day++;
+					}
+				}
+				//if today is Saturday
+				if(dayNumber == 6) {
+					for(int i = dayNumber-6; i < 7; i++) {
+						dayNums[i] = day-6 + "";
+							if(dayNums[i].equals("0") 
+									|| dayNums[i].equals("-1")
+									|| dayNums[i].equals("-2") 
+									|| dayNums[i].equals("-3")
+									|| dayNums[i].equals("-4")
+									|| dayNums[i].equals("-5")) {
+								dayNums[i] = "";
+							}
+						dayNumber++;
+						day++;
+					}
+				}
+		
+		model.addAttribute("monthStr", month);
+		model.addAttribute("year", year);
+		model.addAttribute("dayNums", new ArrayList<String>(Arrays.asList(dayNums)));
+		
 		return "week";
 	}
 	

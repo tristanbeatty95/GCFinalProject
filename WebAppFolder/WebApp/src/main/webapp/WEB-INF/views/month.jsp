@@ -17,7 +17,7 @@
 	<nav class="navbar">
 		<ul class="nav-links">
 			<li style="background-color:#8D8D8D" class="nav-item">
-				<a href="/weekly-calendar" style="color:#FFFFFF">Weekly View</a>
+				<a href="/weekly-calendar?month=${monthStr}" style="color:#FFFFFF">Weekly View</a>
 			</li>
 			<li style="background-color:#8D8D8D" class="nav-item">
 				<a href="/add-event" style="color:#FFFFFF">Add Event</a>
