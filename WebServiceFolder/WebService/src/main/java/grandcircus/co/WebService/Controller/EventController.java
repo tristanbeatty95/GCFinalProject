@@ -1,5 +1,7 @@
 package grandcircus.co.WebService.Controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,23 +26,30 @@ public class EventController {
 
 	@GetMapping("/event")
 	public List<Event> getAllEvents(@RequestParam(required = false) String employees,
-			@RequestParam(required = false) Date start, @RequestParam(required = false) Date end) {
+			@RequestParam(required = false) String start, @RequestParam(required = false) String end) throws ParseException {
+		// If the list of employees is a param, return events with those employees
 		if (employees != null) {
 			return event_repo.findByEmployees(employees);
-			//code below needs to be checked because failed to convert value of type string to date.  
+		
+		// Return items within the time frames if they are present
 		} else if (start != null && end != null) {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			Date startDate = formatter.parse(start);
+			Date endDate = formatter.parse(end);
+			
 			List<Event> events = event_repo.findAll();
 			List<Event> results = new ArrayList<>();
+			
 			for (int i = 0; i < events.size(); i++) {
 				Event curr = events.get(i);
-				if (curr.getStart().after(start) && curr.getEnd().before(end))
+
+				if ((curr.getStart().compareTo(startDate) >= 0) && (curr.getEnd().compareTo(endDate) <= 0))
 					results.add(curr);
 			}
 			return results;
 		} else {
 			return event_repo.findAll();
 		}
-
 	}
 
 	@GetMapping("/event/{id}")
