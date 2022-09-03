@@ -42,9 +42,13 @@ public class EventController {
 			
 			for (int i = 0; i < events.size(); i++) {
 				Event curr = events.get(i);
-
-				if ((curr.getStart().compareTo(startDate) >= 0) && (curr.getEnd().compareTo(endDate) <= 0))
-					results.add(curr);
+				
+				//Works for multiple day events as well as single day events
+				if((curr.getStart().getTime() < endDate.getTime() && (curr.getEnd().getTime() > startDate.getTime())))
+						results.add(curr);
+//				if (((curr.getStart().compareTo(startDate) >= 0) && (curr.getEnd().compareTo(endDate) <= 0))
+//						|| ((curr.getStart().compareTo(startDate) <= 0) && (curr.getStart().compareTo(endDate) >= 0)))
+//					results.add(curr);
 			}
 			return results;
 		} else {

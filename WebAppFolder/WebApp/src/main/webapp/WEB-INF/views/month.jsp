@@ -92,6 +92,7 @@
 							<br>
 							<c:forEach var="event" items="${dailyEvents[dayNum]}">
 								${event.eventName}
+								<br>
 							</c:forEach>
 						</td>
 					</c:forEach>
@@ -104,6 +105,7 @@
 							<br>
 							<c:forEach var="event" items="${dailyEvents[dayNum]}">
 								${event.eventName}
+								<br>
 							</c:forEach>
 						</td>
 					</c:forEach>
@@ -116,6 +118,7 @@
 							<br>
 							<c:forEach var="event" items="${dailyEvents[dayNum]}">
 								${event.eventName}
+								<br>
 							</c:forEach>
 						</td>
 					</c:forEach>
@@ -128,6 +131,7 @@
 							<br>
 							<c:forEach var="event" items="${dailyEvents[dayNum]}">
 								${event.eventName}
+								<br>
 							</c:forEach>
 						</td>
 					</c:forEach>
@@ -140,6 +144,7 @@
 							<br>
 							<c:forEach var="event" items="${dailyEvents[dayNum]}">
 								${event.eventName}
+								<br>
 							</c:forEach>
 						</td>
 					</c:forEach>
@@ -152,6 +157,7 @@
 							<br>
 							<c:forEach var="event" items="${dailyEvents[dayNum]}">
 								${event.eventName}
+								<br>
 							</c:forEach>
 						</td>
 					</c:forEach>
