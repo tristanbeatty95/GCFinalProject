@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import grandcircus.co.WebApp.Models.Event;
+import grandcircus.co.WebApp.Services.DaysOfTheYearService;
 import grandcircus.co.WebApp.Services.EventService;
 
 @Controller
@@ -23,6 +24,9 @@ public class WebController {
 	
 	@Autowired
 	private EventService eventService;
+	
+	@Autowired
+	private DaysOfTheYearService dayService;
 	
 //	//Home page after we complete MVP
 //	@RequestMapping("/login")
@@ -363,6 +367,14 @@ public class WebController {
 
 		return "find-time";
 	}
+	
+	@RequestMapping("/test")
+	public String displayTest(Model model) {
+		System.out.println(dayService.dayEventDataResponse().getDayEvents());
+	
+		return "redirect:/monthly-calendar";
+	}
+	
 
 }
 
