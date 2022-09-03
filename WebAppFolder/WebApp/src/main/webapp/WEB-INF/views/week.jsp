@@ -63,7 +63,7 @@
 	<!-- Calendar Grid -->
 	<div class="calendar-and-daily-info">
 		<div class="month-navigation">
-			<a id="prevButton" href="/weekly-calendar?Month=${monthStr}&weekNum=${prevWeek}"><i class="fa-solid fa-arrow-left"></i></a>
+			<a id="prevButton" href="/weekly-calendar?Month=${monthNum}&weekNum=${prevWeek}"><i class="fa-solid fa-arrow-left"></i></a>
 
 <!-- Gets current month and year as a String -->
 			<p id="month-header-text">
@@ -71,7 +71,7 @@
 				<c:out value="${year}" />
 			</p>
 
-			<a id="nextButton" href="/weekly-calendar?Month=${monthStr}&weekNum=${nextWeek}"><i class="fa-solid fa-arrow-right"></i></a>
+			<a id="nextButton" href="/weekly-calendar?Month=${monthNum}&weekNum=${nextWeek}"><i class="fa-solid fa-arrow-right"></i></a>
 			
 		</div>
 		<div>
@@ -110,7 +110,7 @@
 		</div>
 	</div>
 	<div class="center">Powered by <a title="Days Of The Year" href="https://www.daysoftheyear.com">Days Of The Year</a></div>
-	
+	${weekOfYear }
 
 </body>
 </html>
