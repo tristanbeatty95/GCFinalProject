@@ -16,5 +16,11 @@ public class EventService {
 		Event thatEvent = restTemplate.getForObject(url, Event.class, id);
 		return thatEvent;
 	}
+	
+	public Event[] getEventsByTimeRange(String start, String end){
+		String url = "http://localhost:8080/event?start=" + start + "&end=" + end;
+		Event[] response = restTemplate.getForObject(url, Event[].class);
+		return response;
+	}
 
 }

@@ -3,18 +3,26 @@ package grandcircus.co.WebApp.Controllers;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import grandcircus.co.WebApp.Models.Event;
+import grandcircus.co.WebApp.Services.EventService;
+
 @Controller
 public class WebController {
+	
+	@Autowired
+	private EventService eventService;
 	
 //	//Home page after we complete MVP
 //	@RequestMapping("/login")
@@ -84,13 +92,27 @@ public class WebController {
 		//Array stores the values of each gridpoint on the calendar...
 		//either an empty string if the gridpoint is not occupied, otherwise the day number
 		String[] dayNums;
-		if(numDaysInMonth + startDay > 35) dayNums = new String[42];
-		else dayNums = new String[35];
+		ArrayList<Event[]> dailyEvents;
+		String dayStartTime;
+		String dayEndTime;
+		
+		if(numDaysInMonth + startDay > 35) {
+			dayNums = new String[42];
+			dailyEvents = new ArrayList<Event[]>(42);
+		}
+		else {
+			dayNums = new String[35];
+			dailyEvents = new ArrayList<Event[]>(42);
+		}
 		Arrays.fill(dayNums, 0, dayNums.length, "");
 		
 		//Used for printing the correct day
 		int dayNum = 1;
 		for(int i = startDay; i < (numDaysInMonth + startDay); i++) {
+			dayStartTime = year + "-" + month + "-" + dayNum + "T00:00:00";
+			dayEndTime = year + "-" + month + "-" + dayNum + "T23:59:59";
+			dailyEvents.add(eventService.getEventsByTimeRange(dayStartTime, dayEndTime));
+			
 			dayNums[i] = dayNum + "";
 			dayNum++;
 		}
@@ -134,6 +156,7 @@ public class WebController {
 		}
 				
 		//Info used and displayed on monthly calendar
+		model.addAttribute("dailyEvents", dailyEvents);
 		model.addAttribute("prevYear", prevYear);
 		model.addAttribute("nextYear", nextYear);
 		model.addAttribute("prevMonth", prevMonth);

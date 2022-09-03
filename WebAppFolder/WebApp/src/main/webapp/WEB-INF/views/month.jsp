@@ -87,37 +87,73 @@
 				<!-- Week 1 -->
 				<tr>
 					<c:forEach var="dayNum" items="${dayNums}" begin="0" end="6">
-						<td>${dayNum}</td>
+						<td>
+							${dayNum}
+							<br>
+							<c:forEach var="event" items="${dailyEvents[dayNum]}">
+								${event.eventName}
+							</c:forEach>
+						</td>
 					</c:forEach>
 				</tr>
 				
 				<tr>
 					<c:forEach var="dayNum" items="${dayNums}" begin="7" end="13">
-						<td>${dayNum}</td>
+						<td>
+							${dayNum}
+							<br>
+							<c:forEach var="event" items="${dailyEvents[dayNum]}">
+								${event.eventName}
+							</c:forEach>
+						</td>
 					</c:forEach>
 				</tr>
 				
 				<tr>
 					<c:forEach var="dayNum" items="${dayNums}" begin="14" end="20">
-						<td>${dayNum}</td>
+						<td>
+							${dayNum}
+							<br>
+							<c:forEach var="event" items="${dailyEvents[dayNum]}">
+								${event.eventName}
+							</c:forEach>
+						</td>
 					</c:forEach>
 				</tr>
 				
 				<tr>
 					<c:forEach var="dayNum" items="${dayNums}" begin="21" end="27">
-						<td>${dayNum}</td>
+						<td>
+							${dayNum}
+							<br>
+							<c:forEach var="event" items="${dailyEvents[dayNum]}">
+								${event.eventName}
+							</c:forEach>
+						</td>
 					</c:forEach>
 				</tr>
 				
 				<tr>
 					<c:forEach var="dayNum" items="${dayNums}" begin="28" end="34">
-						<td>${dayNum}</td>
+						<td>
+							${dayNum}
+							<br>
+							<c:forEach var="event" items="${dailyEvents[dayNum]}">
+								${event.eventName}
+							</c:forEach>
+						</td>
 					</c:forEach>
 				</tr>
 				
 				<tr>
 					<c:forEach var="dayNum" items="${dayNums}" begin="35" end="41">
-						<td>${dayNum}</td>
+						<td>
+							${dayNum}
+							<br>
+							<c:forEach var="event" items="${dailyEvents[dayNum]}">
+								${event.eventName}
+							</c:forEach>
+						</td>
 					</c:forEach>
 				</tr>
 			</table>
