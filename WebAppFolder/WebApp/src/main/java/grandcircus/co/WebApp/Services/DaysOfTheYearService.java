@@ -1,46 +1,53 @@
 package grandcircus.co.WebApp.Services;
 
 import java.util.Collections;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import grandcircus.co.WebApp.Models.DayEventDataResponse;
 
 @Service
 public class DaysOfTheYearService {
 
 	private RestTemplate rt = new RestTemplate();
-	//This service needs to be tweaked to allow the headers to give us Authentication. It's getting
-	//to the daysoftheyear website, but not getting through (yet)
 	
+	@Value("${apiKey}")
+	private String apiKey;
 	
-	//Not sure if we need this, but left if here in case. Will delete if not needed.
-	//Source: https://attacomsian.com/blog/spring-boot-resttemplate-get-request-parameters-headers#get-request-with-parameters-and-headers
+	public String dayEventDataResponse() {
+		
+		String url = "https://www.daysoftheyear.com/api/v1/today?limit=1";
 	
-//		ResponseEntity<String> response = rt.exchange(
-//		        url,
-//		        HttpMethod.GET,
-//		        request,
-//		        String.class
-//		);
-
-	
-	public DayEventDataResponse dayEventDataResponse() {
 		//creating headers and setting them up for JSON
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 		
 		//setting the authentication for our API key
-		headers.setBasicAuth("X-Api-Key", "${apiKey}");
-//		HttpEntity<String> request = new HttpEntity<String>(headers);
+		headers.set("x-api-key", apiKey);
 		
-		//setting up the response
-		String url = "https://www.daysoftheyear.com/api/v1/today";
-		DayEventDataResponse response = rt.getForObject(url, DayEventDataResponse.class);
+		HttpEntity<DayEventDataResponse> request = new HttpEntity<DayEventDataResponse>(headers);
 		
-		return response;
+		ResponseEntity<String> response = rt.exchange(
+				url,
+				HttpMethod.GET,
+				request,
+				String.class
+				);
+		if (response.getStatusCode() == HttpStatus.OK) {
+		    System.out.println("Request Successful.");
+		} else {
+		    System.out.println("Request Failed");
+		    System.out.println(response.getStatusCode());
+		}		
+		
+		return response.getBody();
 	}
 }

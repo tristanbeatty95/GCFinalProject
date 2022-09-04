@@ -5,15 +5,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class DayEventDataResponse {
 
 	@JsonProperty("data")
-	private DayEvent[] dayEvents;
+	private DayEvent[] data;
 
-	public DayEvent[] getDayEvents() {
-		return dayEvents;
+	public DayEvent[] getData() {
+		return data;
 	}
 
-	public void setDayEvents(DayEvent[] dayEvents) {
-		this.dayEvents = dayEvents;
+	public void setData(DayEvent[] data) {
+		this.data = data;
 	}
 	
 	
 }
+

@@ -370,7 +370,7 @@ public class WebController {
 	
 	@RequestMapping("/test")
 	public String displayTest(Model model) {
-		System.out.println(dayService.dayEventDataResponse().getDayEvents());
+		System.out.println(dayService.dayEventDataResponse());
 	
 		return "redirect:/monthly-calendar";
 	}
