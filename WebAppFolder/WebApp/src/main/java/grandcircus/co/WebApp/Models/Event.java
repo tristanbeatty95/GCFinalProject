@@ -1,12 +1,11 @@
 package grandcircus.co.WebApp.Models;
 
-import java.util.Date;
 import java.util.List;
 
 public class Event {
 	private String id;
-	private Date start;
-	private Date end;
+	private String start;
+	private String end;
 	private String eventName;
 	private Double duration;
 	private List<String> employees;
@@ -19,19 +18,19 @@ public class Event {
 		this.id = id;
 	}
 
-	public Date getStart() {
+	public String getStart() {
 		return start;
 	}
 
-	public void setStart(Date start) {
+	public void setStart(String start) {
 		this.start = start;
 	}
 
-	public Date getEnd() {
+	public String getEnd() {
 		return end;
 	}
 
-	public void setEnd(Date end) {
+	public void setEnd(String end) {
 		this.end = end;
 	}
 
@@ -59,7 +58,7 @@ public class Event {
 		this.employees = employees;
 	}
 
-	public Event(Date start, Date end, String eventName, List<String> employees, Double duration) {
+	public Event(String start, String end, String eventName, List<String> employees, Double duration) {
 
 		this.start = start;
 		this.end = end;

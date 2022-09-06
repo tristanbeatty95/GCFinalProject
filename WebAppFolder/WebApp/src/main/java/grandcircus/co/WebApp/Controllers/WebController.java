@@ -1,9 +1,9 @@
 package grandcircus.co.WebApp.Controllers;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Date;
 import java.util.List;
@@ -97,8 +97,8 @@ public class WebController {
 		//either an empty string if the gridpoint is not occupied, otherwise the day number
 		String[] dayNums;
 		ArrayList<Event[]> dailyEvents;
-		String dayStartTime;
-		String dayEndTime;
+		LocalDateTime dayStartTime;
+		LocalDateTime dayEndTime;
 		
 		if(numDaysInMonth + startDay > 35) {
 			dayNums = new String[42];
@@ -113,9 +113,9 @@ public class WebController {
 		//Used for printing the correct day
 		int dayNum = 1;
 		for(int i = startDay; i < (numDaysInMonth + startDay); i++) {
-			dayStartTime = year + "-" + month + "-" + dayNum + "T00:00:00";
-			dayEndTime = year + "-" + month + "-" + dayNum + "T23:59:59";
-			dailyEvents.add(eventService.getEventsByTimeRange(dayStartTime, dayEndTime));
+			dayStartTime = LocalDateTime.of(year, month, dayNum, 00, 00);
+			dayEndTime = LocalDateTime.of(year, month, dayNum, 23, 59);
+			dailyEvents.add(eventService.getEventsByTimeRange(dayStartTime.toString(), dayEndTime.toString()));
 			
 			dayNums[i] = dayNum + "";
 			dayNum++;
@@ -350,10 +350,10 @@ public class WebController {
 	
 	@PostMapping("/submitEvent")
 	public String submitEvent(
-			@RequestParam String eventName, @RequestParam Date start, @RequestParam Date end, 
+			@RequestParam String eventName, @RequestParam String start, @RequestParam String end, 
 			@RequestParam String addEmployees, Model model) {
 		String str = addEmployees;
-		List<String> employees = new ArrayList<>(Arrays.asList(str.split(",")));
+		List<String> employees = new ArrayList<>(Arrays.asList(addEmployees.split(",")));
 //		model.addAttribute("eventName", eventName);
 //		model.addAttribute("start", start);
 //		model.addAttribute("end", end);

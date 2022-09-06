@@ -1,9 +1,7 @@
 package grandcircus.co.WebService.Controller;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +31,6 @@ public class EventController {
 		
 		// Return items within the time frames if they are present
 		} else if (start != null && end != null) {
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-			Date startDate = formatter.parse(start);
-			Date endDate = formatter.parse(end);
 			
 			List<Event> events = event_repo.findAll();
 			List<Event> results = new ArrayList<>();
@@ -44,7 +39,7 @@ public class EventController {
 				Event curr = events.get(i);
 				
 				//Works for multiple day events as well as single day events
-				if((curr.getStart().getTime() < endDate.getTime() && (curr.getEnd().getTime() > startDate.getTime())))
+				if((curr.getStart().compareTo(end) <= 0) && (curr.getEnd().compareTo(start) >= 0))
 						results.add(curr);
 //				if (((curr.getStart().compareTo(startDate) >= 0) && (curr.getEnd().compareTo(endDate) <= 0))
 //						|| ((curr.getStart().compareTo(startDate) <= 0) && (curr.getStart().compareTo(endDate) >= 0)))
@@ -100,12 +95,12 @@ public class EventController {
 	}
 
 	@PatchMapping("/event/{id}")
-	public Event patchEvent(@PathVariable("id") String id, @RequestParam(required = false) String name,
-			@RequestParam(required = false) Date start, @RequestParam(required = false) Date end,
+	public Event patchEvent(@PathVariable("id") String id, @RequestParam(required = false) String eventName,
+			@RequestParam(required = false) String start, @RequestParam(required = false) String end,
 			@RequestParam(required = false) List<String> employees) {
 		Event updatedEvent = event_repo.findById(id).orElseThrow(() -> new EventNotFoundException());
-		if (name != null) {
-			updatedEvent.setEventName(name);
+		if (eventName != null) {
+			updatedEvent.setEventName(eventName);
 		}
 		if (start != null) {
 			updatedEvent.setStart(start);
