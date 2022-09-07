@@ -140,6 +140,8 @@ public class WebController {
 			dayNums[i] = dayNum + "";
 			dayNum--;
 		}
+		
+		
 
 		// Used for printing the correct day
 		dayNum = 1;
@@ -162,13 +164,13 @@ public class WebController {
 			dayNum++;
 		}
 		
-		for(int i = 0; i < dailyEvents.size(); i++) {
-			System.out.print("DailyEvents " + i + ": ");
-			for(int j = 0; j < dailyEvents.get(i).length; j++) {
-				System.out.print(dailyEvents.get(i)[j].getEventName());
-			}
-			System.out.println();
-		}
+//		for(int i = 0; i < dailyEvents.size(); i++) {
+//			System.out.print("DailyEvents " + i + ": ");
+//			for(int j = 0; j < dailyEvents.get(i).length; j++) {
+//				System.out.print(dailyEvents.get(i)[j].getEventName());
+//			}
+//			System.out.println();
+//		}
 		
 		// This is a representation of the dayNums array that is sent to the JSP -->
 		//["", "", "", "",  1,  2,  3,
