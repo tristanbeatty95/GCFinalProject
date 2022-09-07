@@ -11,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import grandcircus.co.WebApp.Models.DayEvent;
 import grandcircus.co.WebApp.Models.DayEventDataResponse;
 
 @Service
@@ -21,7 +23,7 @@ public class DaysOfTheYearService {
 	@Value("${apiKey}")
 	private String apiKey;
 	
-	public String dayEventDataResponse() {
+	public ResponseEntity<DayEvent> dayEventDataResponse() {
 		
 		String url = "https://www.daysoftheyear.com/api/v1/today?limit=1";
 	
@@ -33,13 +35,13 @@ public class DaysOfTheYearService {
 		//setting the authentication for our API key
 		headers.set("x-api-key", apiKey);
 		
-		HttpEntity<DayEventDataResponse> request = new HttpEntity<DayEventDataResponse>(headers);
+		HttpEntity<DayEvent> request = new HttpEntity<DayEvent>(headers);
 		
-		ResponseEntity<String> response = rt.exchange(
+		ResponseEntity<DayEvent> response = rt.exchange(
 				url,
 				HttpMethod.GET,
 				request,
-				String.class
+				DayEvent.class
 				);
 		if (response.getStatusCode() == HttpStatus.OK) {
 		    System.out.println("Request Successful.");
@@ -48,6 +50,6 @@ public class DaysOfTheYearService {
 		    System.out.println(response.getStatusCode());
 		}		
 		
-		return response.getBody();
+		return response;
 	}
 }
