@@ -102,16 +102,47 @@ public class WebController {
 		
 		if(numDaysInMonth + startDay > 35) {
 			dayNums = new String[42];
-			dailyEvents = new ArrayList<Event[]>(42);
+			dailyEvents = new ArrayList<Event[]>(43);
 		}
 		else {
 			dayNums = new String[35];
-			dailyEvents = new ArrayList<Event[]>(42);
+			dailyEvents = new ArrayList<Event[]>(36);
 		}
 		Arrays.fill(dayNums, 0, dayNums.length, "");
 		
-		//Used for printing the correct day
-		int dayNum = 1;
+		
+		// Variables for switching between different months on the view
+		int prevYear = year;
+		int prevMonth = month - 1;
+		int nextYear = year;
+		int nextMonth = month + 1;
+
+		if (prevMonth < 1) {
+			prevMonth = 12;
+			prevYear--;
+		} else if (nextMonth > 12) {
+			nextMonth = 1;
+			nextYear++;
+		}
+
+		// Add last few days of previous month to fill in whitespace
+		int dayNum = 1; 
+		
+		if (month <= 1)
+			dayNum = numDaysInMonth(12, year - 1);
+		else
+			dayNum = numDaysInMonth(month - 1, year);
+
+		for (int i = startDay - 1; i >= 0; i--) {
+			dayStartTime = LocalDateTime.of(prevYear, prevMonth, dayNum, 00, 00);
+			dayEndTime = LocalDateTime.of(prevYear, prevMonth, dayNum, 23, 59);
+			dailyEvents.add(eventService.getEventsByTimeRange(dayStartTime.toString(), dayEndTime.toString()));
+			dayNums[i] = dayNum + "";
+			dayNum--;
+		}
+
+		// Used for printing the correct day
+		dayNum = 1;
 		for(int i = startDay; i < (numDaysInMonth + startDay); i++) {
 			dayStartTime = LocalDateTime.of(year, month, dayNum, 00, 00);
 			dayEndTime = LocalDateTime.of(year, month, dayNum, 23, 59);
@@ -120,21 +151,23 @@ public class WebController {
 			dayNums[i] = dayNum + "";
 			dayNum++;
 		}
-		
+	
 		//Add first few days of next month to fill in whitespace
 		dayNum = 1;
 		for(int i = (numDaysInMonth + startDay); i < dayNums.length; i++) {
+			dayStartTime = LocalDateTime.of(nextYear, nextMonth, dayNum, 00, 00);
+			dayEndTime = LocalDateTime.of(nextYear, nextMonth, dayNum, 23, 59);
+			dailyEvents.add(eventService.getEventsByTimeRange(dayStartTime.toString(), dayEndTime.toString()));
 			dayNums[i] = dayNum + "";
 			dayNum++;
 		}
 		
-		//Add last few days of previous month to fill in whitespace
-		if(month <= 1) dayNum = numDaysInMonth(12, year-1); 
-		else dayNum = numDaysInMonth(month - 1, year);
-		
-		for(int i = startDay - 1; i >= 0; i--) {
-			dayNums[i] = dayNum + "";
-			dayNum--;
+		for(int i = 0; i < dailyEvents.size(); i++) {
+			System.out.print("DailyEvents " + i + ": ");
+			for(int j = 0; j < dailyEvents.get(i).length; j++) {
+				System.out.print(dailyEvents.get(i)[j].getEventName());
+			}
+			System.out.println();
 		}
 		
 		// This is a representation of the dayNums array that is sent to the JSP -->
@@ -143,21 +176,6 @@ public class WebController {
 		// 11, 12, 13, 14, 15, 16, 17,
 		// 18, 19, 20, 21, 22, 23, 24,
 		// 25, 26, 27, 28, 29, 30, ""]
-		
-		//Variables for switching between differnt months on the view
-		int prevYear = year;
-		int prevMonth = month - 1;
-		int nextYear = year;
-		int nextMonth = month + 1;
-		
-		if(prevMonth < 1) {
-			prevMonth = 12;
-			prevYear--;;
-		}
-		else if(nextMonth > 12) {
-			nextMonth = 1;
-			nextYear++;
-		}
 				
 		//Info used and displayed on monthly calendar
 		model.addAttribute("dailyEvents", dailyEvents);

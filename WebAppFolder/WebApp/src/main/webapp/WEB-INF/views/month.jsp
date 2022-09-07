@@ -86,11 +86,11 @@
 		
 				<!-- Week 1 -->
 				<tr>
-					<c:forEach var="dayNum" items="${dayNums}" begin="0" end="6">
+					<c:forEach var="dayNum" items="${dayNums}" begin="0" end="6" varStatus="loop">
 						<td>
 							${dayNum}
 							<br>
-							<c:forEach var="event" items="${dailyEvents[dayNum]}">
+							<c:forEach var="event" items="${dailyEvents[loop.index]}">
 								${event.eventName}
 								<br>
 							</c:forEach>
@@ -99,11 +99,11 @@
 				</tr>
 				
 				<tr>
-					<c:forEach var="dayNum" items="${dayNums}" begin="7" end="13">
+					<c:forEach var="dayNum" items="${dayNums}" begin="7" end="13" varStatus="loop">
 						<td>
 							${dayNum}
 							<br>
-							<c:forEach var="event" items="${dailyEvents[dayNum]}">
+							<c:forEach var="event" items="${dailyEvents[loop.index]}">
 								${event.eventName}
 								<br>
 							</c:forEach>
@@ -112,11 +112,11 @@
 				</tr>
 				
 				<tr>
-					<c:forEach var="dayNum" items="${dayNums}" begin="14" end="20">
+					<c:forEach var="dayNum" items="${dayNums}" begin="14" end="20" varStatus="loop">
 						<td>
 							${dayNum}
 							<br>
-							<c:forEach var="event" items="${dailyEvents[dayNum]}">
+							<c:forEach var="event" items="${dailyEvents[loop.index]}">
 								${event.eventName}
 								<br>
 							</c:forEach>
@@ -125,11 +125,11 @@
 				</tr>
 				
 				<tr>
-					<c:forEach var="dayNum" items="${dayNums}" begin="21" end="27">
+					<c:forEach var="dayNum" items="${dayNums}" begin="21" end="27" varStatus="loop">
 						<td>
 							${dayNum}
 							<br>
-							<c:forEach var="event" items="${dailyEvents[dayNum]}">
+							<c:forEach var="event" items="${dailyEvents[loop.index]}">
 								${event.eventName}
 								<br>
 							</c:forEach>
@@ -138,11 +138,11 @@
 				</tr>
 				
 				<tr>
-					<c:forEach var="dayNum" items="${dayNums}" begin="28" end="34">
+					<c:forEach var="dayNum" items="${dayNums}" begin="28" end="34" varStatus="loop">
 						<td>
 							${dayNum}
 							<br>
-							<c:forEach var="event" items="${dailyEvents[dayNum]}">
+							<c:forEach var="event" items="${dailyEvents[loop.index]}">
 								${event.eventName}
 								<br>
 							</c:forEach>
@@ -151,11 +151,11 @@
 				</tr>
 				
 				<tr>
-					<c:forEach var="dayNum" items="${dayNums}" begin="35" end="41">
+					<c:forEach var="dayNum" items="${dayNums}" begin="35" end="41" varStatus="loop">
 						<td>
 							${dayNum}
 							<br>
-							<c:forEach var="event" items="${dailyEvents[dayNum]}">
+							<c:forEach var="event" items="${dailyEvents[loop.index]}">
 								${event.eventName}
 								<br>
 							</c:forEach>
