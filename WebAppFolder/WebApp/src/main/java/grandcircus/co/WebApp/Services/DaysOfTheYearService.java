@@ -22,34 +22,42 @@ public class DaysOfTheYearService {
 	
 	@Value("${apiKey}")
 	private String apiKey;
-	
-	public ResponseEntity<DayEvent> dayEventDataResponse() {
-		
-		String url = "https://www.daysoftheyear.com/api/v1/today?limit=1";
-	
+	String url = "https://www.daysoftheyear.com/api/v1/today?limit=1";
+	public HttpEntity formatRequest() {
 		//creating headers and setting them up for JSON
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 		
 		//setting the authentication for our API key
-		headers.set("x-api-key", apiKey);
+		headers.set("X-Api-Key", apiKey);
 		
-		HttpEntity<DayEvent> request = new HttpEntity<DayEvent>(headers);
-		
-		ResponseEntity<DayEvent> response = rt.exchange(
-				url,
-				HttpMethod.GET,
-				request,
-				DayEvent.class
-				);
-		if (response.getStatusCode() == HttpStatus.OK) {
-		    System.out.println("Request Successful.");
-		} else {
-		    System.out.println("Request Failed");
-		    System.out.println(response.getStatusCode());
-		}		
-		
-		return response;
+		HttpEntity request = new HttpEntity<>(headers);
+		return request;
+	}
+//		ResponseEntity<DayEvent> response = rt.exchange(
+//				url,
+//				HttpMethod.GET,
+//				request,
+//				DayEvent.class
+//				);
+//		if (response.getStatusCode() == HttpStatus.OK) {
+//		    System.out.println("Request Successful.");
+//		} else {
+//		    System.out.println("Request Failed");
+//		    System.out.println(response.getStatusCode());
+//		}		
+//		
+//		return response;
+//	}
+	public DayEvent[] getTodayEvent() {
+		DayEventDataResponse response = rt.exchange(url, HttpMethod.GET, formatRequest(), 
+				DayEventDataResponse.class).getBody();
+		return response.getData();
+	}
+	public String getTodayEventTest() {
+		ResponseEntity<String> response = rt.exchange(url, HttpMethod.GET, formatRequest(), 
+				String.class);
+		return response.getBody();
 	}
 }

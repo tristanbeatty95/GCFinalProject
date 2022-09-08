@@ -37,6 +37,9 @@ public class DayEvent {
 		this.excerpt = excerpt;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return name;
+	}
 
 }
