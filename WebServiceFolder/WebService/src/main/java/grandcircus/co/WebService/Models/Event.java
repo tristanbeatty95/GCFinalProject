@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
 @Document("events")
 public class Event {
 	@Id
@@ -72,8 +71,14 @@ public class Event {
 		this.employees = employees;
 	}
 
+	@Override
+	public String toString() {
+		return "Event [start=" + start + ", end=" + end + ", eventName=" + eventName + ", duration=" + duration
+				+ ", employees=" + employees + "]";
+	}
+
 	public Event() {
-		
+
 	}
 
 }

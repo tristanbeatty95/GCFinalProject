@@ -23,4 +23,9 @@ public class EventService {
 		return response;
 	}
 
+	public Event addNewEvent(Event event) {
+		return restTemplate.postForObject("http://localhost:8080/event", event, Event.class);	
+	}
+	
+
 }

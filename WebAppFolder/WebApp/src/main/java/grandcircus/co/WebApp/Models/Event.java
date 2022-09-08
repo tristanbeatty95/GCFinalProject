@@ -70,5 +70,13 @@ public class Event {
 		
 	}
 
+	@Override
+	public String toString() {
+		return "Event [start=" + start + ", end=" + end + ", eventName=" + eventName + ", duration=" + duration
+				+ ", employees=" + employees + "]";
+	}
+	
+	
+
 }
 
