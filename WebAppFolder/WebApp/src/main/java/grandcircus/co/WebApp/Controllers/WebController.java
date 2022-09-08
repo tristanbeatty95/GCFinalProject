@@ -281,138 +281,157 @@ public class WebController {
 	}
 
 	@RequestMapping("/weekly-calendar")
-	public String displayWeek(Model model, @RequestParam(required = false) Integer month,
-			@RequestParam(required = false) Integer weekNum, @RequestParam(required = false) Integer year) {
+	public String displayWeek(Model model, @RequestParam(required=false) Integer month, @RequestParam(required=false) Integer day,
+			@RequestParam(required=false) Integer year) {
 
-		// If a date is not provided as is the case when "/" is visited, it will show
-		// current month on calendar
-		if (year == null || month == null) {
-			LocalDate currentDate = LocalDate.now();
-			month = currentDate.getMonthValue();
-			year = currentDate.getYear();
-		}
-		// Calculate the current week of the year
-		Date date = new Date();
-		GregorianCalendar cal = new GregorianCalendar();
-		cal.setFirstDayOfWeek(GregorianCalendar.SUNDAY);
-		cal.setMinimalDaysInFirstWeek(1);
-		cal.setTime(date);
-		int weekOfYear = cal.get(GregorianCalendar.WEEK_OF_YEAR);
-
-		// monthStr String is for easier output on the jsp
-		String monthStr = "";
-		switch (month) {
-		case 1:
-			monthStr = "January";
-			break;
-		case 2:
-			monthStr = "February";
-			break;
-		case 3:
-			monthStr = "March";
-			break;
-		case 4:
-			monthStr = "April";
-			break;
-		case 5:
-			monthStr = "May";
-			break;
-		case 6:
-			monthStr = "June";
-			break;
-		case 7:
-			monthStr = "July";
-			break;
-		case 8:
-			monthStr = "August";
-			break;
-		case 9:
-			monthStr = "September";
-			break;
-		case 10:
-			monthStr = "October";
-			break;
-		case 11:
-			monthStr = "November";
-			break;
-		case 12:
-			monthStr = "December";
-			break;
-		default:
-			monthStr = "Invalid month";
-			break;
-		}
-
-		// find the number of days in the currently views month
-		int numDaysInMonth = numDaysInMonth(month, year);
-
-		// startDay is offset determined by the start day of the month
-		int startDay = calculateDayOfWeek(1, month, year);
-
-		// Array stores the values of each gridpoint on the calendar...
-		// either an empty string if the gridpoint is not occupied, otherwise the day
-		// number
-		String[] dayNums = new String[7];
-		Arrays.fill(dayNums, 0, dayNums.length, "");
-
-		// Used for printing the correct day
-		int dayNum = 1;
-		for (int i = startDay; i < (startDay + 3); i++) {
-			dayNums[i] = dayNum + "";
-			dayNum++;
-		}
-
-		// Add last few days of previous month to fill in whitespace
-		if (month <= 1)
-			dayNum = numDaysInMonth(12, year - 1);
-		else
-			dayNum = numDaysInMonth(month - 1, year);
-
-		for (int i = startDay - 1; i >= 0; i--) {
-			dayNums[i] = dayNum + "";
-			dayNum--;
-		}
-
-		// Variables for switching between differnt months on the view
-		int prevYear = year;
-		int prevMonth = month - 1;
-		int nextYear = year;
-		int nextMonth = month + 1;
-		int nextWeek = weekOfYear + 1;
-		int prevWeek = weekOfYear - 1;
-
-		if (prevMonth < 1) {
-			prevMonth = 12;
-			prevYear--;
-			;
-		} else if (nextMonth > 12) {
-			nextMonth = 1;
-			nextYear++;
-		}
-		if (prevWeek < 1) {
-			prevMonth = 12;
-			prevYear--;
-			;
-		}
-		if (nextWeek > 53) {
-			nextMonth = 1;
-			nextYear++;
-		}
-
-		// Info used and displayed on monthly calendar
-		model.addAttribute("currentWeek", weekOfYear);
-		model.addAttribute("prevWeek", prevWeek);
-		model.addAttribute("nextWeek", nextWeek);
-		model.addAttribute("prevYear", prevYear);
-		model.addAttribute("nextYear", nextYear);
-		model.addAttribute("prevMonth", prevMonth);
-		model.addAttribute("nextMonth", nextMonth);
-		model.addAttribute("dayNums", new ArrayList<String>(Arrays.asList(dayNums)));
-		model.addAttribute("year", year);
-		model.addAttribute("monthStr", monthStr);
-		model.addAttribute("monthNum", month);
-
+				//this is the default info sent from Monthly Calendar
+				if(year == null && day == null) {
+					LocalDate currentDate = LocalDate.now();
+					month = currentDate.getMonthValue();
+					year = currentDate.getYear();
+					day = currentDate.getDayOfMonth();
+				} 
+				//this is the default info sent from Weekly Calendar
+				if(year == null && !(month == null) && !(day == null)){
+					LocalDate currentDate = LocalDate.now();
+					year = currentDate.getYear();
+					currentDate = LocalDate.of(year, month, day);
+					month = currentDate.getMonthValue();
+					day = currentDate.getDayOfMonth();
+				}
+				
+				//monthStr String is for easier output on the jsp
+				String monthStr = "";
+				switch(month) {
+					case 1:  monthStr = "January";
+							 break;	
+					case 2:  monthStr = "February";
+							 break;
+					case 3:  monthStr = "March";
+							 break;
+					case 4:  monthStr = "April";
+							 break;
+					case 5:  monthStr = "May";
+							 break;
+					case 6:  monthStr = "June";
+							 break;
+					case 7:  monthStr = "July";
+							 break;
+					case 8:  monthStr = "August";
+							 break;
+					case 9:  monthStr = "September";
+							 break;
+					case 10: monthStr = "October";
+							 break;
+					case 11: monthStr = "November";	
+							 break;
+					case 12: monthStr = "December";
+							 break;
+					default: monthStr = "Invalid month";
+							 break;
+				}
+				
+				//find the number of days in the currently views month
+				int numDaysInMonth = numDaysInMonth(month, year);
+						
+				//startDay is offset determined by the start day of the month
+				int startDay = calculateDayOfWeek(day, month, year);
+				System.out.println("startDay: " + startDay);
+				
+				//Array stores the values of each gridpoint on the calendar...
+				//either an empty string if the gridpoint is not occupied, otherwise the day number
+				String[] dayNums = new String[7];
+				Arrays.fill(dayNums, 0, dayNums.length, "");				
+				
+				//Used for printing the correct day
+				int dayNum = day;
+								
+					for(int i = startDay; i < (7); i++) {
+						dayNums[i] = dayNum + "";
+						dayNum++;
+					}
+					
+					//Add first few days of next week to fill in whitespace
+				dayNum = day;
+					System.out.println("dayNum = day = " + dayNum);
+					for(int i = startDay; i < (7-day); i++) {
+						dayNums[i] = dayNum + "";
+						dayNum++;
+					}
+				
+				
+				//Add last few days of previous Week to fill in whitespace
+				if(day <= 1) dayNum = numDaysInMonth(month-1, year);
+				if(month <= 1) dayNum = numDaysInMonth(12, year-1); 
+				else dayNum = day-1;
+				
+				for(int i = startDay - 1; i >= 0; i--) {
+					dayNums[i] = dayNum + "";
+					dayNum--;
+				}	
+	
+				//Variables for switching between different months on the view
+				int nextWeek = day + 7;
+				int prevWeek = day - 7;
+				int prevYear = year - 1;
+				int prevMonth = month - 1;
+				int nextYear = year + 1;
+				int nextMonth = month + 1;
+				
+				//TODO fix prev and next week for month and year values
+//				if (prevWeek < 1) {
+//					month = month-1;
+//					prevWeek = numDaysInMonth(month-1, year) - (7-day);
+//					day = prevWeek;
+//				}
+//				if (nextWeek > 28 && monthStr.equals("February")) {
+//					month = month + 1;
+//					nextWeek = numDaysInMonth(month+1, year) + (7-day);
+//				}
+//				if (nextWeek > 30 && (monthStr.equals("April") || monthStr.equals("June") || monthStr.equals("September") || monthStr.equals("November"))) {
+//					month = month + 1;
+//					nextWeek = numDaysInMonth(month+1, year) + (7-day);
+//				}
+//				if (nextWeek > 31 && (monthStr.equals("January") || monthStr.equals("March") || monthStr.equals("May") ||
+//						monthStr.equals("July") || monthStr.equals("August") || monthStr.equals("October") || monthStr.equals("December"))) {
+//					month = month + 1;
+//					nextWeek = numDaysInMonth(month+1, year) + (7-day);
+//				}
+				if(prevMonth < 1) {
+					prevMonth = 12;
+					prevYear--;;
+				}
+				else if(nextMonth > 12) {
+					nextMonth = 1;
+					nextYear++;
+				}
+			
+						
+				//Info used and displayed on monthly calendar
+				model.addAttribute("prevWeek", prevWeek);
+				model.addAttribute("nextWeek", nextWeek);
+				model.addAttribute("prevYear", prevYear);
+				model.addAttribute("nextYear", nextYear);
+				model.addAttribute("prevMonth", prevMonth);
+				model.addAttribute("nextMonth", nextMonth);
+				model.addAttribute("dayNums", new ArrayList<String>(Arrays.asList(dayNums)));
+				model.addAttribute("year", year);
+				model.addAttribute("monthStr", monthStr);
+				model.addAttribute("monthNum", month);
+				//testing to make sure all values are correctly processing
+				System.out.println("dayNum: " + dayNum);
+				System.out.println("prevWeek: " + prevWeek);
+				System.out.println("nextWeek: " + nextWeek);
+				System.out.println("prevYear: " + prevYear);
+				System.out.println("nextYear: " + nextYear);
+				System.out.println("prevMonth: " + prevMonth);
+				System.out.println("nextMonth: " + nextMonth);
+				System.out.println("year: " + year);
+				System.out.println("monthNum: " + month);
+		
 		return "week";
+
+		
 	}
 	
 	@RequestMapping("/delete/{id}")
