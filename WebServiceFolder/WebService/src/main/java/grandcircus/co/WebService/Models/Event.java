@@ -64,11 +64,11 @@ public class Event {
 	}
 
 	public Event(String start, String end, String eventName, List<String> employees, Double duration) {
-
 		this.start = start;
 		this.end = end;
 		this.eventName = eventName;
 		this.employees = employees;
+		this.duration = duration;
 	}
 
 	@Override

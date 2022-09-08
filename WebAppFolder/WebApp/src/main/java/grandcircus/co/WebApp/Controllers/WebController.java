@@ -1,6 +1,5 @@
 package grandcircus.co.WebApp.Controllers;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -16,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 
 import grandcircus.co.WebApp.Models.Event;
 import grandcircus.co.WebApp.Services.DaysOfTheYearService;
@@ -413,17 +411,16 @@ public class WebController {
 
 	@PostMapping("/submitEvent")
 	public String submitEvent(@RequestParam String eventName, @RequestParam String start, @RequestParam String end,
-			@RequestParam String addEmployees, Model model) {
+			@RequestParam String addEmployees) {
 		List<String> employees = new ArrayList<>(Arrays.asList(addEmployees.split(",")));
 		LocalDateTime startTime = LocalDateTime.parse(start);
-		LocalDateTime endTime = LocalDateTime.parse(end);
-		Duration tempDuration = Duration.between(startTime, endTime);
-		Long d = tempDuration.toHours();
-		double duration = d.doubleValue();
-		// Long tempDuration = startTime.until(endTime, ChronoUnit.MINUTES);
-		// Double duration = (double) (tempDuration / 60);
-		Event event = new Event(eventName, start, end, employees, duration);
-		System.out.println(eventService.addNewEvent(event).toString());
+		LocalDateTime endTime = LocalDateTime.parse(end);		
+		
+		Long d = ChronoUnit.MINUTES.between(startTime, endTime);
+		double duration = ((d.doubleValue()) / 60);
+
+		Event event = new Event(start, end, eventName, employees, duration);
+		eventService.addNewEvent(event);
 
 		return "redirect:/";
 	}
@@ -440,5 +437,5 @@ public class WebController {
 
 		return "redirect:/monthly-calendar";
 	}
-
+	
 }

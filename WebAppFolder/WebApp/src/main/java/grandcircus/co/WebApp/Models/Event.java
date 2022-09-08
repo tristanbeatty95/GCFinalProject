@@ -59,7 +59,7 @@ public class Event {
 	}
 
 	public Event(String start, String end, String eventName, List<String> employees, Double duration) {
-
+		this.duration = duration;
 		this.start = start;
 		this.end = end;
 		this.eventName = eventName;
