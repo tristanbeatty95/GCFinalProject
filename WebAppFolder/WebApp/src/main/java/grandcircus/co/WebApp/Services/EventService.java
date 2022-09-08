@@ -27,5 +27,9 @@ public class EventService {
 		return restTemplate.postForObject("http://localhost:8080/event", event, Event.class);	
 	}
 	
+	public void deleteEvent(String id) {
+		String url = "http://localhost:8080/event/" + id;
+		restTemplate.delete(url);
+	}
 
 }

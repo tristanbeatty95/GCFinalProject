@@ -88,25 +88,30 @@
 				<tr>
 					<c:forEach var="dayNum" items="${dayNums}" begin="0" end="6" varStatus="loop">
 						<td>
+							<a href="/monthly-calendar?year=${year}&month=${month}&day=${loop.index}">
 							${dayNum}
 							<br>
 							<c:forEach var="event" items="${dailyEvents[loop.index]}">
 								${event.eventName}
 								<br>
 							</c:forEach>
+							</a>
 						</td>
+						
 					</c:forEach>
 				</tr>
 				
 				<tr>
 					<c:forEach var="dayNum" items="${dayNums}" begin="7" end="13" varStatus="loop">
 						<td>
+							<a href="/monthly-calendar?year=${year}&month=${month}&day=${loop.index}">
 							${dayNum}
 							<br>
 							<c:forEach var="event" items="${dailyEvents[loop.index]}">
 								${event.eventName}
 								<br>
 							</c:forEach>
+							</a>
 						</td>
 					</c:forEach>
 				</tr>
@@ -114,12 +119,14 @@
 				<tr>
 					<c:forEach var="dayNum" items="${dayNums}" begin="14" end="20" varStatus="loop">
 						<td>
+							<a href="/monthly-calendar?year=${year}&month=${month}&day=${loop.index}">
 							${dayNum}
 							<br>
 							<c:forEach var="event" items="${dailyEvents[loop.index]}">
 								${event.eventName}
 								<br>
 							</c:forEach>
+							</a>
 						</td>
 					</c:forEach>
 				</tr>
@@ -127,12 +134,14 @@
 				<tr>
 					<c:forEach var="dayNum" items="${dayNums}" begin="21" end="27" varStatus="loop">
 						<td>
+							<a href="/monthly-calendar?year=${year}&month=${month}&day=${loop.index}">
 							${dayNum}
 							<br>
 							<c:forEach var="event" items="${dailyEvents[loop.index]}">
 								${event.eventName}
 								<br>
 							</c:forEach>
+							</a>
 						</td>
 					</c:forEach>
 				</tr>
@@ -140,12 +149,14 @@
 				<tr>
 					<c:forEach var="dayNum" items="${dayNums}" begin="28" end="34" varStatus="loop">
 						<td>
+							<a href="/monthly-calendar?year=${year}&month=${month}&day=${loop.index}">
 							${dayNum}
 							<br>
 							<c:forEach var="event" items="${dailyEvents[loop.index]}">
 								${event.eventName}
 								<br>
 							</c:forEach>
+							</a>
 						</td>
 					</c:forEach>
 				</tr>
@@ -153,12 +164,14 @@
 				<tr>
 					<c:forEach var="dayNum" items="${dayNums}" begin="35" end="41" varStatus="loop">
 						<td>
+							<a href="/monthly-calendar?year=${year}&month=${month}&day=${loop.index}">
 							${dayNum}
 							<br>
 							<c:forEach var="event" items="${dailyEvents[loop.index]}">
 								${event.eventName}
 								<br>
 							</c:forEach>
+							</a>
 						</td>
 					</c:forEach>
 				</tr>
@@ -166,6 +179,13 @@
 		</div>
 		<div class="daily-info-section">
 			<h3 id="day-info-header">Day Info</h3>
+			<ul>
+				<c:forEach var="event" items="${dayEvents}">
+					<li>
+						${event.eventName}	<a href="/delete/${event.id}">&times;</a>
+					</li>
+				</c:forEach>
+			</ul>
 			<a href="/delete-event" id="delete-button">Delete</a>
 		</div>
 	</div>
