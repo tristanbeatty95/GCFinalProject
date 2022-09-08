@@ -37,6 +37,16 @@ public class DayEvent {
 		this.excerpt = excerpt;
 	}
 	
+	public DayEvent() {
+		
+	}
+	
+	public DayEvent(String name, String url, String excerpt) {
+		this.name = name;
+		this.url = url;
+		this.excerpt = excerpt;
+	}
+
 	@Override
 	public String toString() {
 		return name;

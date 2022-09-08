@@ -22,7 +22,6 @@ public class DaysOfTheYearService {
 	
 	@Value("${apiKey}")
 	private String apiKey;
-	String url = "https://www.daysoftheyear.com/api/v1/today?limit=1";
 	public HttpEntity formatRequest() {
 		//creating headers and setting them up for JSON
 		HttpHeaders headers = new HttpHeaders();
@@ -35,29 +34,26 @@ public class DaysOfTheYearService {
 		HttpEntity request = new HttpEntity<>(headers);
 		return request;
 	}
-//		ResponseEntity<DayEvent> response = rt.exchange(
-//				url,
-//				HttpMethod.GET,
-//				request,
-//				DayEvent.class
-//				);
-//		if (response.getStatusCode() == HttpStatus.OK) {
-//		    System.out.println("Request Successful.");
-//		} else {
-//		    System.out.println("Request Failed");
-//		    System.out.println(response.getStatusCode());
-//		}		
-//		
-//		return response;
-//	}
+
 	public DayEvent[] getTodayEvent() {
+		String url = "https://www.daysoftheyear.com/api/v1/today";
 		DayEventDataResponse response = rt.exchange(url, HttpMethod.GET, formatRequest(), 
 				DayEventDataResponse.class).getBody();
 		return response.getData();
 	}
-	public String getTodayEventTest() {
-		ResponseEntity<String> response = rt.exchange(url, HttpMethod.GET, formatRequest(), 
-				String.class);
-		return response.getBody();
+	
+	public DayEvent[] getMonthEvents(String year, String month) {
+		String url = "https://www.daysoftheyear.com/api/v1/date/" + year + "/" + month + "/";
+		DayEventDataResponse response = rt.exchange(url, HttpMethod.GET, formatRequest(), 
+				DayEventDataResponse.class).getBody();
+		return response.getData();
 	}
+	
+	public DayEvent[] getSpecificDateEvents(String year, String month, String day) {
+		String url = "https://www.daysoftheyear.com/api/v1/date/" + year + "/" + month + "/" + day + "/";
+		DayEventDataResponse response = rt.exchange(url, HttpMethod.GET, formatRequest(), 
+				DayEventDataResponse.class).getBody();
+		return response.getData();
+	}
+
 }
