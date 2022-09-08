@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import grandcircus.co.WebApp.Models.DayEvent;
 import grandcircus.co.WebApp.Models.Event;
 import grandcircus.co.WebApp.Services.DaysOfTheYearService;
 import grandcircus.co.WebApp.Services.EventService;
@@ -442,11 +443,4 @@ public class WebController {
 		return "find-time";
 	}
 
-	@RequestMapping("/test")
-	public String displayTest(Model model) {
-		System.out.println(dayService.dayEventDataResponse());
-
-		return "redirect:/monthly-calendar";
-	}
-	
 }
