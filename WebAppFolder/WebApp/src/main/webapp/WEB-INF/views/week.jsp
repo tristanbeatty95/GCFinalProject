@@ -62,9 +62,13 @@
 	<!-- Calendar Grid -->
 	<div class="calendar-and-daily-info">
 		<div class="month-navigation">
+<<<<<<< HEAD
 			<a id="prevButton"
 				href="/weekly-calendar?month=${monthNum}&day=${prevWeek}"><i
 				class="fa-solid fa-arrow-left"></i></a>
+=======
+			<a id="prevButton" href="/weekly-calendar?Month=${monthNum}&day=${prevWeek}"><i class="fa-solid fa-arrow-left"></i></a>
+>>>>>>> weeklyView
 
 			<!-- Gets current month and year as a String -->
 			<p id="month-header-text">
@@ -72,10 +76,15 @@
 				<c:out value="${year}" />
 			</p>
 
+<<<<<<< HEAD
 			<a id="nextButton"
 				href="/weekly-calendar?month=${monthNum}&day=${nextWeek}"><i
 				class="fa-solid fa-arrow-right"></i></a>
 
+=======
+			<a id="nextButton" href="/weekly-calendar?Month=${monthNum}&day=${nextWeek}"><i class="fa-solid fa-arrow-right"></i></a>
+			
+>>>>>>> weeklyView
 		</div>
 		<div>
 
