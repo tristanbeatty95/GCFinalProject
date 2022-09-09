@@ -62,48 +62,7 @@ public class WebController {
 		}
 
 		// monthStr String is for easier output on the jsp
-		String monthStr = "";
-		switch (month) {
-		case 1:
-			monthStr = "January";
-			break;
-		case 2:
-			monthStr = "February";
-			break;
-		case 3:
-			monthStr = "March";
-			break;
-		case 4:
-			monthStr = "April";
-			break;
-		case 5:
-			monthStr = "May";
-			break;
-		case 6:
-			monthStr = "June";
-			break;
-		case 7:
-			monthStr = "July";
-			break;
-		case 8:
-			monthStr = "August";
-			break;
-		case 9:
-			monthStr = "September";
-			break;
-		case 10:
-			monthStr = "October";
-			break;
-		case 11:
-			monthStr = "November";
-			break;
-		case 12:
-			monthStr = "December";
-			break;
-		default:
-			monthStr = "Invalid month";
-			break;
-		}
+		String monthStr = monthNumToString(month);
 
 		// find the number of days in the currently views month
 		int numDaysInMonth = numDaysInMonth(month, year);
@@ -279,6 +238,24 @@ public class WebController {
 
 		return numDays[monthNum - 1] + leapYearCode;
 	}
+	
+	public String monthNumToString(int monthNum) {
+		switch(monthNum) {
+		case 1:  return "January";	
+		case 2:  return "February";
+		case 3:  return "March";
+		case 4:  return "April";
+		case 5:  return "May";
+		case 6:  return "June";
+		case 7:  return "July";
+		case 8:  return "August";
+		case 9:  return "September";
+		case 10: return "October";
+		case 11: return "November";	
+		case 12: return "December";
+		default: return "Invalid month";
+		}
+	}
 
 	@RequestMapping("/weekly-calendar")
 	public String displayWeek(Model model, @RequestParam(required=false) Integer month, @RequestParam(required=false) Integer day,
@@ -295,47 +272,22 @@ public class WebController {
 				if(year == null && !(month == null) && !(day == null)){
 					LocalDate currentDate = LocalDate.now();
 					year = currentDate.getYear();
+					if(day < 0) {
+						month--;
+						day = numDaysInMonth(month, year);
+					}
+					else if(day > numDaysInMonth(month, year)) {
+						month++;
+						day = 1;
+					}
 					currentDate = LocalDate.of(year, month, day);
 					month = currentDate.getMonthValue();
 					day = currentDate.getDayOfMonth();
 				}
-				
-				//monthStr String is for easier output on the jsp
-				String monthStr = "";
-				switch(month) {
-					case 1:  monthStr = "January";
-							 break;	
-					case 2:  monthStr = "February";
-							 break;
-					case 3:  monthStr = "March";
-							 break;
-					case 4:  monthStr = "April";
-							 break;
-					case 5:  monthStr = "May";
-							 break;
-					case 6:  monthStr = "June";
-							 break;
-					case 7:  monthStr = "July";
-							 break;
-					case 8:  monthStr = "August";
-							 break;
-					case 9:  monthStr = "September";
-							 break;
-					case 10: monthStr = "October";
-							 break;
-					case 11: monthStr = "November";	
-							 break;
-					case 12: monthStr = "December";
-							 break;
-					default: monthStr = "Invalid month";
-							 break;
-				}
-				
-				//find the number of days in the currently views month
-				int numDaysInMonth = numDaysInMonth(month, year);
 						
 				//startDay is offset determined by the start day of the month
 				int startDay = calculateDayOfWeek(day, month, year);
+				int lastDayOfMonth = numDaysInMonth(month, year);
 				System.out.println("startDay: " + startDay);
 				
 				//Array stores the values of each gridpoint on the calendar...
@@ -343,28 +295,25 @@ public class WebController {
 				String[] dayNums = new String[7];
 				Arrays.fill(dayNums, 0, dayNums.length, "");				
 				
-				//Used for printing the correct day
+				// Used for printing the correct day
 				int dayNum = day;
-								
-					for(int i = startDay; i < (7); i++) {
-						dayNums[i] = dayNum + "";
-						dayNum++;
+
+				for (int i = startDay; i < (7); i++) {
+					dayNums[i] = dayNum + "";
+					dayNum++;
+					if(dayNum > lastDayOfMonth) {
+						dayNum = 1;
 					}
-					
-					//Add first few days of next week to fill in whitespace
-				dayNum = day;
-					System.out.println("dayNum = day = " + dayNum);
-					for(int i = startDay; i < (7-day); i++) {
-						dayNums[i] = dayNum + "";
-						dayNum++;
-					}
-				
-				
+				}
+
+				// Add first few days of next week to fill in whitespace
+				dayNum = day - 1;
+
 				//Add last few days of previous Week to fill in whitespace
-				if(day <= 1) dayNum = numDaysInMonth(month-1, year);
-				if(month <= 1) dayNum = numDaysInMonth(12, year-1); 
-				else dayNum = day-1;
+				if(dayNum < 1) dayNum = numDaysInMonth(month-1, year);
 				
+				if(month < 1) dayNum = numDaysInMonth(12, year-1); 
+
 				for(int i = startDay - 1; i >= 0; i--) {
 					dayNums[i] = dayNum + "";
 					dayNum--;
@@ -378,25 +327,6 @@ public class WebController {
 				int nextYear = year + 1;
 				int nextMonth = month + 1;
 				
-				//TODO fix prev and next week for month and year values
-//				if (prevWeek < 1) {
-//					month = month-1;
-//					prevWeek = numDaysInMonth(month-1, year) - (7-day);
-//					day = prevWeek;
-//				}
-//				if (nextWeek > 28 && monthStr.equals("February")) {
-//					month = month + 1;
-//					nextWeek = numDaysInMonth(month+1, year) + (7-day);
-//				}
-//				if (nextWeek > 30 && (monthStr.equals("April") || monthStr.equals("June") || monthStr.equals("September") || monthStr.equals("November"))) {
-//					month = month + 1;
-//					nextWeek = numDaysInMonth(month+1, year) + (7-day);
-//				}
-//				if (nextWeek > 31 && (monthStr.equals("January") || monthStr.equals("March") || monthStr.equals("May") ||
-//						monthStr.equals("July") || monthStr.equals("August") || monthStr.equals("October") || monthStr.equals("December"))) {
-//					month = month + 1;
-//					nextWeek = numDaysInMonth(month+1, year) + (7-day);
-//				}
 				if(prevMonth < 1) {
 					prevMonth = 12;
 					prevYear--;;
@@ -406,7 +336,6 @@ public class WebController {
 					nextYear++;
 				}
 			
-						
 				//Info used and displayed on monthly calendar
 				model.addAttribute("prevWeek", prevWeek);
 				model.addAttribute("nextWeek", nextWeek);
@@ -416,7 +345,7 @@ public class WebController {
 				model.addAttribute("nextMonth", nextMonth);
 				model.addAttribute("dayNums", new ArrayList<String>(Arrays.asList(dayNums)));
 				model.addAttribute("year", year);
-				model.addAttribute("monthStr", monthStr);
+				model.addAttribute("monthStr", monthNumToString(month));
 				model.addAttribute("monthNum", month);
 				//testing to make sure all values are correctly processing
 				System.out.println("dayNum: " + dayNum);
@@ -430,8 +359,6 @@ public class WebController {
 				System.out.println("monthNum: " + month);
 		
 		return "week";
-
-		
 	}
 	
 	@RequestMapping("/delete/{id}")
