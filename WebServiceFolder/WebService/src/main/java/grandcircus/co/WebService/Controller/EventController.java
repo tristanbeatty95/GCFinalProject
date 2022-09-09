@@ -41,9 +41,6 @@ public class EventController {
 				//Works for multiple day events as well as single day events
 				if((curr.getStart().compareTo(end) <= 0) && (curr.getEnd().compareTo(start) >= 0))
 						results.add(curr);
-//				if (((curr.getStart().compareTo(startDate) >= 0) && (curr.getEnd().compareTo(endDate) <= 0))
-//						|| ((curr.getStart().compareTo(startDate) <= 0) && (curr.getStart().compareTo(endDate) >= 0)))
-//					results.add(curr);
 			}
 			return results;
 		} else {
