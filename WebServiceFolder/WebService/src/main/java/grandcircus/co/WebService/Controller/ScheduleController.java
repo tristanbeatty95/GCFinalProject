@@ -26,32 +26,35 @@ public class ScheduleController {
 	String eventCannotBeCreatedHandler(EventCannotBeCreatedException ex) {
 		return ex.getMessage();
 	}
-	
 
-	public List<String> scheduleFinder(List<String> employees, String start, String end, Double duration){
-	List<Event> events = event_repo.findAll();	
-	List<String> availableTime = new ArrayList<>();
-	HashMap<String, String> slots = new HashMap<>();
-	for (int i = 0; i < events.size(); i++) {
-		Event curr = events.get(i); 
-		if (curr.getStart().compareTo(start) < 0 && curr.getEnd().compareTo(start) < 0)  {
-			slots.put(start, end);
+	public HashMap<String, String> scheduleFinder(List<String> employees, String start, String end, Double duration) {
+		LocalDateTime startTime = LocalDateTime.parse(start);
+		LocalDateTime endTime = LocalDateTime.parse(end);
+		List<Event> events = event_repo.findAll();
+		HashMap<String, String> slots = new HashMap<>();
+		for (int i = 0; i < events.size(); i++) {
+			Event curr = events.get(i);
+			LocalDateTime currStart = LocalDateTime.parse(curr.getStart());
+			LocalDateTime currEnd = LocalDateTime.parse(curr.getEnd());
+			int counter = 0;
+			while (counter < 5) {
+				if (currStart.isBefore(startTime) && currEnd.isBefore(endTime)) {
+					slots.put(currStart.toString(), currEnd.toString());
+					counter++;
+					currStart.plusHours(1);
+					currEnd.plusHours(1);
+				}
+				if (currStart.isAfter(endTime)) {
+					slots.put(currStart.toString(), currEnd.toString());
+					counter++;
+					currStart.plusHours(1);
+					currEnd.plusHours(1);
+				}
+
+			}
 		}
-		if(curr.getStart().compareTo(end) > 0) {
-			slots.put(start, end);
-		}
-		
-	}
-	return null;
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		return slots;
+
 //	LocalDateTime startTime = LocalDateTime.parse(start);
 //	LocalDateTime endTime = LocalDateTime.parse(end);
 //	HashMap<LocalDateTime, Boolean> slots = new HashMap<>();
@@ -72,6 +75,5 @@ public class ScheduleController {
 //	return availableTime;
 //	}
 
+	}
 }
-}
-
