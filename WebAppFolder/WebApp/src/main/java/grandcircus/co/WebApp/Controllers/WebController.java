@@ -272,21 +272,24 @@ public class WebController {
 				if(year == null && !(month == null) && !(day == null)){
 					LocalDate currentDate = LocalDate.now();
 					year = currentDate.getYear();
-					if(day < 0) {
+					if(day-7 < 0) {
 						month--;
 						day = numDaysInMonth(month, year);
 					}
 					else if(day > numDaysInMonth(month, year)) {
 						month++;
 						day = 1;
+					} else {
+						currentDate = LocalDate.of(year, month, day);
+						month = currentDate.getMonthValue();
+						day = currentDate.getDayOfMonth();
+						
 					}
-					currentDate = LocalDate.of(year, month, day);
-					month = currentDate.getMonthValue();
-					day = currentDate.getDayOfMonth();
 				}
 						
 				//startDay is offset determined by the start day of the month
 				int startDay = calculateDayOfWeek(day, month, year);
+				
 				int lastDayOfMonth = numDaysInMonth(month, year);
 				System.out.println("startDay: " + startDay);
 				
@@ -297,10 +300,16 @@ public class WebController {
 				
 				// Used for printing the correct day
 				int dayNum = day;
-
+				LocalDateTime dayStartTime = null;
+				LocalDateTime dayEndTime = null;
+				List<Event[]> dailyEvents = new ArrayList<Event[]>(7);
 				for (int i = startDay; i < (7); i++) {
+					dayStartTime = LocalDateTime.of(year, month, dayNum, 00, 00);
+					dayEndTime = LocalDateTime.of(year, month, dayNum, 23, 59);
+					dailyEvents.add(eventService.getEventsByTimeRange(dayStartTime.toString(), dayEndTime.toString()));
 					dayNums[i] = dayNum + "";
 					dayNum++;
+					
 					if(dayNum > lastDayOfMonth) {
 						dayNum = 1;
 					}
@@ -315,6 +324,9 @@ public class WebController {
 				if(month < 1) dayNum = numDaysInMonth(12, year-1); 
 
 				for(int i = startDay - 1; i >= 0; i--) {
+					if (dayNum < 1) {
+						dayNum = numDaysInMonth(month-1, year);
+					}
 					dayNums[i] = dayNum + "";
 					dayNum--;
 				}	
@@ -335,8 +347,13 @@ public class WebController {
 					nextMonth = 1;
 					nextYear++;
 				}
+				if (prevWeek > nextWeek) {
+					prevWeek = numDaysInMonth(month-1, year) - day;
+					prevMonth--;
+				}
 			
 				//Info used and displayed on monthly calendar
+				model.addAttribute("dailyEvents", dailyEvents);
 				model.addAttribute("prevWeek", prevWeek);
 				model.addAttribute("nextWeek", nextWeek);
 				model.addAttribute("prevYear", prevYear);

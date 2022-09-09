@@ -11,7 +11,8 @@
 <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
 	rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
-<script src="https://kit.fontawesome.com/aa77e8e357.js" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/aa77e8e357.js"
+	crossorigin="anonymous"></script>
 </head>
 <body>
 	<!-- Navbar at top of page -->
@@ -36,43 +37,45 @@
 	</nav>
 	<div class="overlay" id="divOne">
 		<div class="wrapper">
-			
+
 			<a href="#" class="close">&times;</a>
 			<div class="content">
 				<div class="container">
 					<form>
-						<label for="eventName">Event Name</label>
-						<input type="text" id="eventName" placeholder="event name">
-						<label for="startTime">Start Time</label>
-						<input type="datetime-local" id="startTime">
-						<br>
-						<label for="endTime">End Time</label> 
-						<input type="datetime-local" id="endTime">
-						<br>
+						<label for="eventName">Event Name</label> <input type="text"
+							id="eventName" placeholder="event name"> <label
+							for="startTime">Start Time</label> <input type="datetime-local"
+							id="startTime"> <br> <label for="endTime">End
+							Time</label> <input type="datetime-local" id="endTime"> <br>
 						<label for="addEmployees">Add Employees</label>
-						<textarea id="addEmployees" name="addEmployees" placeholder="Add multiple employees by separating with a comma"
-						rows="3" cols="30"></textarea>
-						<input type="submit" value="Submit"> 	
+						<textarea id="addEmployees" name="addEmployees"
+							placeholder="Add multiple employees by separating with a comma"
+							rows="3" cols="30"></textarea>
+						<input type="submit" value="Submit">
 					</form>
 				</div>
 			</div>
 		</div>
 	</div>
-	
-	
+
+
 	<!-- Calendar Grid -->
 	<div class="calendar-and-daily-info">
 		<div class="month-navigation">
-			<a id="prevButton" href="/weekly-calendar?month=${monthNum}&day=${prevWeek}"><i class="fa-solid fa-arrow-left"></i></a>
+			<a id="prevButton"
+				href="/weekly-calendar?month=${monthNum}&day=${prevWeek}"><i
+				class="fa-solid fa-arrow-left"></i></a>
 
-<!-- Gets current month and year as a String -->
+			<!-- Gets current month and year as a String -->
 			<p id="month-header-text">
 				<c:out value="${monthStr}" />
 				<c:out value="${year}" />
 			</p>
 
-			<a id="nextButton" href="/weekly-calendar?month=${monthNum}&day=${nextWeek}"><i class="fa-solid fa-arrow-right"></i></a>
-			
+			<a id="nextButton"
+				href="/weekly-calendar?month=${monthNum}&day=${nextWeek}"><i
+				class="fa-solid fa-arrow-right"></i></a>
+
 		</div>
 		<div>
 
@@ -92,11 +95,15 @@
 				<!-- Week -->
 
 				<tr>
-					<c:forEach var="dayNum" items="${dayNums}" begin="0" end="6">
-				
-						<td><a href="">${dayNum}</a></td>
-					
-					
+					<c:forEach var="dayNum" items="${dayNums}" begin="0" end="6"
+						varStatus="loop">
+
+						<td><a href="">${dayNum}<c:forEach var="events"
+								items="${dailyEvents[loop.index]}">
+						${events.eventName }
+						</c:forEach></a> </td>
+
+
 					</c:forEach>
 				</tr>
 
@@ -109,7 +116,10 @@
 			<a href="/delete-event" id="delete-button">Delete</a>
 		</div>
 	</div>
-	<div class="center">Powered by <a title="Days Of The Year" href="https://www.daysoftheyear.com">Days Of The Year</a></div>
+	<div class="center">
+		Powered by <a title="Days Of The Year"
+			href="https://www.daysoftheyear.com">Days Of The Year</a>
+	</div>
 	${weekOfYear }
 
 </body>
