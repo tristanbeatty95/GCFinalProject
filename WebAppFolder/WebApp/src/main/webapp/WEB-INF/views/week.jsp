@@ -62,29 +62,18 @@
 	<!-- Calendar Grid -->
 	<div class="calendar-and-daily-info">
 		<div class="month-navigation">
-<<<<<<< HEAD
-			<a id="prevButton"
-				href="/weekly-calendar?month=${monthNum}&day=${prevWeek}"><i
-				class="fa-solid fa-arrow-left"></i></a>
-=======
-			<a id="prevButton" href="/weekly-calendar?Month=${monthNum}&day=${prevWeek}"><i class="fa-solid fa-arrow-left"></i></a>
->>>>>>> weeklyView
+			
+			<a id="prevButton" href="/weekly-calendar?year=${prevWeekYear}&month=${prevWeekMonth}&day=${prevWeekDay}"><i class="fa-solid fa-arrow-left"></i></a>
 
 			<!-- Gets current month and year as a String -->
-			<p id="month-header-text">
-				<c:out value="${monthStr}" />
-				<c:out value="${year}" />
-			</p>
+			<div id="month-header-text">
+				Week of:<br>
+				${curWeekMonthString} ${curWeekDay},<br>
+				${curWeekYear}
+			</div>
 
-<<<<<<< HEAD
-			<a id="nextButton"
-				href="/weekly-calendar?month=${monthNum}&day=${nextWeek}"><i
-				class="fa-solid fa-arrow-right"></i></a>
-
-=======
-			<a id="nextButton" href="/weekly-calendar?Month=${monthNum}&day=${nextWeek}"><i class="fa-solid fa-arrow-right"></i></a>
-			
->>>>>>> weeklyView
+			<a id="nextButton" href="/weekly-calendar?year=${nextWeekYear}&month=${nextWeekMonth}&day=${nextWeekDay}"><i class="fa-solid fa-arrow-right"></i></a>
+		
 		</div>
 		<div>
 
@@ -107,12 +96,14 @@
 					<c:forEach var="dayNum" items="${dayNums}" begin="0" end="6"
 						varStatus="loop">
 
-						<td><a href="">${dayNum}<c:forEach var="events"
-								items="${dailyEvents[loop.index]}">
-						${events.eventName }
-						</c:forEach></a> </td>
-
-
+						<td>
+							<a href="/weekly-calendar?year=${curWeekYear}&month=${curWeekMonth}&day=${curWeekDay}">
+								${dayNum}<br>
+								<c:forEach var="events" items="${dayEvents[loop.index]}">
+									${events.eventName}
+								</c:forEach>
+							</a> 
+						</td>
 					</c:forEach>
 				</tr>
 
