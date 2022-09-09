@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.yaml.snakeyaml.util.ArrayUtils;
 
-import grandcircus.co.WebApp.Models.DayEvent;
 import grandcircus.co.WebApp.Models.Event;
 import grandcircus.co.WebApp.Services.DaysOfTheYearService;
 import grandcircus.co.WebApp.Services.EventService;
@@ -59,30 +57,43 @@ public class WebController {
 			LocalDate currentDate = LocalDate.now();
 			month = currentDate.getMonthValue();
 			year = currentDate.getYear();
+			day = currentDate.getDayOfMonth();
 		}
 
 		// find the number of days in the currently views month
 		int numDaysInMonth = numDaysInMonth(month, year);
 
-		// startDay is offset determined by the start day of the month
-		int startDay = calculateDayOfWeek(1, month, year);
+		// determines the day num of the current day, so that we can determine how many
+		// days to backpedal in order to point at sunday
+		int dayOffset = calculateDayOfWeek(1, month, year);
 
 		// Array stores the values of each gridpoint on the calendar...
-		// either an empty string if the gridpoint is not occupied, otherwise the day
+		// either a 0 if the gridpoint is not occupied, otherwise the day
 		// number
-		String[] dayNums;
-		ArrayList<Event[]> dailyEvents;
-		LocalDateTime dayStartTime;
-		LocalDateTime dayEndTime;
+		int arraySize = ((numDaysInMonth + dayOffset) > 35) ? 42 : 35;
+		List<Integer> dayNums = new ArrayList<Integer>(arraySize);
+		List<Event[]> dailyEvents = new ArrayList<Event[]>(arraySize);
 
-		if (numDaysInMonth + startDay > 35) {
-			dayNums = new String[42];
-			dailyEvents = new ArrayList<Event[]>(43);
-		} else {
-			dayNums = new String[35];
-			dailyEvents = new ArrayList<Event[]>(36);
+		// Set the curDay pointer as the first day of this week
+		LocalDateTime curDay = LocalDateTime.of(year, month, 1, 0, 0);
+		LocalDateTime curDayEndTime = LocalDateTime.of(year, month, 1, 23, 59);
+		
+		//Move the first day to be the first one on the grid
+		while(dayOffset-- > 0) {
+			curDay = curDay.minusDays(1);
+			curDayEndTime = curDayEndTime.minusDays(1);
 		}
-		Arrays.fill(dayNums, 0, dayNums.length, "");
+
+		// Used for printing the correct day numbers of this week on the jsp
+		for (int i = 0; i < arraySize; i++) {
+			dailyEvents.add(eventService.getEventsByTimeRange(curDay.toString(), curDayEndTime.toString()));
+			dayNums.add(curDay.getDayOfMonth());
+			curDay = curDay.plusDays(1);
+			curDayEndTime = curDayEndTime.plusDays(1);
+		}
+
+		// monthStr String is for easier output on the jsp
+		String monthStr = monthNumToString(month);
 
 		// Variables for switching between different months on the view
 		int prevYear = year;
@@ -98,56 +109,7 @@ public class WebController {
 			nextYear++;
 		}
 
-		// Add last few days of previous month to fill in whitespace
-		int dayNum = 1;
-
-		if (month <= 1)
-			dayNum = numDaysInMonth(12, year - 1);
-		else
-			dayNum = numDaysInMonth(month - 1, year);
-
-		for (int i = startDay - 1; i >= 0; i--) {
-			dayStartTime = LocalDateTime.of(prevYear, prevMonth, dayNum, 00, 00);
-			dayEndTime = LocalDateTime.of(prevYear, prevMonth, dayNum, 23, 59);
-			dailyEvents.add(eventService.getEventsByTimeRange(dayStartTime.toString(), dayEndTime.toString()));
-			dayNums[i] = dayNum + "";
-			dayNum--;
-		}
-
-		// Used for printing the correct day
-		dayNum = 1;
-		for (int i = startDay; i < (numDaysInMonth + startDay); i++) {
-			dayStartTime = LocalDateTime.of(year, month, dayNum, 00, 00);
-			dayEndTime = LocalDateTime.of(year, month, dayNum, 23, 59);
-			dailyEvents.add(eventService.getEventsByTimeRange(dayStartTime.toString(), dayEndTime.toString()));
-
-			dayNums[i] = dayNum + "";
-			dayNum++;
-		}
-
-		// Add first few days of next month to fill in whitespace
-		dayNum = 1;
-		for (int i = (numDaysInMonth + startDay); i < dayNums.length; i++) {
-			dayStartTime = LocalDateTime.of(nextYear, nextMonth, dayNum, 00, 00);
-			dayEndTime = LocalDateTime.of(nextYear, nextMonth, dayNum, 23, 59);
-			dailyEvents.add(eventService.getEventsByTimeRange(dayStartTime.toString(), dayEndTime.toString()));
-			dayNums[i] = dayNum + "";
-			dayNum++;
-		}
-
-		if (day != null) {
-			model.addAttribute("dayEvents", dailyEvents.get(day));
-		}
-
-		// This is a representation of the dayNums array that is sent to the JSP -->
-		// ["", "", "", "", 1, 2, 3,
-		// 4, 5, 6, 7, 8, 9, 10,
-		// 11, 12, 13, 14, 15, 16, 17,
-		// 18, 19, 20, 21, 22, 23, 24,
-		// 25, 26, 27, 28, 29, 30, ""]
-
-		// monthStr String is for easier output on the jsp
-		String monthStr = monthNumToString(month);
+		if(day != null)	model.addAttribute("dayEvents", dailyEvents.get(day));
 
 		// Info used and displayed on monthly calendar
 		model.addAttribute("dailyEvents", dailyEvents);
@@ -155,7 +117,7 @@ public class WebController {
 		model.addAttribute("nextYear", nextYear);
 		model.addAttribute("prevMonth", prevMonth);
 		model.addAttribute("nextMonth", nextMonth);
-		model.addAttribute("dayNums", new ArrayList<String>(Arrays.asList(dayNums)));
+		model.addAttribute("dayNums", dayNums);
 		model.addAttribute("year", year);
 		model.addAttribute("monthStr", monthStr);
 		model.addAttribute("monthNum", month);
