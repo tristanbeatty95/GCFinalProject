@@ -63,16 +63,16 @@
 	<div class="calendar-and-daily-info">
 		<div class="month-navigation">
 			
-			<a id="prevButton" href="/weekly-calendar?year=${prevWeekYear}&month=${prevWeekMonth}&day=${prevWeekDay}"><i class="fa-solid fa-arrow-left"></i></a>
+			<a id="prevButton" href="/weekly-calendar?date=${prevWeekDate}"><i class="fa-solid fa-arrow-left"></i></a>
 
 			<!-- Gets current month and year as a String -->
 			<div id="month-header-text">
 				Week of:<br>
-				${curWeekMonthString} ${curWeekDay},<br>
-				${curWeekYear}
+				${curWeekMonthString} ${curWeekDate.dayOfMonth},<br>
+				${curWeekDate.year}
 			</div>
 
-			<a id="nextButton" href="/weekly-calendar?year=${nextWeekYear}&month=${nextWeekMonth}&day=${nextWeekDay}"><i class="fa-solid fa-arrow-right"></i></a>
+			<a id="nextButton" href="/weekly-calendar?date=${nextWeekDate}"><i class="fa-solid fa-arrow-right"></i></a>
 		
 		</div>
 		<div>
@@ -93,13 +93,13 @@
 				<!-- Week -->
 
 				<tr>
-					<c:forEach var="dayNum" items="${dayNums}" begin="0" end="6"
+					<c:forEach var="date" items="${dates}" begin="0" end="6"
 						varStatus="loop">
 
 						<td>
-							<a href="/weekly-calendar?year=${curWeekYear}&month=${curWeekMonth}&day=${curWeekDay}">
-								${dayNum}<br>
-								<c:forEach var="events" items="${dayEvents[loop.index]}">
+							<a href="/weekly-calendar?date=${date}">
+								${date.dayOfMonth}<br>
+								<c:forEach var="events" items="${events[loop.index]}">
 									${events.eventName}
 								</c:forEach>
 							</a> 
@@ -112,7 +112,14 @@
 
 
 		<div class="daily-info-section">
-			<h3 id="day-info-header">Day Info</h3>
+			<h3 id="day-info-header">${curDayMonthString} ${curDayDate.dayOfMonth}</h3>
+			<ul>
+				<c:forEach var="event" items="${dayEvents}">
+					<li>
+						${event.eventName}	(${event.startTime} - ${event.endTime})<a href="/delete/${event.id}">&times;</a>
+					</li>
+				</c:forEach>
+			</ul>
 			<a href="/delete-event" id="delete-button">Delete</a>
 		</div>
 	</div>

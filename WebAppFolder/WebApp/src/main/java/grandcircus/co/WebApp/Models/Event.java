@@ -18,6 +18,16 @@ public class Event {
 		this.id = id;
 	}
 
+	// Getter for time, without the date portion
+	public String getStartTime() {
+		return this.getStart().substring(11);
+	}
+
+	// Getter for time, without the date portion
+	public String getEndTime() {
+		return this.getEnd().substring(11);
+	}
+
 	public String getStart() {
 		return start;
 	}
@@ -67,7 +77,7 @@ public class Event {
 	}
 
 	public Event() {
-		
+
 	}
 
 	@Override
@@ -75,8 +85,5 @@ public class Event {
 		return "Event [start=" + start + ", end=" + end + ", eventName=" + eventName + ", duration=" + duration
 				+ ", employees=" + employees + "]";
 	}
-	
-	
 
 }
-

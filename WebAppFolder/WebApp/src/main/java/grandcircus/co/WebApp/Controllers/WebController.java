@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.yaml.snakeyaml.util.ArrayUtils;
 
 import grandcircus.co.WebApp.Models.Event;
 import grandcircus.co.WebApp.Services.DaysOfTheYearService;
@@ -49,134 +48,158 @@ public class WebController {
 
 	// Month will be default page
 	@RequestMapping("/monthly-calendar")
-	public String displayMonth(@RequestParam(required = false) Integer year,
-			@RequestParam(required = false) Integer month, @RequestParam(required = false) Integer day, Model model) {
+	public String displayMonth(@RequestParam(required = false) String date, @RequestParam(required = false) String dayDate, Model model) {
 		// If a date is not provided as is the case when "/" is visited, it will show
 		// current month on calendar
-		if (year == null || month == null) {
-			LocalDate currentDate = LocalDate.now();
-			month = currentDate.getMonthValue();
-			year = currentDate.getYear();
-			day = currentDate.getDayOfMonth();
+		LocalDate today;
+		if (date == null) {
+			today = LocalDate.now();
+		}
+		else {
+			today = LocalDate.parse(date);
+		}
+		date = today.toString();
+		
+		LocalDate sidebarDate;
+		if (dayDate == null) {
+			sidebarDate = LocalDate.now();
+		}
+		else {
+			sidebarDate = LocalDate.parse(dayDate);
 		}
 
-		// find the number of days in the currently views month
-		int numDaysInMonth = numDaysInMonth(month, year);
+		// find the number of days in the currently viewed month
+		int numDaysInMonth = numDaysInMonth(today.getMonthValue(), today.getYear());
 
 		// determines the day num of the current day, so that we can determine how many
 		// days to backpedal in order to point at sunday
-		int dayOffset = calculateDayOfWeek(1, month, year);
+		int dayOffset = calculateDayOfWeek(1, today.getMonthValue(), today.getYear());
 
 		// Array stores the values of each gridpoint on the calendar...
 		// either a 0 if the gridpoint is not occupied, otherwise the day
 		// number
 		int arraySize = ((numDaysInMonth + dayOffset) > 35) ? 42 : 35;
-		List<Integer> dayNums = new ArrayList<Integer>(arraySize);
-		List<Event[]> dailyEvents = new ArrayList<Event[]>(arraySize);
+		List<LocalDate> dates = new ArrayList<LocalDate>(arraySize);
+		List<Event[]> events = new ArrayList<Event[]>(arraySize);
 
 		// Set the curDay pointer as the first day of this week
-		LocalDateTime curDay = LocalDateTime.of(year, month, 1, 0, 0);
-		LocalDateTime curDayEndTime = LocalDateTime.of(year, month, 1, 23, 59);
+		LocalDateTime curDay = LocalDateTime.of(today.getYear(), today.getMonthValue(), today.getDayOfMonth(), 0, 0);
+		LocalDateTime curDayEndTime = LocalDateTime.of(today.getYear(), today.getMonthValue(), today.getDayOfMonth(), 23, 59);
 		
 		//Move the first day to be the first one on the grid
-		while(dayOffset-- > 0) {
-			curDay = curDay.minusDays(1);
-			curDayEndTime = curDayEndTime.minusDays(1);
-		}
+		curDay = curDay.minusDays(today.getDayOfMonth() + dayOffset - 1);
+		curDayEndTime = curDayEndTime.minusDays(today.getDayOfMonth() + dayOffset - 1);
+		today = today.minusDays(today.getDayOfMonth() + dayOffset - 1);
 
 		// Used for printing the correct day numbers of this week on the jsp
 		for (int i = 0; i < arraySize; i++) {
-			dailyEvents.add(eventService.getEventsByTimeRange(curDay.toString(), curDayEndTime.toString()));
-			dayNums.add(curDay.getDayOfMonth());
+			events.add(eventService.getEventsByTimeRange(curDay.toString(), curDayEndTime.toString()));
+			dates.add(today);
+			today = today.plusDays(1);
 			curDay = curDay.plusDays(1);
 			curDayEndTime = curDayEndTime.plusDays(1);
 		}
-
-		// monthStr String is for easier output on the jsp
-		String monthStr = monthNumToString(month);
-
-		// Variables for switching between different months on the view
-		int prevYear = year;
-		int prevMonth = month - 1;
-		int nextYear = year;
-		int nextMonth = month + 1;
-
-		if (prevMonth < 1) {
-			prevMonth = 12;
-			prevYear--;
-		} else if (nextMonth > 12) {
-			nextMonth = 1;
-			nextYear++;
+		
+		for(int i = 0; i < events.size(); i++) {
+			System.out.print("Events" + i + ": ");
+			Event[] cur = events.get(i);
+			for(int j = 0; j < cur.length; j++) {
+				System.out.print(cur[j] + ", ");
+			}
+			System.out.println();
 		}
 
-		if(day != null)	model.addAttribute("dayEvents", dailyEvents.get(day));
+		// Set today to the first day of this month
+		//today = today.minusDays(numDaysInMonth);
+		today = LocalDate.parse(date);
+		model.addAttribute("curMonthDate", today);
+		model.addAttribute("curMonthString", monthNumToString(today.getMonthValue()));
+		// Set today to last month's date
+		today = today.minusMonths(1);
+		model.addAttribute("prevMonthDate", today.toString());
+		// Set today to next month's date
+		today = today.plusMonths(2);
+		model.addAttribute("nextMonthDate", today.toString());
+		
+		// Day numbers to be printed
+		model.addAttribute("dates", dates);
+		model.addAttribute("events", events);
+		// Set today to curDay for daily info section
+		today = LocalDate.parse(date);
+		model.addAttribute("curDayDate", sidebarDate);
+		model.addAttribute("curDayMonthString", monthNumToString(sidebarDate.getMonthValue()));
 
-		// Info used and displayed on monthly calendar
-		model.addAttribute("dailyEvents", dailyEvents);
-		model.addAttribute("prevYear", prevYear);
-		model.addAttribute("nextYear", nextYear);
-		model.addAttribute("prevMonth", prevMonth);
-		model.addAttribute("nextMonth", nextMonth);
-		model.addAttribute("dayNums", dayNums);
-		model.addAttribute("year", year);
-		model.addAttribute("monthStr", monthStr);
-		model.addAttribute("monthNum", month);
+		for (int i = 0; i < dates.size(); i++) {
+			if (dates.get(i).toString().equals(dayDate)) {
+				model.addAttribute("dayEvents", events.get(i));
+			}
+		}
 
 		return "month";
 	}
 
 	@RequestMapping("/weekly-calendar")
-	public String displayWeek(Model model, @RequestParam(required = false) Integer month,
-			@RequestParam(required = false) Integer day, @RequestParam(required = false) Integer year) {
+	public String displayWeek(Model model, @RequestParam(required = false) String date) {
 		
 		// If page is entered with no params (clicking on weekly view instead of either
 		// of the arrows)
-		if (year == null || month == null || day == null) {
-			LocalDateTime todaysDate = LocalDateTime.now();
-			year = todaysDate.getYear();
-			month = todaysDate.getMonthValue();
-			day = todaysDate.getDayOfMonth();
+		LocalDate today;
+		if (date == null) {
+			today = LocalDate.now();
 		}
+		else {
+			today = LocalDate.parse(date);
+		}
+		date = today.toString();
 		
 		//Stores the numbers to be printed for the current week
-		int[] dayNums = new int[7];
-		List<Event[]> dayEvents = new ArrayList<Event[]>(7);
+		List<LocalDate> dates = new ArrayList<LocalDate>(7);
+		List<Event[]> events = new ArrayList<Event[]>(7);
 		
 		//determines the day num of the current day, so that we can determine how many days to backpedal in order to point at sunday
-		int dayOffset = calculateDayOfWeek(day, month, year);
+		int dayOffset = calculateDayOfWeek(today.getDayOfMonth(), today.getMonthValue(), today.getYear());
 		
 		//Set the curDay pointer as the first day of this week
-		LocalDateTime curDay = LocalDateTime.of(year, month, day - dayOffset, 0, 0);
-		LocalDateTime curDayEndTime = LocalDateTime.of(year, month, day - dayOffset, 23, 59);
+		LocalDateTime curDay = LocalDateTime.of(today.getYear(), today.getMonth(), today.getDayOfMonth(), 0, 0);
+		LocalDateTime curDayEndTime = LocalDateTime.of(today.getYear(), today.getMonth(), today.getDayOfMonth(), 23, 59);
+		
+		curDay = curDay.minusDays(dayOffset);
+		curDayEndTime = curDayEndTime.minusDays(dayOffset);
+		today = today.minusDays(dayOffset);
 
 		// Used for printing the correct day numbers of this week on the jsp 
 		for (int i = 0; i < 7; i++) {
-			dayEvents.add(eventService.getEventsByTimeRange(curDay.toString(), curDayEndTime.toString()));
-			dayNums[i] = curDay.getDayOfMonth();
+			events.add(eventService.getEventsByTimeRange(curDay.toString(), curDayEndTime.toString()));
+			dates.add(today);
+			today = today.plusDays(1);
 			curDay = curDay.plusDays(1);
 			curDayEndTime = curDayEndTime.plusDays(1);
 		}
 
 		
-		//Set curDay to the first day of this week
-		curDay = LocalDateTime.of(year, month, day - dayOffset, 0, 0);
-		model.addAttribute("curWeekDay", curDay.getDayOfMonth());
-		model.addAttribute("curWeekMonthString", monthNumToString(curDay.getMonthValue()));
-		model.addAttribute("curWeekMonth", curDay.getMonthValue());
-		model.addAttribute("curWeekYear", curDay.getYear());
-		//Set curDay to next weeks date
-		curDay = curDay.plusDays(7);
-		model.addAttribute("nextWeekDay", curDay.getDayOfMonth());
-		model.addAttribute("nextWeekMonth", curDay.getMonthValue());
-		model.addAttribute("nextWeekYear", curDay.getYear());
-		//Set curDay to last weeks date
-		curDay = curDay.minusDays(14);
-		model.addAttribute("prevWeekDay", curDay.getDayOfMonth());
-		model.addAttribute("prevWeekMonth", curDay.getMonthValue());
-		model.addAttribute("prevWeekYear", curDay.getYear());
+		//Set today to the first day of this week
+		today = today.minusDays(7);
+		model.addAttribute("curWeekDate", today);
+		model.addAttribute("curWeekMonthString", monthNumToString(today.getMonthValue()));
+		//Set today to next weeks date
+		today = today.plusDays(7);
+		model.addAttribute("nextWeekDate", today.toString());
+		//Set today to last weeks date
+		today = today.minusDays(14);
+		model.addAttribute("prevWeekDate", today.toString());
 		//Day numbers to be printed
-		model.addAttribute("dayNums", dayNums);
-		model.addAttribute("dayEvents", dayEvents);
+		model.addAttribute("dates", dates);
+		model.addAttribute("events", events);
+		//Set today to curDay for daily info section
+		today = LocalDate.parse(date);
+		model.addAttribute("curDayDate", today);
+		model.addAttribute("curDayMonthString", monthNumToString(today.getMonthValue()));
+		
+		for(int i = 0; i < dates.size(); i++) {
+			if(dates.get(i).toString().equals(date)) {
+				model.addAttribute("dayEvents", events.get(i));
+			}
+		}
 		
 		return "week";
 	}

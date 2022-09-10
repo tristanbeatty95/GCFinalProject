@@ -30,6 +30,16 @@ public class Event {
 	public void setStart(String start) {
 		this.start = start;
 	}
+	
+	//Getter for time, without the date portion
+	public String getStartTime() {
+		return this.getStart().substring(11);
+	}
+	
+	//Getter for time, without the date portion
+	public String getEndTime() {
+		return this.getEnd().substring(11);
+	}
 
 	public String getEnd() {
 		return end;
