@@ -101,13 +101,13 @@
 								${date.dayOfMonth}<br>
 								<c:forEach var="events" items="${events[loop.index]}">								
 									${events.eventName}
+							
 								</c:forEach>
-								<br><br>
-								<p class="center">
-									<!-- The url variables below (line 108) are from the old controller code, do not apply to reworked weekly controller -->
-									<a href="/weekly-day-event?month=${curWeekMonth}&year=${curWeekYear}&day=${dayNum}"><i class="far fa-caret-square-right"></i></a>
-								</p>
 							</a>
+								<p class="center">
+									
+									<a href="/weekly-day-event?month=${dayMonthString }&year=2022&day=${dayDayString}"><i class="far fa-caret-square-right"></i></a>
+								</p>
 						</td>
 					</c:forEach>
 				</tr>
@@ -121,7 +121,7 @@
 			<ul>
 				<c:forEach var="event" items="${dayEvents}">
 					<li>
-						${event.eventName}	(${event.startTime} - ${event.endTime})<a href="/delete/${event.id}">&times;</a>
+						${event.eventName}	(${event.startTime} - ${event.endTime})<a href="/delete/${event.id}">   <i class="fa fa-trash" aria-hidden="true"></i></a>
 					</li>
 				</c:forEach>
 			</ul>
