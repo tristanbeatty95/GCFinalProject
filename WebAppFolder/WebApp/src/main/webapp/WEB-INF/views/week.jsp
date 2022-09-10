@@ -99,10 +99,15 @@
 						<td>
 							<a href="/weekly-calendar?date=${date}">
 								${date.dayOfMonth}<br>
-								<c:forEach var="events" items="${events[loop.index]}">
+								<c:forEach var="events" items="${events[loop.index]}">								
 									${events.eventName}
 								</c:forEach>
-							</a> 
+								<br><br>
+								<p class="center">
+									<!-- The url variables below (line 108) are from the old controller code, do not apply to reworked weekly controller -->
+									<a href="/weekly-day-event?month=${curWeekMonth}&year=${curWeekYear}&day=${dayNum}"><i class="far fa-caret-square-right"></i></a>
+								</p>
+							</a>
 						</td>
 					</c:forEach>
 				</tr>
@@ -120,10 +125,14 @@
 					</li>
 				</c:forEach>
 			</ul>
+
+			<a href="${dayEventUrl }">${dayEventName}</a>
+			
 			<a href="/delete-event" id="delete-button">Delete</a>
 		</div>
 	</div>
 	<div class="center">
+	<p>Click on a <i class="far fa-caret-square-right"></i> button to see more weird, funny, unknown and bizarre daily events!</p>
 		Powered by <a title="Days Of The Year"
 			href="https://www.daysoftheyear.com">Days Of The Year</a>
 	</div>

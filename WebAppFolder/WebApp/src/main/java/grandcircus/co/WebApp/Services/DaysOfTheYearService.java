@@ -50,7 +50,7 @@ public class DaysOfTheYearService {
 	}
 	
 	public DayEvent[] getSpecificDateEvents(String year, String month, String day) {
-		String url = "https://www.daysoftheyear.com/api/v1/date/" + year + "/" + month + "/" + day + "/";
+		String url = "https://www.daysoftheyear.com/api/v1/date/" + year + "/" + month + "/" + day + "/?limit=1";
 		DayEventDataResponse response = rt.exchange(url, HttpMethod.GET, formatRequest(), 
 				DayEventDataResponse.class).getBody();
 		return response.getData();
