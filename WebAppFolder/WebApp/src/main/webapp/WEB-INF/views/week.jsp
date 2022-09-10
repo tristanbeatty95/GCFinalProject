@@ -97,12 +97,14 @@
 						varStatus="loop">
 
 						<td>
-							<a href="/weekly-calendar?year=${curWeekYear}&month=${curWeekMonth}&day=${curWeekDay}">
+							<%-- <a href="/weekly-calendar?year=${curWeekYear}&month=${curWeekMonth}&day=${curWeekDay}"> --%>
 								${dayNum}<br>
 								<c:forEach var="events" items="${dayEvents[loop.index]}">
 									${events.eventName}
 								</c:forEach>
-							</a> 
+								<br><br><p class="center">
+								<a href="/weekly-day-event?month=${curWeekMonth}&year=${curWeekYear}&day=${dayNum}"><i class="far fa-caret-square-right"></i></a></p>
+							<!-- </a>  -->
 						</td>
 					</c:forEach>
 				</tr>
@@ -113,10 +115,14 @@
 
 		<div class="daily-info-section">
 			<h3 id="day-info-header">Day Info</h3>
+			
+			<a href="${dayEventUrl }">${dayEventName}</a>
+			
 			<a href="/delete-event" id="delete-button">Delete</a>
 		</div>
 	</div>
 	<div class="center">
+	<p>Click on a <i class="far fa-caret-square-right"></i> button to see more weird, funny, unknown and bizarre daily events!</p>
 		Powered by <a title="Days Of The Year"
 			href="https://www.daysoftheyear.com">Days Of The Year</a>
 	</div>
