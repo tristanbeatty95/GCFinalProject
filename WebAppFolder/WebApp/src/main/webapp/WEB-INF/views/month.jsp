@@ -23,10 +23,12 @@
 			<li style="background-color:#8D8D8D" class="nav-item" class="button">
 				<a href="#divOne" style="color:#FFFFFF">Add Event</a>
 			</li>
+			<li style="background-color: #8D8D8D" class="nav-item"><a
+				href="/schedule-finder" style="color: #FFFFFF">Search Events</a></li>
 		</ul>
 		<ul class="nav-links">
 			<li class="nav-item" id="companyNameText">
-				<p style="color:#FFFFFF">[Company Name]</p>
+				<p style="color:#FFFFFF">Timely - Weekly Calendar</p>
 			</li>
 		</ul>
 		<ul class="nav-links">
