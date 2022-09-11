@@ -31,5 +31,11 @@ public class EventService {
 		String url = "http://localhost:8080/event/" + id;
 		restTemplate.delete(url);
 	}
+	
+	public Event[] getAllEvents() {
+		String url = "http://localhost:8080/event/";
+		Event[] response = restTemplate.getForObject(url, Event[].class);
+		return response;
+	}
 
 }

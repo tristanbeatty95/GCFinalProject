@@ -10,6 +10,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,7 @@ public class WebController {
 
 	@Autowired
 	private DaysOfTheYearService dayService;
+	
 
 //	//Home page after we complete MVP
 //	@RequestMapping("/login")
@@ -457,4 +459,60 @@ public class WebController {
 		return day.toString();
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@RequestMapping("/schedule-finder")
+	public String displayScheduleFinder() {
+		return "schedule-finder";
+	}
+	
+	@GetMapping("/schedule-finder1")
+	public String displayTimes(@RequestParam String start,
+								@RequestParam String end,
+								@RequestParam List<String> employees,
+								Model model) {
+		
+		Event[] events = eventService.getAllEvents();	
+		List<String> availableTimes = new ArrayList<>();
+		LocalDate searchStart = LocalDate.parse(start);
+		LocalDate searchEnd = LocalDate.parse(end);
+
+		for(Event e : events) {
+			String eventStart = "";
+			String eventEnd = "";
+			if (e.getStart().length() > 9) {
+				eventStart = e.getStart().substring(0, 10);
+				eventEnd = e.getEnd().substring(0, 10);
+			}
+			
+			if (searchStart.equals(LocalDate.parse(eventStart)) || (searchEnd.equals(LocalDate.parse(eventEnd)) )) {
+				//suggest times
+				availableTimes.add("This time conflicts with " + e.getEventName() + " on " + eventStart);
+			} 
+		}
+
+		model.addAttribute("availableTimes", availableTimes);
+			
+		
+		return "/schedule-finder";
+	}
 }

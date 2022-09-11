@@ -24,6 +24,8 @@
 			<li style="background-color: #8D8D8D" class="nav-item" class="button">
 				<a href="#divOne" style="color: #FFFFFF">Add Event</a>
 			</li>
+			<li style="background-color: #8D8D8D" class="nav-item"><a
+				href="/schedule-finder" style="color: #FFFFFF">Search Events</a></li>
 		</ul>
 		<ul class="nav-links">
 			<li class="nav-item" id="companyNameText">
@@ -136,7 +138,7 @@
 		Powered by <a title="Days Of The Year"
 			href="https://www.daysoftheyear.com">Days Of The Year</a>
 	</div>
-	${weekOfYear }
+	
 
 </body>
 </html>
