@@ -106,7 +106,7 @@
 							</a>
 								<p class="center">
 									
-									<a href="/weekly-day-event?month=${dayMonthString }&year=2022&day=${dayDayString}"><i class="far fa-caret-square-right"></i></a>
+									<a href="/weekly-day-event?date=${date }&month=${dayMonthString}&year=2022&day=${date.dayOfMonth}"><i class="far fa-caret-square-right"></i></a>
 								</p>
 						</td>
 					</c:forEach>
@@ -126,7 +126,7 @@
 				</c:forEach>
 			</ul>
 
-			<a href="${dayEventUrl }">${dayEventName}</a>
+			<a href="${dayEventUrl }" target="_blank" rel="noopener noreferrer">${dayEventName}</a>
 			
 			<a href="/delete-event" id="delete-button">Delete</a>
 		</div>

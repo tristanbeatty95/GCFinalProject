@@ -178,17 +178,9 @@ public class WebController {
 		}
 		//Used for generating data for DaysOfYearApi call on jsp
 		String dayMonthString = monthToString(curDay.getMonthValue());
-		String dayDayString = dayToString(curDay.getDayOfMonth());
+		String dayDayString = dayToString(today.getDayOfMonth());
 		String dayEventName = "";
-		String dayEventUrl = "";
-		DayEvent[] dayEvent = dayService.getSpecificDateEvents("2022", dayMonthString, dayDayString);
-		for (DayEvent d : dayEvent) {
-			dayEventName = d.getName();
-			dayEventUrl = d.getUrl();
-		}
-		System.out.println(dayEventName);
-		System.out.println(dayEventUrl);
-		
+		String dayEventUrl = "";		
 		model.addAttribute("dayEventName", dayEventName);
 		model.addAttribute("dayEventUrl", dayEventUrl);
 
@@ -211,6 +203,13 @@ public class WebController {
 		model.addAttribute("curDayDate", today);
 		model.addAttribute("curDayMonthString", monthNumToString(today.getMonthValue()));
 		//Day, Month, and Year Values to pass to DaysOfTheYearAPI link
+		if(dayMonthString.length() < 2) {
+			dayMonthString = "0"+dayMonthString;
+		}
+		if(dayDayString.length() < 2) {
+			dayDayString = "0"+dayDayString;
+		}
+		
 		model.addAttribute("dayMonthString", dayMonthString);
 		model.addAttribute("dayDayString", dayDayString);
 		
@@ -351,13 +350,16 @@ public class WebController {
 	}
 
 	@RequestMapping("/weekly-day-event")
-	public String displayDayApiEvent(Model model, @RequestParam(required=false) String date) {
+	public String displayDayApiEvent(Model model, @RequestParam(required=false) String date,
+										@RequestParam(required=false) Integer month,
+										@RequestParam(required=false) Integer day) {
 		
 		// If page is entered with no params (clicking on weekly view instead of either
 		// of the arrows)
 		LocalDate today;
 		if (date == null) {
-			today = LocalDate.now();
+			today = LocalDate.of(2022, month, day);
+			
 		}
 		else {
 			today = LocalDate.parse(date);
@@ -388,20 +390,18 @@ public class WebController {
 			curDayEndTime = curDayEndTime.plusDays(1);
 		}
 		//Used for generating data for DaysOfYearApi call on jsp
-		String dayMonthString = monthToString(curDay.getMonthValue());
-		String dayDayString = dayToString(curDay.getDayOfMonth());
+		String dayMonthString = monthToString(month);
+		String dayDayString = dayToString(day);		
 		String dayEventName = "";
 		String dayEventUrl = "";
-		DayEvent[] dayEvent = dayService.getSpecificDateEvents("2022", dayMonthString, dayDayString);
-		for (DayEvent d : dayEvent) {
+		DayEvent[] dayEvents = dayService.getSpecificDateEvents("2022", dayMonthString, dayDayString);
+		for (DayEvent d : dayEvents) {
 			dayEventName = d.getName();
 			dayEventUrl = d.getUrl();
 		}
-		System.out.println(dayEventName);
-		System.out.println(dayEventUrl);
-		
 		model.addAttribute("dayEventName", dayEventName);
 		model.addAttribute("dayEventUrl", dayEventUrl);
+
 
 		
 		//Set today to the first day of this week
@@ -422,6 +422,13 @@ public class WebController {
 		model.addAttribute("curDayDate", today);
 		model.addAttribute("curDayMonthString", monthNumToString(today.getMonthValue()));
 		//Day, Month, and Year Values to pass to DaysOfTheYearAPI link
+		if(dayMonthString.length() < 2) {
+			dayMonthString = "0"+dayMonthString;
+		}
+		if(dayDayString.length() < 2) {
+			dayDayString = "0"+dayDayString;
+		}
+		//to pass into links on JSP
 		model.addAttribute("dayMonthString", dayMonthString);
 		model.addAttribute("dayDayString", dayDayString);
 		
@@ -431,11 +438,9 @@ public class WebController {
 			}
 		}
 		
-	
-		
 		return "week";
 	}
-	
+	//helper method to make sure month is always 2 digits (required by API call)
 	public String monthToString(Integer month) {
 		if (month.toString().length() == 1) {
 			String newMonth = "0" + month ;
@@ -443,6 +448,7 @@ public class WebController {
 		}
 		return month.toString();
 	}
+	//helper method to make sure day is always 2 digits (required by API call)
 	public String dayToString(Integer day) {
 		if (day.toString().length() == 1) {
 			String newDay = "0" + day;
