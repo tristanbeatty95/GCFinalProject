@@ -1,7 +1,10 @@
 package grandcircus.co.WebService.Controller;
 
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,37 @@ import grandcircus.co.WebService.Repo.EventRepo;
 public class EventController {
 	@Autowired
 	private EventRepo event_repo;
+	
+	@GetMapping("/event/{start}/{end}")
+	public HashMap<String, ArrayList<Event>> getEventsBetween(@PathVariable("start") String start, @PathVariable("end") String end){
+		List<Event> events = event_repo.findAll();
+		HashMap<String, ArrayList<Event>> datesToEvents = new HashMap<String, ArrayList<Event>>();
+		LocalDate startDate;
+		LocalDate endDate;
+		
+		for(Event event : events) {
+			//Start and end of current object
+			startDate = LocalDateTime.parse(event.getStart()).toLocalDate();
+			endDate = LocalDateTime.parse(event.getEnd()).toLocalDate();
+			
+			//Put the current even in the list contained under the startdate key
+			if(!datesToEvents.containsKey(startDate.toString())) {
+				datesToEvents.put(startDate.toString(), new ArrayList<Event>());
+			}
+			datesToEvents.get(startDate.toString()).add(event);
+			startDate = startDate.plusDays(1);
+			
+			while(startDate.isBefore(endDate) || startDate.isEqual(endDate)) {
+				if(!datesToEvents.containsKey(startDate.toString())) {
+					datesToEvents.put(startDate.toString(), new ArrayList<Event>());
+				}
+				datesToEvents.get(startDate.toString()).add(event);
+				startDate = startDate.plusDays(1);
+			}
+		}
+		
+		return datesToEvents;
+	}
 
 	@GetMapping("/event")
 	public List<Event> getAllEvents(@RequestParam(required = false) String employees,

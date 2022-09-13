@@ -81,27 +81,19 @@ public class WebController {
 		// either a 0 if the gridpoint is not occupied, otherwise the day
 		// number
 		int arraySize = ((numDaysInMonth + dayOffset) > 35) ? 42 : 35;
-		HashMap<Integer, LocalDate> dates = new HashMap<Integer, LocalDate>(arraySize, (float)1.0);
-		List<Event[]> events = new ArrayList<Event[]>(arraySize);
-
-		// Set the curDay pointer as the first day of this week
-		LocalDateTime curDay = LocalDateTime.of(today.getYear(), today.getMonthValue(), today.getDayOfMonth(), 0, 0);
-		LocalDateTime curDayEndTime = LocalDateTime.of(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-				23, 59);
+		ArrayList<LocalDate> dates = new ArrayList<LocalDate>(arraySize);
+		HashMap<String, ArrayList<Event>> events;
 
 		// Move the first day to be the first one on the grid
-		curDay = curDay.minusDays(today.getDayOfMonth() + dayOffset - 1);
-		curDayEndTime = curDayEndTime.minusDays(today.getDayOfMonth() + dayOffset - 1);
 		today = today.minusDays(today.getDayOfMonth() + dayOffset - 1);
 
 		// Used for printing the correct day numbers of this week on the jsp
 		for (int i = 0; i < arraySize; i++) {
-			events.add(eventService.getEventsByTimeRange(curDay.toString(), curDayEndTime.toString()));
-			dates.put(i, today);
+			dates.add(today);
 			today = today.plusDays(1);
-			curDay = curDay.plusDays(1);
-			curDayEndTime = curDayEndTime.plusDays(1);
 		}
+		
+		events = eventService.getEventsByTimeRange(dates.get(0).toString(), dates.get(dates.size() - 1).toString());
 
 		// Set today to the first day of this month
 		// today = today.minusDays(numDaysInMonth);
@@ -125,7 +117,7 @@ public class WebController {
 
 		for (int i = 0; i < dates.size(); i++) {
 			if (dates.get(i).toString().equals(dayDate)) {
-				model.addAttribute("dayEvents", events.get(i));
+				model.addAttribute("dayEvents", events.get(dayDate));
 			}
 		}
 
@@ -147,7 +139,7 @@ public class WebController {
 
 		// Stores the numbers to be printed for the current week
 		List<LocalDate> dates = new ArrayList<LocalDate>(7);
-		List<Event[]> events = new ArrayList<Event[]>(7);
+		HashMap<String, ArrayList<Event>> events;
 
 		// determines the day num of the current day, so that we can determine how many
 		// days to backpedal in order to point at sunday
@@ -164,12 +156,12 @@ public class WebController {
 
 		// Used for printing the correct day numbers of this week on the jsp
 		for (int i = 0; i < 7; i++) {
-			events.add(eventService.getEventsByTimeRange(curDay.toString(), curDayEndTime.toString()));
 			dates.add(today);
 			today = today.plusDays(1);
 			curDay = curDay.plusDays(1);
-			curDayEndTime = curDayEndTime.plusDays(1);
 		}
+		events = eventService.getEventsByTimeRange(dates.get(0).toString(), dates.get(dates.size() - 1).toString());
+		
 		// Used for generating data for DaysOfYearApi call on jsp
 		String dayMonthString = monthToString(curDay.getMonthValue());
 		String dayDayString = dayToString(today.getDayOfMonth());
@@ -208,7 +200,7 @@ public class WebController {
 
 		for (int i = 0; i < dates.size(); i++) {
 			if (dates.get(i).toString().equals(date)) {
-				model.addAttribute("dayEvents", events.get(i));
+				model.addAttribute("dayEvents", events.get(dates.get(i).toString()));
 			}
 		}
 

@@ -1,5 +1,11 @@
 package grandcircus.co.WebApp.Services;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,9 +23,15 @@ public class EventService {
 		return thatEvent;
 	}
 	
-	public Event[] getEventsByTimeRange(String start, String end){
-		String url = "http://localhost:8080/event?start=" + start + "&end=" + end;
-		Event[] response = restTemplate.getForObject(url, Event[].class);
+	public HashMap<String, ArrayList<Event>> getEventsByTimeRange(String start, String end){
+		String url = "http://localhost:8080/event/" + start + "/" + end;
+		
+		ParameterizedTypeReference<HashMap<String, ArrayList<Event>>> responseType = 
+				new ParameterizedTypeReference<HashMap<String, ArrayList<Event>>>(){};
+		
+		RequestEntity<Void> request = RequestEntity.get(url).accept(MediaType.APPLICATION_JSON).build();
+		
+		HashMap<String, ArrayList<Event>> response = restTemplate.exchange(request, responseType).getBody();
 		return response;
 	}
 

@@ -88,12 +88,12 @@
 		
 				<!-- Week 1 -->
 				<tr>
-					<c:forEach var="eventList" items="${events}" begin="0" end="6" varStatus="loop">
+					<c:forEach var="date" items="${dates}" begin="0" end="6" varStatus="loop">
 						<td>
-							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${dates[loop.index]}">
-							${dates[loop.index].dayOfMonth}
+							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${date}">
+							${date.dayOfMonth}
 							<br>
-							<c:forEach var="dayEvent" items="${eventList}">
+							<c:forEach var="dayEvent" items="${events[date]}">
 								${dayEvent.eventName}
 								<br>
 							</c:forEach>
@@ -104,12 +104,12 @@
 				</tr>
 				
 				<tr>
-					<c:forEach var="eventList" items="${events}" begin="7" end="13" varStatus="loop">
+					<c:forEach var="date" items="${dates}" begin="7" end="13" varStatus="loop">
 						<td>
-							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${dates[loop.index]}">
-							${dates[loop.index].dayOfMonth}
+							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${date}">
+							${date.dayOfMonth}
 							<br>
-							<c:forEach var="dayEvent" items="${eventList}">
+							<c:forEach var="dayEvent" items="${events[date]}">
 								${dayEvent.eventName}
 								<br>
 							</c:forEach>
@@ -120,12 +120,12 @@
 				</tr>
 				
 				<tr>
-					<c:forEach var="eventList" items="${events}" begin="14" end="20" varStatus="loop">
+					<c:forEach var="date" items="${dates}" begin="14" end="20" varStatus="loop">
 						<td>
-							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${dates[loop.index]}">
-							${dates[loop.index].dayOfMonth}
+							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${date}">
+							${date.dayOfMonth}
 							<br>
-							<c:forEach var="dayEvent" items="${eventList}">
+							<c:forEach var="dayEvent" items="${events[date]}">
 								${dayEvent.eventName}
 								<br>
 							</c:forEach>
@@ -136,12 +136,12 @@
 				</tr>
 				
 				<tr>
-					<c:forEach var="eventList" items="${events}" begin="21" end="27" varStatus="loop">
+					<c:forEach var="date" items="${dates}" begin="21" end="27" varStatus="loop">
 						<td>
-							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${dates[loop.index]}">
-							${dates[loop.index].dayOfMonth}
+							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${date}">
+							${date.dayOfMonth}
 							<br>
-							<c:forEach var="dayEvent" items="${eventList}">
+							<c:forEach var="dayEvent" items="${events[date]}">
 								${dayEvent.eventName}
 								<br>
 							</c:forEach>
@@ -152,12 +152,12 @@
 				</tr>
 				
 				<tr>
-					<c:forEach var="eventList" items="${events}" begin="28" end="34" varStatus="loop">
+					<c:forEach var="date" items="${dates}" begin="28" end="34" varStatus="loop">
 						<td>
-							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${dates[loop.index]}">
-							${dates[loop.index].dayOfMonth}
+							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${date}">
+							${date.dayOfMonth}
 							<br>
-							<c:forEach var="dayEvent" items="${eventList}">
+							<c:forEach var="dayEvent" items="${events[date]}">
 								${dayEvent.eventName}
 								<br>
 							</c:forEach>
@@ -168,12 +168,12 @@
 				</tr>
 				
 				<tr>
-					<c:forEach var="eventList" items="${events}" begin="35" end="41" varStatus="loop">
+					<c:forEach var="date" items="${dates}" begin="35" end="41" varStatus="loop">
 						<td>
-							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${dates[loop.index]}">
-							${dates[loop.index].dayOfMonth}
+							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${date}">
+							${date.dayOfMonth}
 							<br>
-							<c:forEach var="dayEvent" items="${eventList}">
+							<c:forEach var="dayEvent" items="${events[date]}">
 								${dayEvent.eventName}
 								<br>
 							</c:forEach>
