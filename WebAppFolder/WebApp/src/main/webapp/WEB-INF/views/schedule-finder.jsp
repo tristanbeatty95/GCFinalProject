@@ -73,7 +73,7 @@ List of Employees: <input type="text" name="employees" placeholder="Add multiple
 <c:if test="${empty availableTimes}">
    This does not conflict with any currently scheduled events!
 </c:if>
-<c:if test="${not empty availableTimes}"><c:forEach var="times" items="${availableTimes}"><c:out value="${times }"> </c:out><br></c:forEach></c:if>
+<c:if test="${not empty availableTimes}"> ${availableTimes }</c:if>
 
 
 </body>

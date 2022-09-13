@@ -28,7 +28,7 @@
 		</ul>
 		<ul class="nav-links">
 			<li class="nav-item" id="companyNameText">
-				<p style="color:#FFFFFF">Timely - Weekly Calendar</p>
+				<p style="color:#FFFFFF">Monthly Calendar</p>
 			</li>
 		</ul>
 		<ul class="nav-links">
