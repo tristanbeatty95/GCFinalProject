@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,6 @@ public class WebController {
 
 	@Autowired
 	private DaysOfTheYearService dayService;
-	
 
 //	//Home page after we complete MVP
 //	@RequestMapping("/login")
@@ -51,23 +51,22 @@ public class WebController {
 
 	// Month will be default page
 	@RequestMapping("/monthly-calendar")
-	public String displayMonth(@RequestParam(required = false) String date, @RequestParam(required = false) String dayDate, Model model) {
+	public String displayMonth(@RequestParam(required = false) String date,
+			@RequestParam(required = false) String dayDate, Model model) {
 		// If a date is not provided as is the case when "/" is visited, it will show
 		// current month on calendar
 		LocalDate today;
 		if (date == null) {
 			today = LocalDate.now();
-		}
-		else {
+		} else {
 			today = LocalDate.parse(date);
 		}
 		date = today.toString();
-		
+
 		LocalDate sidebarDate;
 		if (dayDate == null) {
 			sidebarDate = LocalDate.now();
-		}
-		else {
+		} else {
 			sidebarDate = LocalDate.parse(dayDate);
 		}
 
@@ -82,14 +81,15 @@ public class WebController {
 		// either a 0 if the gridpoint is not occupied, otherwise the day
 		// number
 		int arraySize = ((numDaysInMonth + dayOffset) > 35) ? 42 : 35;
-		List<LocalDate> dates = new ArrayList<LocalDate>(arraySize);
+		HashMap<Integer, LocalDate> dates = new HashMap<Integer, LocalDate>(arraySize, (float)1.0);
 		List<Event[]> events = new ArrayList<Event[]>(arraySize);
 
 		// Set the curDay pointer as the first day of this week
 		LocalDateTime curDay = LocalDateTime.of(today.getYear(), today.getMonthValue(), today.getDayOfMonth(), 0, 0);
-		LocalDateTime curDayEndTime = LocalDateTime.of(today.getYear(), today.getMonthValue(), today.getDayOfMonth(), 23, 59);
-		
-		//Move the first day to be the first one on the grid
+		LocalDateTime curDayEndTime = LocalDateTime.of(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
+				23, 59);
+
+		// Move the first day to be the first one on the grid
 		curDay = curDay.minusDays(today.getDayOfMonth() + dayOffset - 1);
 		curDayEndTime = curDayEndTime.minusDays(today.getDayOfMonth() + dayOffset - 1);
 		today = today.minusDays(today.getDayOfMonth() + dayOffset - 1);
@@ -97,23 +97,14 @@ public class WebController {
 		// Used for printing the correct day numbers of this week on the jsp
 		for (int i = 0; i < arraySize; i++) {
 			events.add(eventService.getEventsByTimeRange(curDay.toString(), curDayEndTime.toString()));
-			dates.add(today);
+			dates.put(i, today);
 			today = today.plusDays(1);
 			curDay = curDay.plusDays(1);
 			curDayEndTime = curDayEndTime.plusDays(1);
 		}
-		
-		for(int i = 0; i < events.size(); i++) {
-			System.out.print("Events" + i + ": ");
-			Event[] cur = events.get(i);
-			for(int j = 0; j < cur.length; j++) {
-				System.out.print(cur[j] + ", ");
-			}
-			System.out.println();
-		}
 
 		// Set today to the first day of this month
-		//today = today.minusDays(numDaysInMonth);
+		// today = today.minusDays(numDaysInMonth);
 		today = LocalDate.parse(date);
 		model.addAttribute("curMonthDate", today);
 		model.addAttribute("curMonthString", monthNumToString(today.getMonthValue()));
@@ -123,7 +114,7 @@ public class WebController {
 		// Set today to next month's date
 		today = today.plusMonths(2);
 		model.addAttribute("nextMonthDate", today.toString());
-		
+
 		// Day numbers to be printed
 		model.addAttribute("dates", dates);
 		model.addAttribute("events", events);
@@ -143,34 +134,35 @@ public class WebController {
 
 	@RequestMapping("/weekly-calendar")
 	public String displayWeek(Model model, @RequestParam(required = false) String date) {
-		
+
 		// If page is entered with no params (clicking on weekly view instead of either
 		// of the arrows)
 		LocalDate today;
 		if (date == null) {
 			today = LocalDate.now();
-		}
-		else {
+		} else {
 			today = LocalDate.parse(date);
 		}
 		date = today.toString();
-		
-		//Stores the numbers to be printed for the current week
+
+		// Stores the numbers to be printed for the current week
 		List<LocalDate> dates = new ArrayList<LocalDate>(7);
 		List<Event[]> events = new ArrayList<Event[]>(7);
-		
-		//determines the day num of the current day, so that we can determine how many days to backpedal in order to point at sunday
+
+		// determines the day num of the current day, so that we can determine how many
+		// days to backpedal in order to point at sunday
 		int dayOffset = calculateDayOfWeek(today.getDayOfMonth(), today.getMonthValue(), today.getYear());
-		
-		//Set the curDay pointer as the first day of this week
+
+		// Set the curDay pointer as the first day of this week
 		LocalDateTime curDay = LocalDateTime.of(today.getYear(), today.getMonth(), today.getDayOfMonth(), 0, 0);
-		LocalDateTime curDayEndTime = LocalDateTime.of(today.getYear(), today.getMonth(), today.getDayOfMonth(), 23, 59);
-		
+		LocalDateTime curDayEndTime = LocalDateTime.of(today.getYear(), today.getMonth(), today.getDayOfMonth(), 23,
+				59);
+
 		curDay = curDay.minusDays(dayOffset);
 		curDayEndTime = curDayEndTime.minusDays(dayOffset);
 		today = today.minusDays(dayOffset);
 
-		// Used for printing the correct day numbers of this week on the jsp 
+		// Used for printing the correct day numbers of this week on the jsp
 		for (int i = 0; i < 7; i++) {
 			events.add(eventService.getEventsByTimeRange(curDay.toString(), curDayEndTime.toString()));
 			dates.add(today);
@@ -178,49 +170,48 @@ public class WebController {
 			curDay = curDay.plusDays(1);
 			curDayEndTime = curDayEndTime.plusDays(1);
 		}
-		//Used for generating data for DaysOfYearApi call on jsp
+		// Used for generating data for DaysOfYearApi call on jsp
 		String dayMonthString = monthToString(curDay.getMonthValue());
 		String dayDayString = dayToString(today.getDayOfMonth());
 		String dayEventName = "";
-		String dayEventUrl = "";		
+		String dayEventUrl = "";
 		model.addAttribute("dayEventName", dayEventName);
 		model.addAttribute("dayEventUrl", dayEventUrl);
 
-		
-		//Set today to the first day of this week
+		// Set today to the first day of this week
 		today = today.minusDays(7);
 		model.addAttribute("curWeekDate", today);
 		model.addAttribute("curWeekMonthString", monthNumToString(today.getMonthValue()));
-		//Set today to next weeks date
+		// Set today to next weeks date
 		today = today.plusDays(7);
 		model.addAttribute("nextWeekDate", today.toString());
-		//Set today to last weeks date
+		// Set today to last weeks date
 		today = today.minusDays(14);
 		model.addAttribute("prevWeekDate", today.toString());
-		//Day numbers to be printed
+		// Day numbers to be printed
 		model.addAttribute("dates", dates);
 		model.addAttribute("events", events);
-		//Set today to curDay for daily info section
+		// Set today to curDay for daily info section
 		today = LocalDate.parse(date);
 		model.addAttribute("curDayDate", today);
 		model.addAttribute("curDayMonthString", monthNumToString(today.getMonthValue()));
-		//Day, Month, and Year Values to pass to DaysOfTheYearAPI link
-		if(dayMonthString.length() < 2) {
-			dayMonthString = "0"+dayMonthString;
+		// Day, Month, and Year Values to pass to DaysOfTheYearAPI link
+		if (dayMonthString.length() < 2) {
+			dayMonthString = "0" + dayMonthString;
 		}
-		if(dayDayString.length() < 2) {
-			dayDayString = "0"+dayDayString;
+		if (dayDayString.length() < 2) {
+			dayDayString = "0" + dayDayString;
 		}
-		
+
 		model.addAttribute("dayMonthString", dayMonthString);
 		model.addAttribute("dayDayString", dayDayString);
-		
-		for(int i = 0; i < dates.size(); i++) {
-			if(dates.get(i).toString().equals(date)) {
+
+		for (int i = 0; i < dates.size(); i++) {
+			if (dates.get(i).toString().equals(date)) {
 				model.addAttribute("dayEvents", events.get(i));
 			}
 		}
-		
+
 		return "week";
 	}
 
@@ -352,38 +343,38 @@ public class WebController {
 	}
 
 	@RequestMapping("/weekly-day-event")
-	public String displayDayApiEvent(Model model, @RequestParam(required=false) String date,
-										@RequestParam(required=false) Integer month,
-										@RequestParam(required=false) Integer day) {
-		
+	public String displayDayApiEvent(Model model, @RequestParam(required = false) String date,
+			@RequestParam(required = false) Integer month, @RequestParam(required = false) Integer day) {
+
 		// If page is entered with no params (clicking on weekly view instead of either
 		// of the arrows)
 		LocalDate today;
 		if (date == null) {
 			today = LocalDate.of(2022, month, day);
-			
-		}
-		else {
+
+		} else {
 			today = LocalDate.parse(date);
 		}
 		date = today.toString();
-		
-		//Stores the numbers to be printed for the current week
+
+		// Stores the numbers to be printed for the current week
 		List<LocalDate> dates = new ArrayList<LocalDate>(7);
 		List<Event[]> events = new ArrayList<Event[]>(7);
-		
-		//determines the day num of the current day, so that we can determine how many days to backpedal in order to point at sunday
+
+		// determines the day num of the current day, so that we can determine how many
+		// days to backpedal in order to point at sunday
 		int dayOffset = calculateDayOfWeek(today.getDayOfMonth(), today.getMonthValue(), today.getYear());
-		
-		//Set the curDay pointer as the first day of this week
+
+		// Set the curDay pointer as the first day of this week
 		LocalDateTime curDay = LocalDateTime.of(today.getYear(), today.getMonth(), today.getDayOfMonth(), 0, 0);
-		LocalDateTime curDayEndTime = LocalDateTime.of(today.getYear(), today.getMonth(), today.getDayOfMonth(), 23, 59);
-		
+		LocalDateTime curDayEndTime = LocalDateTime.of(today.getYear(), today.getMonth(), today.getDayOfMonth(), 23,
+				59);
+
 		curDay = curDay.minusDays(dayOffset);
 		curDayEndTime = curDayEndTime.minusDays(dayOffset);
 		today = today.minusDays(dayOffset);
 
-		// Used for printing the correct day numbers of this week on the jsp 
+		// Used for printing the correct day numbers of this week on the jsp
 		for (int i = 0; i < 7; i++) {
 			events.add(eventService.getEventsByTimeRange(curDay.toString(), curDayEndTime.toString()));
 			dates.add(today);
@@ -391,9 +382,9 @@ public class WebController {
 			curDay = curDay.plusDays(1);
 			curDayEndTime = curDayEndTime.plusDays(1);
 		}
-		//Used for generating data for DaysOfYearApi call on jsp
+		// Used for generating data for DaysOfYearApi call on jsp
 		String dayMonthString = monthToString(month);
-		String dayDayString = dayToString(day);		
+		String dayDayString = dayToString(day);
 		String dayEventName = "";
 		String dayEventUrl = "";
 		DayEvent[] dayEvents = dayService.getSpecificDateEvents("2022", dayMonthString, dayDayString);
@@ -404,53 +395,53 @@ public class WebController {
 		model.addAttribute("dayEventName", dayEventName);
 		model.addAttribute("dayEventUrl", dayEventUrl);
 
-
-		
-		//Set today to the first day of this week
+		// Set today to the first day of this week
 		today = today.minusDays(7);
 		model.addAttribute("curWeekDate", today);
 		model.addAttribute("curWeekMonthString", monthNumToString(today.getMonthValue()));
-		//Set today to next weeks date
+		// Set today to next weeks date
 		today = today.plusDays(7);
 		model.addAttribute("nextWeekDate", today.toString());
-		//Set today to last weeks date
+		// Set today to last weeks date
 		today = today.minusDays(14);
 		model.addAttribute("prevWeekDate", today.toString());
-		//Day numbers to be printed
+		// Day numbers to be printed
 		model.addAttribute("dates", dates);
 		model.addAttribute("events", events);
-		//Set today to curDay for daily info section
+		// Set today to curDay for daily info section
 		today = LocalDate.parse(date);
 		model.addAttribute("curDayDate", today);
 		model.addAttribute("curDayMonthString", monthNumToString(today.getMonthValue()));
-		//Day, Month, and Year Values to pass to DaysOfTheYearAPI link
-		if(dayMonthString.length() < 2) {
-			dayMonthString = "0"+dayMonthString;
+		// Day, Month, and Year Values to pass to DaysOfTheYearAPI link
+		if (dayMonthString.length() < 2) {
+			dayMonthString = "0" + dayMonthString;
 		}
-		if(dayDayString.length() < 2) {
-			dayDayString = "0"+dayDayString;
+		if (dayDayString.length() < 2) {
+			dayDayString = "0" + dayDayString;
 		}
-		//to pass into links on JSP
+		// to pass into links on JSP
 		model.addAttribute("dayMonthString", dayMonthString);
 		model.addAttribute("dayDayString", dayDayString);
-		
-		for(int i = 0; i < dates.size(); i++) {
-			if(dates.get(i).toString().equals(date)) {
+
+		for (int i = 0; i < dates.size(); i++) {
+			if (dates.get(i).toString().equals(date)) {
 				model.addAttribute("dayEvents", events.get(i));
 			}
 		}
-		
+
 		return "week";
 	}
-	//helper method to make sure month is always 2 digits (required by API call)
+
+	// helper method to make sure month is always 2 digits (required by API call)
 	public String monthToString(Integer month) {
 		if (month.toString().length() == 1) {
-			String newMonth = "0" + month ;
+			String newMonth = "0" + month;
 			return newMonth;
 		}
 		return month.toString();
 	}
-	//helper method to make sure day is always 2 digits (required by API call)
+
+	// helper method to make sure day is always 2 digits (required by API call)
 	public String dayToString(Integer day) {
 		if (day.toString().length() == 1) {
 			String newDay = "0" + day;
@@ -459,60 +450,36 @@ public class WebController {
 		return day.toString();
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	@RequestMapping("/schedule-finder")
 	public String displayScheduleFinder() {
 		return "schedule-finder";
 	}
-	
+
 	@GetMapping("/schedule-finder1")
-	public String displayTimes(@RequestParam String start,
-								@RequestParam String end,
-								@RequestParam List<String> employees,
-								Model model) {
-		
-		Event[] events = eventService.getAllEvents();	
+	public String displayTimes(@RequestParam String start, @RequestParam String end,
+			@RequestParam List<String> employees, Model model) {
+
+		Event[] events = eventService.getAllEvents();
 		List<String> availableTimes = new ArrayList<>();
 		LocalDate searchStart = LocalDate.parse(start);
 		LocalDate searchEnd = LocalDate.parse(end);
 
-		for(Event e : events) {
+		for (Event e : events) {
 			String eventStart = "";
 			String eventEnd = "";
 			if (e.getStart().length() > 9) {
 				eventStart = e.getStart().substring(0, 10);
 				eventEnd = e.getEnd().substring(0, 10);
 			}
-			
-			if (searchStart.equals(LocalDate.parse(eventStart)) || (searchEnd.equals(LocalDate.parse(eventEnd)) )) {
-				//suggest times
+
+			if (searchStart.equals(LocalDate.parse(eventStart)) || (searchEnd.equals(LocalDate.parse(eventEnd)))) {
+				// suggest times
 				availableTimes.add("This time conflicts with " + e.getEventName() + " on " + eventStart);
-			} 
+			}
 		}
 
 		model.addAttribute("availableTimes", availableTimes);
-			
-		
+
 		return "/schedule-finder";
 	}
 }
