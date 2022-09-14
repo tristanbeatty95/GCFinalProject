@@ -93,7 +93,8 @@
 							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${date}">
 							${date.dayOfMonth}
 							<br>
-							<c:forEach var="dayEvent" items="${events[date.toString()]}">
+							<c:set var="dateString">${date.toString()}</c:set>
+							<c:forEach var="dayEvent" items="${events[dateString]}">
 								${dayEvent.eventName}
 								<br>
 							</c:forEach>
@@ -109,7 +110,8 @@
 							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${date}">
 							${date.dayOfMonth}
 							<br>
-							<c:forEach var="dayEvent" items="${events[date.toString()]}">
+							<c:set var="dateString">${date.toString()}</c:set>
+							<c:forEach var="dayEvent" items="${events[dateString]}">
 								${dayEvent.eventName}
 								<br>
 							</c:forEach>
@@ -125,7 +127,8 @@
 							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${date}">
 							${date.dayOfMonth}
 							<br>
-							<c:forEach var="dayEvent" items="${events[date.toString()]}">
+							<c:set var="dateString">${date.toString()}</c:set>
+							<c:forEach var="dayEvent" items="${events[dateString]}">
 								${dayEvent.eventName}
 								<br>
 							</c:forEach>
@@ -141,7 +144,8 @@
 							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${date}">
 							${date.dayOfMonth}
 							<br>
-							<c:forEach var="dayEvent" items="${events[date.toString()]}">
+							<c:set var="dateString">${date.toString()}</c:set>
+							<c:forEach var="dayEvent" items="${events[dateString]}">
 								${dayEvent.eventName}
 								<br>
 							</c:forEach>
@@ -157,7 +161,8 @@
 							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${date}">
 							${date.dayOfMonth}
 							<br>
-							<c:forEach var="dayEvent" items="${events[date.toString()]}">
+							<c:set var="dateString">${date.toString()}</c:set>
+							<c:forEach var="dayEvent" items="${events[dateString]}">
 								${dayEvent.eventName}
 								<br>
 							</c:forEach>
@@ -173,7 +178,8 @@
 							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${date}">
 							${date.dayOfMonth}
 							<br>
-							<c:forEach var="dayEvent" items="${events[date.toString()]}">
+							<c:set var="dateString">${date.toString()}</c:set>
+							<c:forEach var="dayEvent" items="${events[dateString]}">
 								${dayEvent.eventName}
 								<br>
 							</c:forEach>

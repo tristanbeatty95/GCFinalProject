@@ -152,26 +152,17 @@ public class WebController {
 		// determines the day num of the current day, so that we can determine how many
 		// days to backpedal in order to point at sunday
 		int dayOffset = calculateDayOfWeek(today.getDayOfMonth(), today.getMonthValue(), today.getYear());
-
-		// Set the curDay pointer as the first day of this week
-		LocalDateTime curDay = LocalDateTime.of(today.getYear(), today.getMonth(), today.getDayOfMonth(), 0, 0);
-		LocalDateTime curDayEndTime = LocalDateTime.of(today.getYear(), today.getMonth(), today.getDayOfMonth(), 23,
-				59);
-
-		curDay = curDay.minusDays(dayOffset);
-		curDayEndTime = curDayEndTime.minusDays(dayOffset);
 		today = today.minusDays(dayOffset);
 
 		// Used for printing the correct day numbers of this week on the jsp
 		for (int i = 0; i < 7; i++) {
 			dates.add(today);
 			today = today.plusDays(1);
-			curDay = curDay.plusDays(1);
 		}
 		events = eventService.getEventsByTimeRange(dates.get(0).toString(), dates.get(dates.size() - 1).toString());
 		
 		// Used for generating data for DaysOfYearApi call on jsp
-		String dayMonthString = monthToString(curDay.getMonthValue());
+		String dayMonthString = monthToString(today.getMonthValue());
 		String dayDayString = dayToString(today.getDayOfMonth());
 		String dayEventName = "";
 		String dayEventUrl = "";
@@ -359,29 +350,20 @@ public class WebController {
 
 		// Stores the numbers to be printed for the current week
 		List<LocalDate> dates = new ArrayList<LocalDate>(7);
-		List<Event[]> events = new ArrayList<Event[]>(7);
+		HashMap<String, ArrayList<Event>> events;
 
 		// determines the day num of the current day, so that we can determine how many
 		// days to backpedal in order to point at sunday
 		int dayOffset = calculateDayOfWeek(today.getDayOfMonth(), today.getMonthValue(), today.getYear());
-
-		// Set the curDay pointer as the first day of this week
-		LocalDateTime curDay = LocalDateTime.of(today.getYear(), today.getMonth(), today.getDayOfMonth(), 0, 0);
-		LocalDateTime curDayEndTime = LocalDateTime.of(today.getYear(), today.getMonth(), today.getDayOfMonth(), 23,
-				59);
-
-		curDay = curDay.minusDays(dayOffset);
-		curDayEndTime = curDayEndTime.minusDays(dayOffset);
 		today = today.minusDays(dayOffset);
 
 		// Used for printing the correct day numbers of this week on the jsp
 		for (int i = 0; i < 7; i++) {
-			events.add(eventService.getEventsByTimeRange(curDay.toString(), curDayEndTime.toString()));
 			dates.add(today);
 			today = today.plusDays(1);
-			curDay = curDay.plusDays(1);
-			curDayEndTime = curDayEndTime.plusDays(1);
 		}
+		events = eventService.getEventsByTimeRange(dates.get(0).toString(), dates.get(6).toString());
+		
 		// Used for generating data for DaysOfYearApi call on jsp
 		String dayMonthString = monthToString(month);
 		String dayDayString = dayToString(day);
@@ -425,7 +407,7 @@ public class WebController {
 
 		for (int i = 0; i < dates.size(); i++) {
 			if (dates.get(i).toString().equals(date)) {
-				model.addAttribute("dayEvents", events.get(i));
+				model.addAttribute("dayEvents", events.get(dates.get(i).toString()));
 			}
 		}
 

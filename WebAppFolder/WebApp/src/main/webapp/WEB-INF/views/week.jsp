@@ -101,19 +101,20 @@
 						<td>
 							<a href="/weekly-calendar?date=${date}">
 								${date.dayOfMonth}<br>
-								<c:forEach var="events" items="${events[loop.index]}">								
-									${events.eventName}
+								
+								<c:set var="dateString">${date.toString()}</c:set>
+								<c:forEach var="dayEvent" items="${events[dateString]}">								
+									${dayEvent.eventName}
 							
 								</c:forEach>
 							</a>
-								<p class="center">
+							<p class="center">
 									
-									<a href="/weekly-day-event?date=${date }&month=${dayMonthString}&year=2022&day=${date.dayOfMonth}"><i class="far fa-caret-square-right"></i></a>
-								</p>
+								<a href="/weekly-day-event?date=${date }&month=${dayMonthString}&year=2022&day=${date.dayOfMonth}"><i class="far fa-caret-square-right"></i></a>
+							</p>
 						</td>
 					</c:forEach>
 				</tr>
-
 			</table>
 		</div>
 
