@@ -123,7 +123,8 @@
 			<ul>
 				<c:forEach var="event" items="${dayEvents}">
 					<li>
-						${event.eventName}	(${event.startTime} - ${event.endTime})<a href="/delete/${event.id}">   <i class="fa fa-trash" aria-hidden="true"></i></a>
+						${event.eventName}	(${event.startTime} - ${event.endTime}) 
+						Employees attending: ${event.employees}<a href="/delete/${event.id}">   <i class="fa fa-trash" aria-hidden="true"></i></a>
 					</li>
 				</c:forEach>
 			</ul>
