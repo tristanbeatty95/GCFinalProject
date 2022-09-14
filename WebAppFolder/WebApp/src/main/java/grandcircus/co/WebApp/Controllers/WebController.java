@@ -94,6 +94,14 @@ public class WebController {
 		}
 		
 		events = eventService.getEventsByTimeRange(dates.get(0).toString(), dates.get(dates.size() - 1).toString());
+//		for(String s : events.keySet()) {
+//			ArrayList<Event> cur = events.get(s);
+//			System.out.print(s = ": ");
+//			for(Event e : cur) {
+//				System.out.print(e.getEventName() + ", ");
+//			}
+//			System.out.println();
+//		}
 
 		// Set today to the first day of this month
 		// today = today.minusDays(numDaysInMonth);

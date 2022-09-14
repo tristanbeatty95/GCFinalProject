@@ -93,7 +93,7 @@
 							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${date}">
 							${date.dayOfMonth}
 							<br>
-							<c:forEach var="dayEvent" items="${events[date]}">
+							<c:forEach var="dayEvent" items="${events[date.toString()]}">
 								${dayEvent.eventName}
 								<br>
 							</c:forEach>
@@ -109,7 +109,7 @@
 							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${date}">
 							${date.dayOfMonth}
 							<br>
-							<c:forEach var="dayEvent" items="${events[date]}">
+							<c:forEach var="dayEvent" items="${events[date.toString()]}">
 								${dayEvent.eventName}
 								<br>
 							</c:forEach>
@@ -125,7 +125,7 @@
 							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${date}">
 							${date.dayOfMonth}
 							<br>
-							<c:forEach var="dayEvent" items="${events[date]}">
+							<c:forEach var="dayEvent" items="${events[date.toString()]}">
 								${dayEvent.eventName}
 								<br>
 							</c:forEach>
@@ -141,7 +141,7 @@
 							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${date}">
 							${date.dayOfMonth}
 							<br>
-							<c:forEach var="dayEvent" items="${events[date]}">
+							<c:forEach var="dayEvent" items="${events[date.toString()]}">
 								${dayEvent.eventName}
 								<br>
 							</c:forEach>
@@ -157,7 +157,7 @@
 							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${date}">
 							${date.dayOfMonth}
 							<br>
-							<c:forEach var="dayEvent" items="${events[date]}">
+							<c:forEach var="dayEvent" items="${events[date.toString()]}">
 								${dayEvent.eventName}
 								<br>
 							</c:forEach>
@@ -173,7 +173,7 @@
 							<a href="/monthly-calendar?date=${curMonthDate}&dayDate=${date}">
 							${date.dayOfMonth}
 							<br>
-							<c:forEach var="dayEvent" items="${events[date]}">
+							<c:forEach var="dayEvent" items="${events[date.toString()]}">
 								${dayEvent.eventName}
 								<br>
 							</c:forEach>
