@@ -215,7 +215,7 @@ public class WebController {
 	@PostMapping("/submitEvent")
 	public String submitEvent(@RequestParam String eventName, @RequestParam String start, @RequestParam String end,
 			@RequestParam String addEmployees) {
-		List<String> employees = new ArrayList<>(Arrays.asList(addEmployees.split(",")));
+		List<String> employees = new ArrayList<>(Arrays.asList(addEmployees.split(", ")));
 		LocalDateTime startTime = LocalDateTime.parse(start);
 		LocalDateTime endTime = LocalDateTime.parse(end);
 
@@ -439,28 +439,64 @@ public class WebController {
 
 	@GetMapping("/schedule-finder1")
 	public String displayTimes(@RequestParam String start, @RequestParam String end,
-			@RequestParam List<String> employees, Model model) {
+			@RequestParam String employees, Model model) {
 
 		Event[] events = eventService.getAllEvents();
-		List<String> availableTimes = new ArrayList<>();
-		LocalDate searchStart = LocalDate.parse(start);
-		LocalDate searchEnd = LocalDate.parse(end);
+		List<String> conflictMessage = new ArrayList<>();
+		List<String> suggestOne = new ArrayList<>();
+		List<String> suggestTwo = new ArrayList<>();
+		LocalDateTime searchStart = LocalDateTime.parse(start);
+		LocalDateTime searchEnd = LocalDateTime.parse(end);
+		
 
 		for (Event e : events) {
-			String eventStart = "";
-			String eventEnd = "";
-			if (e.getStart().length() > 9) {
-				eventStart = e.getStart().substring(0, 10);
-				eventEnd = e.getEnd().substring(0, 10);
-			}
+			String eventStartString = e.getStart();
+			LocalDateTime eventStart = LocalDateTime.parse(eventStartString);
+			String eventEndString = e.getEnd();
+			LocalDateTime eventEnd = LocalDateTime.parse(eventEndString);
+			List<String> employeeList = e.getEmployees();
 
-			if (searchStart.equals(LocalDate.parse(eventStart)) || (searchEnd.equals(LocalDate.parse(eventEnd)))) {
+			if (searchStart.isAfter(eventStart) && (searchEnd.isBefore(eventEnd))) {
 				// suggest times
-				availableTimes.add("This time conflicts with " + e.getEventName() + " on " + eventStart);
+				Long d = ChronoUnit.MINUTES.between(eventStart, eventEnd);
+				Long duration = (long) ((d.doubleValue()) / 60);
+				for(String name : employeeList) {
+					if (employees.equalsIgnoreCase(name)) {
+						conflictMessage.add("This time conflicts with " + employees + "'s event named " + e.getEventName());
+						suggestOne.add("1. Suggested Start Time: " + eventStart.plusHours(-duration) + " Suggested End Time: " + eventStart.plusMinutes(-5));
+						suggestTwo.add("2. Suggested Start Time: " + eventEnd.plusMinutes(5)+ " Suggested End Time: " + eventEnd.plusHours(duration));
+					}
+					
+				}
+			} else if (searchEnd.isAfter(eventStart) 
+					&& searchEnd.isBefore(eventEnd)) {
+				// suggest times
+				Long d = ChronoUnit.MINUTES.between(eventStart, eventEnd);
+				Long duration = (long) ((d.doubleValue()) / 60);
+				for(String name : employeeList) {
+					if (employees.equalsIgnoreCase(name)) {
+						conflictMessage.add("This time conflicts with " + employees + "'s event named " + e.getEventName());
+						suggestOne.add("1. Suggested Start Time: " + eventStart.plusHours(-duration) + " Suggested End Time: " + eventStart.plusMinutes(-5));
+						suggestTwo.add("2. Suggested Start Time: " + eventEnd.plusMinutes(5)+ " Suggested End Time: " + eventEnd.plusHours(duration));
+					}
+					
+				}
+			} else if (searchStart.isAfter(eventStart) && searchStart.isBefore(eventEnd)) {
+				// suggest times
+				Long d = ChronoUnit.MINUTES.between(eventStart, eventEnd);
+				Long duration = (long) ((d.doubleValue()) / 60);
+				for(String name : employeeList) {
+					if (employees.equalsIgnoreCase(name)) {
+						conflictMessage.add("This time conflicts with " + employees + "'s event named " + e.getEventName());
+						suggestOne.add("1. Suggested Start Time: " + eventStart.plusHours(-duration) + " Suggested End Time: " + eventStart.plusMinutes(-5));
+						suggestTwo.add("2. Suggested Start Time: " + eventEnd.plusMinutes(5)+ " Suggested End Time: " + eventEnd.plusHours(duration));
+					}
 			}
 		}
-
-		model.addAttribute("availableTimes", availableTimes);
+		}
+		model.addAttribute("conflictMessage", conflictMessage);
+		model.addAttribute("suggestOne", suggestOne);
+		model.addAttribute("suggestTwo", suggestTwo);
 
 		return "/schedule-finder";
 	}

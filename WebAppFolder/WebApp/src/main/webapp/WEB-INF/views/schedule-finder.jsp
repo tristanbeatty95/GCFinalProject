@@ -64,16 +64,16 @@
 	
 <h3>Search For Open Dates To Hold Events </h3><br>
 <form action="/schedule-finder1" method="get">
-Date Start: <input type="date" name="start" required/><br>
-Date End: <input type="date" name="end" required/><br>
+Date Start: <input type="datetime-local" name="start" required/><br>
+Date End: <input type="datetime-local" name="end" required/><br>
 List of Employees: <input type="text" name="employees" placeholder="Add multiple employees by separating with a comma"/> <br>
 <input type="submit" />
 
 </form>
-<c:if test="${empty availableTimes}">
-   This does not conflict with any currently scheduled events!
+<c:if test="${empty conflictMessage}">
+   There are currently no conflicts to show!
 </c:if>
-<c:if test="${not empty availableTimes}"> ${availableTimes }</c:if>
+<c:if test="${not empty conflictMessage}"> ${conflictMessage } <br> ${suggestOne } <br> ${suggestTwo }</c:if>
 
 
 </body>
