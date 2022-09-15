@@ -20,11 +20,11 @@
 	<!-- Navbar at top of page -->
 	<nav class="navbar">
 		<ul class="nav-links">
-			<li class="nav-item"><a
+			<li class="nav-item" id="nav1"><a
 				href="/weekly-calendar?month=${monthNum}">Weekly View</a></li>
-			<li class="nav-item" class="button"><a href="#divOne">Add
+			<li class="nav-item" class="button" id="nav2"><a href="#divOne">Add
 					Event</a></li>
-			<li class="nav-item"><a href="/schedule-finder">Search
+			<li class="nav-item" id="nav3"><a href="/schedule-finder">Search
 					Events</a></li>
 		</ul>
 		<ul class="nav-links2">
@@ -33,7 +33,7 @@
 			</li>
 		</ul>
 		<ul class="nav-links3">
-			<li style="background-color: #D15656" class="nav-item"
+			<li style="background-color: #e3f0ff" class="nav-item"
 				id="logoutButton"><a href="/logout">Logout</a></li>
 		</ul>
 	</nav>

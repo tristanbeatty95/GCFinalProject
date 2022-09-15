@@ -9,10 +9,10 @@
 
 /*
 */
+
 .nav-links li{
 	border-radius: 20px;
 	margin: 10px;
-	background-color:#8D8D8D;
 }
 
 .nav-links2 {
@@ -54,7 +54,7 @@ nav {
   	margin-right: 5px;
   	margin-left: 5px;
   	text-decoration: none;
-  	color: white;
+  	/*color: white;*/
 }
 
 /* "[Company Name]" on navbar */
@@ -115,14 +115,14 @@ h1{
 .calendar-and-daily-info td a:hover {
 	/*background-color: #f26d66; */
 	transition: background-color 0.5s;
-	font-weight: 600;
+	font-weight: 900;
 }
 
 .daily-info-section{
 	display:flex;
 	flex-direction: column;
 	justify-content:space-between;
-	background-color: lightgrey;
+	background-color: #ffefd7;
 	padding:20px;
 	width: 20%;
 	border-radius: 25px;
@@ -140,11 +140,11 @@ h1{
 }
 
 #delete-button{
-	background-color: #f26d66; /* */
+	background-color: #e3f0ff; /* */
 	padding:5px;
 	text-align:center;
 	display:inline;
-	color: white;
+	color: black;
 	border-radius: 15px;
 }
 
@@ -276,51 +276,7 @@ td a {
 	text-align:center;
 }
 
-/* IM BLUE DOBA DI DOBA DIE
-.week1 {
-	background-color: #bfd6f6;
-}
 
-.week2 {
-	background-color: #8dbdff;
-}
-
-.week3 {
-	background-color: #64a1f4;
-}
-
-.week4 {
-	background-color: #4a91f2;
-}
-
-.week5 {
-	background-color: #3b7dd8;
-}
-*/
-
-/* WATER LORD
-.week1 {
-	background-color: #ebf4f6;
-}
-
-.week2 {
-	background-color: #bdeaee;
-}
-
-.week3 {
-	background-color: #76b4bd;
-}
-
-.week4 {
-	background-color: #58668b;
-}
-
-.week5 {
-	background-color: #5e5656;
-}
-*/
-
-/* BEACHY
 .week1 {
 	background-color: #fff6e9;
 }
@@ -340,51 +296,19 @@ td a {
 .week5 {
 	background-color: #d2e7ff;
 }
-*/
 
-/* PASTEL 
-.week1 {
-	background-color: #a8e6cf;
-}
-
-.week2 {
-	background-color: #dcedc1;
+#nav1 {
+	background-color: #d2e7ff;
+	color: black;
 }
 
-.week3 {
-	background-color: #ffd3b6;
+
+#nav2 {
+	background-color: #e3f0ff;
+	color: black;
 }
 
-.week4 {
-	background-color: #ffaaa5;
+#nav3 {
+	background-color: #d2e7ff;
+	color: black;
 }
-
-.week5 {
-	background-color: #ff8b94;
-}
-*/
-
-/* RAINBOW GRADIENT
-#weekdays {
-	background: linear-gradient(to right, #FBEC6B, #F4BC6B);
-}
-.week1 {
-	background: linear-gradient(to right, #FBEC6B, #f2905e);
-}
-
-.week2 {
-	background: linear-gradient(to right, #f2905e, #fa3747);
-}
-
-.week3 {
-	background: linear-gradient(to right, #fa3747, #8006bd);
-}
-
-.week4 {
-	background: linear-gradient(to right, #8006bd, #5ea9ff);
-}
-
-.week5 {
-	background: linear-gradient(to right, #5ea9ff, #92fcb0);
-}
-*/
