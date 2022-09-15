@@ -2,6 +2,7 @@ package grandcircus.co.WebApp.Controllers;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -447,56 +448,77 @@ public class WebController {
 		List<String> suggestTwo = new ArrayList<>();
 		LocalDateTime searchStart = LocalDateTime.parse(start);
 		LocalDateTime searchEnd = LocalDateTime.parse(end);
-		
-
+		String conflictMessageString = "";
+		String suggestOneString = "";
+		String suggestTwoString = "";
 		for (Event e : events) {
 			String eventStartString = e.getStart();
 			LocalDateTime eventStart = LocalDateTime.parse(eventStartString);
 			String eventEndString = e.getEnd();
 			LocalDateTime eventEnd = LocalDateTime.parse(eventEndString);
 			List<String> employeeList = e.getEmployees();
-
-			if (searchStart.isAfter(eventStart) && (searchEnd.isBefore(eventEnd))) {
+			Long d = ChronoUnit.MINUTES.between(eventStart, eventEnd);
+			Long duration = (long) ((d.doubleValue()) / 60);
+			LocalDateTime suggestStart1 = eventStart.plusHours(-duration);
+			LocalDateTime suggestEnd1 = eventStart.plusMinutes(-5);
+			LocalDateTime suggestStart2 = eventEnd.plusMinutes(5);
+			LocalDateTime suggestEnd2 = eventEnd.plusHours(duration);
+			String pattern = "hh:mm a";
+			if ((searchStart.isAfter(eventStart) && (searchEnd.isBefore(eventEnd))) || 
+					(searchStart.isEqual(eventStart) && searchEnd.isEqual(eventEnd))) {
 				// suggest times
-				Long d = ChronoUnit.MINUTES.between(eventStart, eventEnd);
-				Long duration = (long) ((d.doubleValue()) / 60);
 				for(String name : employeeList) {
 					if (employees.equalsIgnoreCase(name)) {
-						conflictMessage.add("This time conflicts with " + employees + "'s event named " + e.getEventName());
-						suggestOne.add("1. Suggested Start Time: " + eventStart.plusHours(-duration) + " Suggested End Time: " + eventStart.plusMinutes(-5));
-						suggestTwo.add("2. Suggested Start Time: " + eventEnd.plusMinutes(5)+ " Suggested End Time: " + eventEnd.plusHours(duration));
+						conflictMessage.add("This time conflicts with " + employees + "'s event named " + e.getEventName() + " on " + eventStart.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+						conflictMessageString = conflictMessage.toString();
+						conflictMessageString = conflictMessageString.substring(1, conflictMessageString.length()-1);
+						suggestOne.add("1. Suggested Start Time: " + suggestStart1.format(DateTimeFormatter.ofPattern(pattern)) + " Suggested End Time: " + suggestEnd1.format(DateTimeFormatter.ofPattern(pattern)));
+						suggestOneString = suggestOne.toString();
+						suggestOneString = suggestOneString.substring(1,suggestOneString.length()-1);
+						suggestTwo.add("2. Suggested Start Time: " + suggestStart2.format(DateTimeFormatter.ofPattern(pattern))+ " Suggested End Time: " + suggestEnd2.format(DateTimeFormatter.ofPattern(pattern)));
+						suggestTwoString = suggestTwo.toString();
+						suggestTwoString = suggestTwoString.substring(1, suggestTwoString.length()-1);
 					}
 					
 				}
 			} else if (searchEnd.isAfter(eventStart) 
 					&& searchEnd.isBefore(eventEnd)) {
 				// suggest times
-				Long d = ChronoUnit.MINUTES.between(eventStart, eventEnd);
-				Long duration = (long) ((d.doubleValue()) / 60);
 				for(String name : employeeList) {
 					if (employees.equalsIgnoreCase(name)) {
-						conflictMessage.add("This time conflicts with " + employees + "'s event named " + e.getEventName());
-						suggestOne.add("1. Suggested Start Time: " + eventStart.plusHours(-duration) + " Suggested End Time: " + eventStart.plusMinutes(-5));
-						suggestTwo.add("2. Suggested Start Time: " + eventEnd.plusMinutes(5)+ " Suggested End Time: " + eventEnd.plusHours(duration));
+						conflictMessage.add("This time conflicts with " + employees + "'s event named " + e.getEventName() + " on " + eventStart.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+						conflictMessageString = conflictMessage.toString();
+						conflictMessageString = conflictMessageString.substring(1, conflictMessageString.length()-1);
+						suggestOne.add("1. Suggested Start Time: " + suggestStart1.format(DateTimeFormatter.ofPattern(pattern)) + " Suggested End Time: " + suggestEnd1.format(DateTimeFormatter.ofPattern(pattern)));
+						suggestOneString = suggestOne.toString();
+						suggestOneString = suggestOneString.substring(1,suggestOneString.length()-1);
+						suggestTwo.add("2. Suggested Start Time: " + suggestStart2.format(DateTimeFormatter.ofPattern(pattern))+ " Suggested End Time: " + suggestEnd2.format(DateTimeFormatter.ofPattern(pattern)));
+						suggestTwoString = suggestTwo.toString();
+						suggestTwoString = suggestTwoString.substring(1, suggestTwoString.length()-1);
 					}
 					
 				}
 			} else if (searchStart.isAfter(eventStart) && searchStart.isBefore(eventEnd)) {
 				// suggest times
-				Long d = ChronoUnit.MINUTES.between(eventStart, eventEnd);
-				Long duration = (long) ((d.doubleValue()) / 60);
 				for(String name : employeeList) {
 					if (employees.equalsIgnoreCase(name)) {
-						conflictMessage.add("This time conflicts with " + employees + "'s event named " + e.getEventName());
-						suggestOne.add("1. Suggested Start Time: " + eventStart.plusHours(-duration) + " Suggested End Time: " + eventStart.plusMinutes(-5));
-						suggestTwo.add("2. Suggested Start Time: " + eventEnd.plusMinutes(5)+ " Suggested End Time: " + eventEnd.plusHours(duration));
+						conflictMessage.add("This time conflicts with " + employees + "'s event named " + e.getEventName() + " on " + eventStart.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+						conflictMessageString = conflictMessage.toString();
+						conflictMessageString = conflictMessageString.substring(1, conflictMessageString.length()-1);
+						suggestOne.add("1. Suggested Start Time: " + suggestStart1.format(DateTimeFormatter.ofPattern(pattern)) + " Suggested End Time: " + suggestEnd1.format(DateTimeFormatter.ofPattern(pattern)));
+						suggestOneString = suggestOne.toString();
+						suggestOneString = suggestOneString.substring(1,suggestOneString.length()-1);
+						suggestTwo.add("2. Suggested Start Time: " + suggestStart2.format(DateTimeFormatter.ofPattern(pattern))+ " Suggested End Time: " + suggestEnd2.format(DateTimeFormatter.ofPattern(pattern)));
+						suggestTwoString = suggestTwo.toString();
+						suggestTwoString = suggestTwoString.substring(1, suggestTwoString.length()-1);
 					}
 			}
 		}
 		}
 		model.addAttribute("conflictMessage", conflictMessage);
-		model.addAttribute("suggestOne", suggestOne);
-		model.addAttribute("suggestTwo", suggestTwo);
+		model.addAttribute("conflictMessageString", conflictMessageString);
+		model.addAttribute("suggestOneString", suggestOneString);
+		model.addAttribute("suggestTwoString", suggestTwoString);
 
 		return "/schedule-finder";
 	}
