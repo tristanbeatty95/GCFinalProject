@@ -1,9 +1,32 @@
 @charset "ISO-8859-1";
 
+
 .navbar{
 	display:flex;
 	justify-content: space-between;
 	align-items: center;
+}
+
+/*
+*/
+.nav-links li{
+	border-radius: 20px;
+	margin: 10px;
+	background-color:#8D8D8D;
+}
+
+.nav-links2 {
+	border-radius: 0px;
+	margin: 10px;
+}
+
+
+.navbar li a:hover {
+	/*Make the Navbar a little more fun */
+	
+	color: black;
+	transition: background-color 0.5s;
+
 }
 
 nav {
@@ -15,6 +38,7 @@ nav {
 
 /* Container for navbar items */
 .nav-links {
+	font-family: 'Poppins';
 	margin-top:5px;
   	margin-bottom:5px;
   	list-style: none;
@@ -23,6 +47,8 @@ nav {
 
 /* 3 link buttons on navbar */
 .nav-item a {
+	font-family: 'Poppins';
+	font-size: 22px;
   	display: inline-block;
   	padding: 10px 15px;
   	margin-right: 5px;
@@ -33,6 +59,8 @@ nav {
 
 /* "[Company Name]" on navbar */
 .nav-item p{
+	font-family: 'Poppins';
+	font-size: 40px;
 	display: inline-block;
   	padding: 10px 15px;
   	margin-right: 5px;
@@ -55,6 +83,7 @@ table, th, td{
 }
 
 th{
+	font-family: 'Poppins';
 	background-color: grey;
 	color: white;
 	font-size:20px;
@@ -76,9 +105,17 @@ h1{
 }
 
 .calendar-and-daily-info{
+	font-family: 'Poppins';
 	display:flex;
 	justify-content:space-around;
 	margin: 5% 2% 5% 2%;
+}
+
+/* */
+.calendar-and-daily-info td a:hover {
+	/*background-color: #f26d66; */
+	transition: background-color 0.5s;
+	font-weight: 600;
 }
 
 .daily-info-section{
@@ -88,6 +125,9 @@ h1{
 	background-color: lightgrey;
 	padding:20px;
 	width: 20%;
+	border-radius: 25px;
+	border-color: black;
+	border-width: 2px; 
 }
 
 #day-info-header{
@@ -95,11 +135,17 @@ h1{
 	font-size: 24px;
 }
 
+.daily-info-section li:hover {
+	font-weight: 400;
+}
+
 #delete-button{
-	background-color:#D15656;
+	background-color: #f26d66; /* */
 	padding:5px;
 	text-align:center;
 	display:inline;
+	color: white;
+	border-radius: 15px;
 }
 
 .month-navigation{
@@ -138,6 +184,7 @@ h1{
 }
 
 .overlay {
+	font-family: 'Poppins';	
 	position: fixed;
 	top: 0;
 	bottom: 0;
@@ -209,7 +256,7 @@ input[type="text"], textarea{
 }
 
 input[type="submit"]{
-	background-color: #412b3b;
+	background-color: #f26d66;
 	color: #fff;
 	padding: 15px 50px;
 	border: none;
@@ -228,3 +275,116 @@ td a {
 .center {
 	text-align:center;
 }
+
+/* IM BLUE DOBA DI DOBA DIE
+.week1 {
+	background-color: #bfd6f6;
+}
+
+.week2 {
+	background-color: #8dbdff;
+}
+
+.week3 {
+	background-color: #64a1f4;
+}
+
+.week4 {
+	background-color: #4a91f2;
+}
+
+.week5 {
+	background-color: #3b7dd8;
+}
+*/
+
+/* WATER LORD
+.week1 {
+	background-color: #ebf4f6;
+}
+
+.week2 {
+	background-color: #bdeaee;
+}
+
+.week3 {
+	background-color: #76b4bd;
+}
+
+.week4 {
+	background-color: #58668b;
+}
+
+.week5 {
+	background-color: #5e5656;
+}
+*/
+
+/* BEACHY
+.week1 {
+	background-color: #fff6e9;
+}
+
+.week2 {
+	background-color: #ffefd7;
+}
+
+.week3 {
+	background-color: #fffef9;
+}
+
+.week4 {
+	background-color: #e3f0ff;
+}
+
+.week5 {
+	background-color: #d2e7ff;
+}
+*/
+
+/* PASTEL 
+.week1 {
+	background-color: #a8e6cf;
+}
+
+.week2 {
+	background-color: #dcedc1;
+}
+
+.week3 {
+	background-color: #ffd3b6;
+}
+
+.week4 {
+	background-color: #ffaaa5;
+}
+
+.week5 {
+	background-color: #ff8b94;
+}
+*/
+
+/* RAINBOW GRADIENT
+#weekdays {
+	background: linear-gradient(to right, #FBEC6B, #F4BC6B);
+}
+.week1 {
+	background: linear-gradient(to right, #FBEC6B, #f2905e);
+}
+
+.week2 {
+	background: linear-gradient(to right, #f2905e, #fa3747);
+}
+
+.week3 {
+	background: linear-gradient(to right, #fa3747, #8006bd);
+}
+
+.week4 {
+	background: linear-gradient(to right, #8006bd, #5ea9ff);
+}
+
+.week5 {
+	background: linear-gradient(to right, #5ea9ff, #92fcb0);
+}
+*/

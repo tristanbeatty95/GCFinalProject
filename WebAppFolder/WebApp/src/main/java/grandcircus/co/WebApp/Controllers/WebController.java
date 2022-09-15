@@ -129,7 +129,7 @@ public class WebController {
 			}
 		}
 
-		return "month";
+		return "month";	
 	}
 
 	@RequestMapping("/weekly-calendar")
