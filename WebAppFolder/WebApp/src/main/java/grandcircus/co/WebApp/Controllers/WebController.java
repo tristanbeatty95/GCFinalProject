@@ -16,9 +16,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import grandcircus.co.WebApp.Models.Account;
 import grandcircus.co.WebApp.Models.DayEvent;
 import grandcircus.co.WebApp.Models.Event;
+import grandcircus.co.WebApp.Services.AccountService;
 import grandcircus.co.WebApp.Services.DaysOfTheYearService;
 import grandcircus.co.WebApp.Services.EventService;
 
@@ -30,23 +33,40 @@ public class WebController {
 
 	@Autowired
 	private DaysOfTheYearService dayService;
+	
+	@Autowired
+	private AccountService accountService;
 
-//	//Home page after we complete MVP
-//	@RequestMapping("/login")
-//	public String displayLogin(Model model) {
-//
-//		return "login";
-//	}
-//	
-//	//Logout page after we complete MVP
-//	@RequestMapping("/logout")
-//	public String logout() {
-//		return "redirect:/login";
-//	}
+	//Home page after we complete MVP
+	@RequestMapping("/login")
+	public String displayLogin(Model model) {
+		return "login";
+	}
+	
+	@PostMapping("/login-submit")
+	public String verifyLogin(@RequestParam String email, @RequestParam String password,
+								RedirectAttributes redirectAttributes) {
+		Account account = accountService.getAccountByEmail(email);
+		if(account.getPassword().equals(password)) {
+			return "redirect:/monthly-calendar";
+		}
+		//set this to the hashed password later
+		//String password = password;
+		
+		redirectAttributes.addAttribute("email", email);
+		redirectAttributes.addAttribute("password", password);
+		return "no";
+	}
+	
+	//Logout page after we complete MVP
+	@RequestMapping("/logout")
+	public String logout() {
+		return "redirect:/login";
+	}
 
 	@RequestMapping("/")
 	public String homeRedirect() {
-		return "redirect:/monthly-calendar";
+		return "redirect:/login";
 	}
 
 	// Month will be default page
@@ -94,14 +114,6 @@ public class WebController {
 		}
 		
 		events = eventService.getEventsByTimeRange(dates.get(0).toString(), dates.get(dates.size() - 1).toString());
-//		for(String s : events.keySet()) {
-//			ArrayList<Event> cur = events.get(s);
-//			System.out.print(s = ": ");
-//			for(Event e : cur) {
-//				System.out.print(e.getEventName() + ", ");
-//			}
-//			System.out.println();
-//		}
 
 		// Set today to the first day of this month
 		// today = today.minusDays(numDaysInMonth);

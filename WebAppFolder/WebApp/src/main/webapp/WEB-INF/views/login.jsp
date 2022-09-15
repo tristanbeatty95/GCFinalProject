@@ -15,24 +15,26 @@
 		<button id="show-login">Login</button>
 	</div>
 	<div class="popup">
-		<div class="close-btn">&times;</div>
+		<!-- <div class="close-btn">&times;</div> -->
 		<div class="form">
+		<form method="post" action="/login-submit">
 			<h2>Log in</h2>
 			<div class="form-element">
 				<label for="email">Email</label> <input type="text" id="email"
-					placeholder="Enter email">
+					placeholder="Enter email" name="email">
 			</div>
 			<div class="form-element">
 				<label for="password">Password</label> <input type="password"
-					id="password" placeholder="Enter Password">
+					id="password" placeholder="Enter Password" name="password">
 			</div>
-			<div class="form-element">
+			<!-- <div class="form-element">
 				<input type="checkbox" id="remember-me"> <label
 					for="remember-me">Remember me</label>
-			</div>
+			</div> -->
 			<div class="form-element">
 				<button>Sign in</button>
 			</div>
+		</form>
 		</div>
 	</div>
 </body>
