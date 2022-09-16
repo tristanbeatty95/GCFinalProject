@@ -70,6 +70,18 @@ public class WebController {
 		} else {
 			sidebarDate = LocalDate.parse(dayDate);
 		}
+		// Used for generating data for DaysOfYearApi call on jsp
+		String dayMonthString = dayDate.substring(5, 7);
+		String dayDayString = dayDate.substring(8, 10);
+			String dayEventName = "";
+			String dayEventUrl = "";
+			DayEvent[] dayEvents = dayService.getSpecificDateEvents("2022", dayMonthString, dayDayString);
+					for (DayEvent d : dayEvents) {
+						dayEventName = d.getName();
+						dayEventUrl = d.getUrl();
+					}
+			model.addAttribute("dayEventName", dayEventName);
+			model.addAttribute("dayEventUrl", dayEventUrl);
 
 		// find the number of days in the currently viewed month
 		int numDaysInMonth = numDaysInMonth(today.getMonthValue(), today.getYear());

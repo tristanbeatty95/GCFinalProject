@@ -193,15 +193,19 @@
 						<li>(${event.startTime}-${event.endTime})</li>
 						<li>Attendees: ${event.employees}</li>
 						</ul>
-					
-					
-						
+				
 					</li>
 				</c:forEach>
 			</ul>
-			
+			<br><br>
+			<div class ="center"><a href="${dayEventUrl }" target="_blank" rel="noopener noreferrer">${dayEventName} <i class="far fa-caret-square-right"></i></a></div>
 		</div>
 	</div>
+	<div class="center">
+		Powered by <a title="Days Of The Year"
+			href="https://www.daysoftheyear.com">Days Of The Year</a>
+	</div>
+	<br><br>
 
 </body>
 </html>
