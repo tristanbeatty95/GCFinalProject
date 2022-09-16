@@ -11,26 +11,34 @@
 <title>Welcome</title>
 </head>
 <body>
-	<div class="center">
+	<!-- <div class="center">
 		<button id="show-login">Login</button>
-	</div>
+	</div> -->
 	<div class="popup">
 		<!-- <div class="close-btn">&times;</div> -->
 		<div class="form">
-		<form method="post" action="/login-submit">
-			<h2>Log in</h2>
+		<form method="post" action="/new-login-submit">
+			<h2>Create Account</h2>
 			<div class="form-element">
 				<label for="email">Email</label> <input type="text" id="email"
 					placeholder="Enter email" name="email">
 			</div>
 			<div class="form-element">
+				<label for="Name">Name</label> <input type="text" id="name"
+					placeholder="Enter name" required name="name">
+			</div>
+			<div class="form-element">
 				<label for="password">Password</label> <input type="password"
 					id="password" placeholder="Enter Password" name="password">
 			</div>
-			<a href="/login/create">Create an Account</a>
+			<div class="form-element">
+				<label for="retypePassword">Re-Type Password</label> <input type="password"
+					id="retypePassword" placeholder="Enter Password Again" name="retypePassword">
+			</div>
+			<a href="/login">I already have an account</a>
 			<p>${error}</p>
 			<div class="form-element">
-				<button>Sign in</button>
+				<button>Create Account</button>
 			</div>
 		</form>
 		</div>

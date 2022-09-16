@@ -10,7 +10,7 @@ public class AccountService {
 	private RestTemplate restTemplate = new RestTemplate();
 
 	public Account[] getAllAccounts() {
-		String url = "http://localhost:8080/account";
+		String url = "http://localhost:8080/account/all";
 		Account[] allAccounts = restTemplate.getForObject(url, Account[].class);
 		return allAccounts;
 	}

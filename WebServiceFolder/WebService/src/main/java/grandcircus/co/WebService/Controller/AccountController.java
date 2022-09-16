@@ -22,7 +22,7 @@ public class AccountController {
 	@Autowired
 	AccountRepo accountRepo;
 	
-	@GetMapping("/account")
+	@GetMapping("/account/all")
 	public List<Account> getAllAccounts() {
 		return accountRepo.findAll();
 	}

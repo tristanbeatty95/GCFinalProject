@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,23 +41,58 @@ public class WebController {
 
 	//Home page after we complete MVP
 	@RequestMapping("/login")
-	public String displayLogin(Model model) {
+	public String displayLogin(@RequestParam(required=false) String error, Model model) {
+		model.addAttribute("error", error);
 		return "login";
+	}
+	
+	@RequestMapping("/login/create")
+	public String createAccount(@RequestParam(required=false) String error, Model model) {
+		model.addAttribute("error", error);
+		return "login-create";
+	}
+	
+	@PostMapping("/new-login-submit")
+	public String newAccountCreation(@RequestParam String email, @RequestParam String name,
+										@RequestParam String password, @RequestParam String retypePassword) {
+		//validation
+		if(accountService.getAccountByEmail(email) != null) {
+			return "redirect:/login/create?error=account already exists with this email";
+		}
+		else if(!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+			return "redirect:/login/create?error=email address is invalid";
+		}
+		else if(!password.equals(retypePassword) || !password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")) {
+			return "redirect:/login/create?error=password is not valid or does not match";
+		}
+		
+		Account newAccount = new Account(name, email, password);
+		accountService.addNewAccount(newAccount);
+		
+		return "redirect:/monthly-calendar";
 	}
 	
 	@PostMapping("/login-submit")
 	public String verifyLogin(@RequestParam String email, @RequestParam String password,
 								RedirectAttributes redirectAttributes) {
+		
 		Account account = accountService.getAccountByEmail(email);
-		if(account.getPassword().equals(password)) {
-			return "redirect:/monthly-calendar";
+		PasswordEncoder passwordEncoder =
+			    PasswordEncoderFactories.createDelegatingPasswordEncoder();
+		String pword = passwordEncoder.encode(password);
+		System.out.println(pword);
+		
+		if(account == null || !account.getPassword().equals(password)) {
+			return "redirect:/login?error=" + "Password incorrect or account doesn't exist";
 		}
+		
+		
 		//set this to the hashed password later
 		//String password = password;
 		
-		redirectAttributes.addAttribute("email", email);
-		redirectAttributes.addAttribute("password", password);
-		return "no";
+//		redirectAttributes.addAttribute("email", email);
+//		redirectAttributes.addAttribute("password", password);
+		return "redirect:/monthly-calendar";
 	}
 	
 	//Logout page after we complete MVP
