@@ -19,11 +19,11 @@
 	<!-- Navbar at top of page -->
 	<nav class="navbar">
 		<ul class="nav-links">
-			<li class="nav-item"><a
+			<li class="nav-item" id="nav1"><a
 				href="/weekly-calendar?month=${monthNum}">Weekly View</a></li>
-			<li class="nav-item"><a href="/monthly-calendar">Monthly
+			<li class="nav-item" id="nav2"><a href="/monthly-calendar">Monthly
 					View</a></li>
-			<li class="nav-item" class="button"><a href="#divOne">Add
+			<li class="nav-item" id="nav3" class="button"><a href="#divOne">Add
 					Event</a></li>
 		</ul>
 		<ul class="nav-links2">
