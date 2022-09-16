@@ -193,7 +193,7 @@
 					</li>
 				</c:forEach>
 			</ul>
-			<a href="/delete-event" id="delete-button">Delete</a>
+			
 		</div>
 	</div>
 
