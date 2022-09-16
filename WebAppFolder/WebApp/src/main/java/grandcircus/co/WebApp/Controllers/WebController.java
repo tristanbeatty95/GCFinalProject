@@ -71,6 +71,9 @@ public class WebController {
 			sidebarDate = LocalDate.parse(dayDate);
 		}
 		// Used for generating data for DaysOfYearApi call on jsp
+		if (dayDate == null) {
+			dayDate = LocalDate.now().toString();
+		}
 		String dayMonthString = dayDate.substring(5, 7);
 		String dayDayString = dayDate.substring(8, 10);
 			String dayEventName = "";
