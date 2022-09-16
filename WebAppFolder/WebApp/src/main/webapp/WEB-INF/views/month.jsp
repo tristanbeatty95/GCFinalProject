@@ -46,7 +46,7 @@
 				<div class="container">
 					<form action="submitEvent" method="post">
 						<label for="eventName">Event Name</label> <input type="text"
-							id="eventName" name="eventName" placeholder="Event name">
+							id="eventName" name="eventName" placeholder="Event name" required>
 						<label for="startTime">Start Time</label> <input
 							type="datetime-local" name="start" id="startTime"> <br>
 						<label for="endTime">End Time</label> <input type="datetime-local"

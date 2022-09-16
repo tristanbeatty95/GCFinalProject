@@ -10,7 +10,7 @@
 <!-- Import link for tailwind -->
 <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
 	rel="stylesheet">
-	<link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+<link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
 <link rel="stylesheet" href="styles.css">
 <script src="https://kit.fontawesome.com/aa77e8e357.js"
 	crossorigin="anonymous"></script>
@@ -45,15 +45,14 @@
 				<div class="container">
 					<form action="submitEvent" method="post">
 						<label for="eventName">Event Name</label> <input type="text"
-							id="eventName" name="eventName" placeholder="Event name">
+							id="eventName" name="eventName" placeholder="Event name" required>
 						<label for="startTime">Start Time</label> <input
-							type="datetime-local" name="start" id="startTime"> <br>
+							type="datetime-local" name="start" id="startTime" value="${searchStart }"> <br>
 						<label for="endTime">End Time</label> <input type="datetime-local"
-							name="end" id="endTime"> <br> <label
+							name="end" id="endTime" value="${searchEnd }"> <br> <label
 							for="addEmployees">Add Employees</label>
-						<textarea id="addEmployees" name="addEmployees"
-							placeholder="Add multiple employees by separating with a comma"
-							rows="3" cols="30"></textarea>
+						<input type="text" id="addEmployees" name="addEmployees" 
+						value="${employees }">
 						<input type="submit" value="Submit">
 					</form>
 				</div>
@@ -71,7 +70,11 @@ List of Employees: <input type="text" name="employees" placeholder="Add multiple
 
 </form>
 <c:if test="${empty conflictMessageString}">
-   There are currently no conflicts to show!
+   There are currently no conflicts to show! <br><br>
+   Would you like to add an event? <br><br>
+  <a href="#divOne" class="button">Add	Event</a>
+   
+   
 </c:if>
 <c:if test="${not empty conflictMessage}"> ${conflictMessageString } <br> ${suggestOneString } <br> ${suggestTwoString }</c:if>
 

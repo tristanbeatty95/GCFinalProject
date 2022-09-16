@@ -530,6 +530,9 @@ public class WebController {
 		//return data to the view
 		model.addAttribute("conflictMessage", conflictMessage);
 		model.addAttribute("conflictMessageString", conflictMessageString);
+		model.addAttribute("searchEnd",searchEnd);
+		model.addAttribute("searchStart", searchStart);
+		model.addAttribute("employees", employees);
 		
 
 		return "/schedule-finder";
