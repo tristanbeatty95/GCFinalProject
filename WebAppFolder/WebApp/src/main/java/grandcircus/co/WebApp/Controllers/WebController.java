@@ -464,83 +464,97 @@ public class WebController {
 	public String displayTimes(@RequestParam String start, @RequestParam String end,
 			@RequestParam String employees, Model model) {
 
+		//call all events to be able to search for conflicts
 		Event[] events = eventService.getAllEvents();
-		List<String> conflictMessage = new ArrayList<>();
-		List<String> suggestOne = new ArrayList<>();
-		List<String> suggestTwo = new ArrayList<>();
+		
+		//parse employees to search as an arraylist
+		List<String> parsedEmployeeList = new ArrayList<>(Arrays.asList(employees.split(", ")));
+		
+		//instantiate initial messages, to be filled below upon conflict
+		StringBuilder conflictMessage = new StringBuilder();
+		String conflictMessageString = "";
+
+		
+		//turning the start and end time Strings into LDT format
 		LocalDateTime searchStart = LocalDateTime.parse(start);
 		LocalDateTime searchEnd = LocalDateTime.parse(end);
-		String conflictMessageString = "";
-		String suggestOneString = "";
-		String suggestTwoString = "";
+		
+		//search each event for conflict
 		for (Event e : events) {
-			String eventStartString = e.getStart();
-			LocalDateTime eventStart = LocalDateTime.parse(eventStartString);
-			String eventEndString = e.getEnd();
-			LocalDateTime eventEnd = LocalDateTime.parse(eventEndString);
+			//get start/end of event time (String) and convert to LDT
+			LocalDateTime eventStart = LocalDateTime.parse(e.getStart());
+			LocalDateTime eventEnd = LocalDateTime.parse(e.getEnd());
+			
+			//get employee list from event
 			List<String> employeeList = e.getEmployees();
+			
+			//calculate duration of event
 			Long d = ChronoUnit.MINUTES.between(eventStart, eventEnd);
 			Long duration = (long) ((d.doubleValue()) / 60);
+			
+			//set suggested start and end times to 5 min before/after each event
 			LocalDateTime suggestStart1 = eventStart.plusHours(-duration);
 			LocalDateTime suggestEnd1 = eventStart.plusMinutes(-5);
 			LocalDateTime suggestStart2 = eventEnd.plusMinutes(5);
 			LocalDateTime suggestEnd2 = eventEnd.plusHours(duration);
-			String pattern = "hh:mm a";
+			
+			//check if start/end times conflict with event times on calendar
 			if ((searchStart.isAfter(eventStart) && (searchEnd.isBefore(eventEnd))) || 
 					(searchStart.isEqual(eventStart) && searchEnd.isEqual(eventEnd))) {
-				// suggest times
-				for(String name : employeeList) {
-					if (employees.equalsIgnoreCase(name)) {
-						conflictMessage.add("This time conflicts with " + employees + "'s event named " + e.getEventName() + " on " + eventStart.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
-						conflictMessageString = conflictMessage.toString();
-						conflictMessageString = conflictMessageString.substring(1, conflictMessageString.length()-1);
-						suggestOne.add("1. Suggested Start Time: " + suggestStart1.format(DateTimeFormatter.ofPattern(pattern)) + " Suggested End Time: " + suggestEnd1.format(DateTimeFormatter.ofPattern(pattern)));
-						suggestOneString = suggestOne.toString();
-						suggestOneString = suggestOneString.substring(1,suggestOneString.length()-1);
-						suggestTwo.add("2. Suggested Start Time: " + suggestStart2.format(DateTimeFormatter.ofPattern(pattern))+ " Suggested End Time: " + suggestEnd2.format(DateTimeFormatter.ofPattern(pattern)));
-						suggestTwoString = suggestTwo.toString();
-						suggestTwoString = suggestTwoString.substring(1, suggestTwoString.length()-1);
+				
+				for (int i = 0; i < parsedEmployeeList.size(); i++) {
+				
+					for (String name : employeeList) {
+						
+						//if there is a conflict, check to see if there is an employee who matches the conflict
+						if (parsedEmployeeList.get(i).equalsIgnoreCase(name)) {
+							conflictMessage.append("This time conflicts with " + parsedEmployeeList.get(i) + "'s event named " + e.getEventName() + " on " + eventStart.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")) + "<br>");
+							conflictMessage.append("1. Suggested Start Time: " + suggestStart1.format(DateTimeFormatter.ofPattern("hh:mm a")) + " Suggested End Time: " + suggestEnd1.format(DateTimeFormatter.ofPattern("hh:mm a")) + "<br>");
+							conflictMessage.append("2. Suggested Start Time: " + suggestStart2.format(DateTimeFormatter.ofPattern("hh:mm a"))+ " Suggested End Time: " + suggestEnd2.format(DateTimeFormatter.ofPattern("hh:mm a")) + "<br><br>");
+							conflictMessageString = conflictMessage.toString();
+
+						}
+						
 					}
-					
 				}
-			} else if (searchEnd.isAfter(eventStart) 
-					&& searchEnd.isBefore(eventEnd)) {
-				// suggest times
-				for(String name : employeeList) {
-					if (employees.equalsIgnoreCase(name)) {
-						conflictMessage.add("This time conflicts with " + employees + "'s event named " + e.getEventName() + " on " + eventStart.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
-						conflictMessageString = conflictMessage.toString();
-						conflictMessageString = conflictMessageString.substring(1, conflictMessageString.length()-1);
-						suggestOne.add("1. Suggested Start Time: " + suggestStart1.format(DateTimeFormatter.ofPattern(pattern)) + " Suggested End Time: " + suggestEnd1.format(DateTimeFormatter.ofPattern(pattern)));
-						suggestOneString = suggestOne.toString();
-						suggestOneString = suggestOneString.substring(1,suggestOneString.length()-1);
-						suggestTwo.add("2. Suggested Start Time: " + suggestStart2.format(DateTimeFormatter.ofPattern(pattern))+ " Suggested End Time: " + suggestEnd2.format(DateTimeFormatter.ofPattern(pattern)));
-						suggestTwoString = suggestTwo.toString();
-						suggestTwoString = suggestTwoString.substring(1, suggestTwoString.length()-1);
-					}
+			} else if (searchEnd.isAfter(eventStart) && searchEnd.isBefore(eventEnd)) {
+				for (int i = 0; i < parsedEmployeeList.size(); i++) {
 					
+					for (String name : employeeList) {
+						
+						//if there is a conflict, check to see if there is an employee who matches the conflict
+						if (parsedEmployeeList.get(i).equalsIgnoreCase(name)) {
+							conflictMessage.append("This time conflicts with " + parsedEmployeeList.get(i) + "'s event named " + e.getEventName() + " on " + eventStart.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))+ "<br>");
+							conflictMessage.append("1. Suggested Start Time: " + suggestStart1.format(DateTimeFormatter.ofPattern("hh:mm a")) + " Suggested End Time: " + suggestEnd1.format(DateTimeFormatter.ofPattern("hh:mm a")) + "<br>");
+							conflictMessage.append("2. Suggested Start Time: " + suggestStart2.format(DateTimeFormatter.ofPattern("hh:mm a"))+ " Suggested End Time: " + suggestEnd2.format(DateTimeFormatter.ofPattern("hh:mm a")) + "<br><br>");
+							conflictMessageString = conflictMessage.toString();
+							
+						}
+						
+					}
 				}
 			} else if (searchStart.isAfter(eventStart) && searchStart.isBefore(eventEnd)) {
-				// suggest times
-				for(String name : employeeList) {
-					if (employees.equalsIgnoreCase(name)) {
-						conflictMessage.add("This time conflicts with " + employees + "'s event named " + e.getEventName() + " on " + eventStart.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
-						conflictMessageString = conflictMessage.toString();
-						conflictMessageString = conflictMessageString.substring(1, conflictMessageString.length()-1);
-						suggestOne.add("1. Suggested Start Time: " + suggestStart1.format(DateTimeFormatter.ofPattern(pattern)) + " Suggested End Time: " + suggestEnd1.format(DateTimeFormatter.ofPattern(pattern)));
-						suggestOneString = suggestOne.toString();
-						suggestOneString = suggestOneString.substring(1,suggestOneString.length()-1);
-						suggestTwo.add("2. Suggested Start Time: " + suggestStart2.format(DateTimeFormatter.ofPattern(pattern))+ " Suggested End Time: " + suggestEnd2.format(DateTimeFormatter.ofPattern(pattern)));
-						suggestTwoString = suggestTwo.toString();
-						suggestTwoString = suggestTwoString.substring(1, suggestTwoString.length()-1);
+				for (int i = 0; i < parsedEmployeeList.size(); i++) {
+					
+					for (String name : employeeList) {
+						
+						//if there is a conflict, check to see if there is an employee who matches the conflict
+						if (parsedEmployeeList.get(i).equalsIgnoreCase(name)) {
+							conflictMessage.append("This time conflicts with " + parsedEmployeeList.get(i) + "'s event named " + e.getEventName() + " on " + eventStart.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))+ "<br>");
+							conflictMessage.append("1. Suggested Start Time: " + suggestStart1.format(DateTimeFormatter.ofPattern("hh:mm a")) + " Suggested End Time: " + suggestEnd1.format(DateTimeFormatter.ofPattern("hh:mm a")) + "<br>");
+							conflictMessage.append("2. Suggested Start Time: " + suggestStart2.format(DateTimeFormatter.ofPattern("hh:mm a"))+ " Suggested End Time: " + suggestEnd2.format(DateTimeFormatter.ofPattern("hh:mm a")) + "<br><br>");
+							conflictMessageString = conflictMessage.toString();
+						
+						}
+						
 					}
-			}
+				}
 		}
-		}
+	}
+		//return data to the view
 		model.addAttribute("conflictMessage", conflictMessage);
 		model.addAttribute("conflictMessageString", conflictMessageString);
-		model.addAttribute("suggestOneString", suggestOneString);
-		model.addAttribute("suggestTwoString", suggestTwoString);
+		
 
 		return "/schedule-finder";
 	}

@@ -70,7 +70,7 @@ List of Employees: <input type="text" name="employees" placeholder="Add multiple
 <input type="submit" />
 
 </form>
-<c:if test="${empty conflictMessage}">
+<c:if test="${empty conflictMessageString}">
    There are currently no conflicts to show!
 </c:if>
 <c:if test="${not empty conflictMessage}"> ${conflictMessageString } <br> ${suggestOneString } <br> ${suggestTwoString }</c:if>
