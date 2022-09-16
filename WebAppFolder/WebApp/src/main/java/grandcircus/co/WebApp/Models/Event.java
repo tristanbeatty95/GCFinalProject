@@ -1,5 +1,7 @@
 package grandcircus.co.WebApp.Models;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class Event {
@@ -20,12 +22,14 @@ public class Event {
 
 	// Getter for time, without the date portion
 	public String getStartTime() {
-		return this.getStart().substring(11);
+		LocalDateTime startString = LocalDateTime.parse(start);
+		return startString.format(DateTimeFormatter.ofPattern("hh:mm a"));
 	}
 
 	// Getter for time, without the date portion
 	public String getEndTime() {
-		return this.getEnd().substring(11);
+		LocalDateTime endString = LocalDateTime.parse(end);
+		return endString.format(DateTimeFormatter.ofPattern("hh:mm a"));
 	}
 
 	public String getStart() {

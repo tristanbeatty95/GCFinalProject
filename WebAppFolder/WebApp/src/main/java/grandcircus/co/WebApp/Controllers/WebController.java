@@ -145,7 +145,20 @@ public class WebController {
 			today = LocalDate.parse(date);
 		}
 		date = today.toString();
-
+		
+		// Used for generating data for DaysOfYearApi call on jsp
+		String dayMonthString = monthToString(today.getMonthValue());
+		String dayDayString = dayToString(today.getDayOfMonth());
+		String dayEventName = "";
+		String dayEventUrl = "";
+		DayEvent[] dayEvents = dayService.getSpecificDateEvents("2022", dayMonthString, dayDayString);
+				for (DayEvent d : dayEvents) {
+					dayEventName = d.getName();
+					dayEventUrl = d.getUrl();
+				}
+		model.addAttribute("dayEventName", dayEventName);
+		model.addAttribute("dayEventUrl", dayEventUrl);
+		
 		// Stores the numbers to be printed for the current week
 		List<LocalDate> dates = new ArrayList<LocalDate>(7);
 		HashMap<String, ArrayList<Event>> events;
@@ -162,13 +175,7 @@ public class WebController {
 		}
 		events = eventService.getEventsByTimeRange(dates.get(0).toString(), dates.get(dates.size() - 1).toString());
 		
-		// Used for generating data for DaysOfYearApi call on jsp
-		String dayMonthString = monthToString(today.getMonthValue());
-		String dayDayString = dayToString(today.getDayOfMonth());
-		String dayEventName = "";
-		String dayEventUrl = "";
-		model.addAttribute("dayEventName", dayEventName);
-		model.addAttribute("dayEventUrl", dayEventUrl);
+	
 
 		// Set today to the first day of this week
 		today = today.minusDays(7);

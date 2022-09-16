@@ -106,12 +106,8 @@
 							
 								</c:forEach>
 						</a>
-							<p class="center">
-
-								<a
-									href="/weekly-day-event?date=${date }&month=${dayMonthString}&year=2022&day=${date.dayOfMonth}"><i
-									class="far fa-caret-square-right"></i></a>
-							</p></td>
+							
+							</td>
 					</c:forEach>
 				</tr>
 			</table>
@@ -123,23 +119,29 @@
 				${curDayDate.dayOfMonth}</h3>
 			<ul>
 				<c:forEach var="event" items="${dayEvents}">
-					<li>${event.eventName} (${event.startTime} - ${event.endTime})
-						Attendees: ${event.employees}<a href="/delete/${event.id}"> <i
+					<li>${event.eventName} <a href="/delete/${event.id}"> <i
 							class="fa fa-trash" aria-hidden="true"></i></a>
+						<ul>
+						<li>(${event.startTime} - ${event.endTime})</li>
+						<li>Attendees: ${event.employees}</li>
+						</ul>
+					
+						
 					</li>
 				</c:forEach>
 			</ul>
+			<br>
+			<ul>
+				<li><a href="${dayEventUrl }" target="_blank" rel="noopener noreferrer">${dayEventName}
+				<i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a></li>
+			</ul>
+			
 
-			<a href="${dayEventUrl }" target="_blank" rel="noopener noreferrer">${dayEventName}</a>
-
-			<a href="/delete-event" id="delete-button">Delete</a>
+			
 		</div>
 	</div>
 	<div class="center">
-		<p>
-			Click on a <i class="far fa-caret-square-right"></i> button to see
-			more weird, funny, unknown and bizarre daily events!
-		</p>
+		
 		Powered by <a title="Days Of The Year"
 			href="https://www.daysoftheyear.com">Days Of The Year</a>
 	</div>

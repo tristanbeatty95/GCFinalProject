@@ -187,13 +187,19 @@
 				${curDayDate.dayOfMonth}</h3>
 			<ul>
 				<c:forEach var="event" items="${dayEvents}">
-					<li>${event.eventName}(${event.startTime}-${event.endTime})
-						Attendees: ${event.employees}<a href="/delete/${event.id}"> <i
+					<li>${event.eventName} <a href="/delete/${event.id}"> <i
 							class="fa fa-trash" aria-hidden="true"></i></a>
+						<ul>
+						<li>(${event.startTime}-${event.endTime})</li>
+						<li>Attendees: ${event.employees}</li>
+						</ul>
+					
+					
+						
 					</li>
 				</c:forEach>
 			</ul>
-			<a href="/delete-event" id="delete-button">Delete</a>
+			
 		</div>
 	</div>
 
