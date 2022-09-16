@@ -499,8 +499,15 @@ public class WebController {
 			LocalDateTime suggestEnd2 = eventEnd.plusHours(duration);
 			
 			//check if start/end times conflict with event times on calendar
+			//these are all different time search conditions
 			if ((searchStart.isAfter(eventStart) && (searchEnd.isBefore(eventEnd))) || 
-					(searchStart.isEqual(eventStart) && searchEnd.isEqual(eventEnd))) {
+					(searchStart.isEqual(eventStart) && searchEnd.isEqual(eventEnd)) ||
+					searchStart.isEqual(eventStart) || searchStart.isEqual(eventEnd) ||
+					searchEnd.isEqual(eventStart) || searchEnd.isEqual(eventEnd) ||
+					(searchEnd.isAfter(eventStart) && searchEnd.isBefore(eventEnd)) ||
+					(searchStart.isBefore(eventStart) && searchEnd.isAfter(eventEnd)) ||
+					(searchStart.isAfter(eventStart) && searchStart.isBefore(eventEnd)) ||
+					(searchStart.isEqual(eventEnd) && searchEnd.isAfter(eventEnd))) {
 				
 				for (int i = 0; i < parsedEmployeeList.size(); i++) {
 				
@@ -517,39 +524,8 @@ public class WebController {
 						
 					}
 				}
-			} else if (searchEnd.isAfter(eventStart) && searchEnd.isBefore(eventEnd)) {
-				for (int i = 0; i < parsedEmployeeList.size(); i++) {
-					
-					for (String name : employeeList) {
-						
-						//if there is a conflict, check to see if there is an employee who matches the conflict
-						if (parsedEmployeeList.get(i).equalsIgnoreCase(name)) {
-							conflictMessage.append("This time conflicts with " + parsedEmployeeList.get(i) + "'s event named " + e.getEventName() + " on " + eventStart.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))+ "<br>");
-							conflictMessage.append("1. Suggested Start Time: " + suggestStart1.format(DateTimeFormatter.ofPattern("hh:mm a")) + " Suggested End Time: " + suggestEnd1.format(DateTimeFormatter.ofPattern("hh:mm a")) + "<br>");
-							conflictMessage.append("2. Suggested Start Time: " + suggestStart2.format(DateTimeFormatter.ofPattern("hh:mm a"))+ " Suggested End Time: " + suggestEnd2.format(DateTimeFormatter.ofPattern("hh:mm a")) + "<br><br>");
-							conflictMessageString = conflictMessage.toString();
-							
-						}
-						
-					}
-				}
-			} else if (searchStart.isAfter(eventStart) && searchStart.isBefore(eventEnd)) {
-				for (int i = 0; i < parsedEmployeeList.size(); i++) {
-					
-					for (String name : employeeList) {
-						
-						//if there is a conflict, check to see if there is an employee who matches the conflict
-						if (parsedEmployeeList.get(i).equalsIgnoreCase(name)) {
-							conflictMessage.append("This time conflicts with " + parsedEmployeeList.get(i) + "'s event named " + e.getEventName() + " on " + eventStart.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))+ "<br>");
-							conflictMessage.append("1. Suggested Start Time: " + suggestStart1.format(DateTimeFormatter.ofPattern("hh:mm a")) + " Suggested End Time: " + suggestEnd1.format(DateTimeFormatter.ofPattern("hh:mm a")) + "<br>");
-							conflictMessage.append("2. Suggested Start Time: " + suggestStart2.format(DateTimeFormatter.ofPattern("hh:mm a"))+ " Suggested End Time: " + suggestEnd2.format(DateTimeFormatter.ofPattern("hh:mm a")) + "<br><br>");
-							conflictMessageString = conflictMessage.toString();
-						
-						}
-						
-					}
-				}
-		}
+			} 
+
 	}
 		//return data to the view
 		model.addAttribute("conflictMessage", conflictMessage);
