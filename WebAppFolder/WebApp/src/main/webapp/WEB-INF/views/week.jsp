@@ -10,6 +10,7 @@
 <!-- Import link for tailwind -->
 <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
 	rel="stylesheet">
+<link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
 <link rel="stylesheet" href="styles.css">
 <script src="https://kit.fontawesome.com/aa77e8e357.js"
 	crossorigin="anonymous"></script>
@@ -19,21 +20,20 @@
 	<nav class="navbar">
 		<ul class="nav-links">
 
-			<li style="background-color: #8D8D8D" class="nav-item"><a
-				href="/monthly-calendar" style="color: #FFFFFF">Monthly View</a></li>
-			<li style="background-color: #8D8D8D" class="nav-item" class="button">
-				<a href="#divOne" style="color: #FFFFFF">Add Event</a>
-			</li>
-			<li style="background-color: #8D8D8D" class="nav-item"><a
-				href="/schedule-finder" style="color: #FFFFFF">Search Events</a></li>
+			<li class="nav-item" id="nav1"><a href="/monthly-calendar">Monthly
+					View</a></li>
+			<li class="nav-item" id="nav2" class="button"><a href="#divOne">Add
+					Event</a></li>
+			<li class="nav-item" id="nav3"><a href="/schedule-finder">Search
+					Events</a></li>
 		</ul>
-		<ul class="nav-links">
+		<ul class="nav-links2">
 			<li class="nav-item" id="companyNameText">
-				<p style="color: #FFFFFF">Weekly Calendar</p>
+				<p>Weekly Calendar</p>
 			</li>
 		</ul>
-		<ul class="nav-links">
-			<li style="background-color: #D15656" class="nav-item"
+		<ul class="nav-links3">
+			<li style="background-color: #e3f0ff" class="nav-item"
 				id="logoutButton"><a href="/logout">Logout</a></li>
 		</ul>
 	</nav>
@@ -45,7 +45,7 @@
 				<div class="container">
 					<form>
 						<label for="eventName">Event Name</label> <input type="text"
-							id="eventName" placeholder="event name"> <label
+							id="eventName" placeholder="event name" required> <label
 							for="startTime">Start Time</label> <input type="datetime-local"
 							id="startTime"> <br> <label for="endTime">End
 							Time</label> <input type="datetime-local" id="endTime"> <br>
@@ -59,23 +59,24 @@
 			</div>
 		</div>
 	</div>
-
+	
 
 	<!-- Calendar Grid -->
 	<div class="calendar-and-daily-info">
 		<div class="month-navigation">
-			
-			<a id="prevButton" href="/weekly-calendar?date=${prevWeekDate}"><i class="fa-solid fa-arrow-left"></i></a>
+
+			<a id="prevButton" href="/weekly-calendar?date=${prevWeekDate}"><i
+				class="fa-solid fa-arrow-left"></i></a>
 
 			<!-- Gets current month and year as a String -->
 			<div id="month-header-text">
-				Week of:<br>
-				${curWeekMonthString} ${curWeekDate.dayOfMonth},<br>
+				Week of:<br> ${curWeekMonthString} ${curWeekDate.dayOfMonth},<br>
 				${curWeekDate.year}
 			</div>
 
-			<a id="nextButton" href="/weekly-calendar?date=${nextWeekDate}"><i class="fa-solid fa-arrow-right"></i></a>
-		
+			<a id="nextButton" href="/weekly-calendar?date=${nextWeekDate}"><i
+				class="fa-solid fa-arrow-right"></i></a>
+
 		</div>
 		<div>
 
@@ -98,21 +99,14 @@
 					<c:forEach var="date" items="${dates}" begin="0" end="6"
 						varStatus="loop">
 
-						<td>
-							<a href="/weekly-calendar?date=${date}">
-								${date.dayOfMonth}<br>
-								
-								<c:set var="dateString">${date.toString()}</c:set>
+						<td><a href="/weekly-calendar?date=${date}">
+								${date.dayOfMonth}<br> <c:set var="dateString">${date.toString()}</c:set>
 								<c:forEach var="dayEvent" items="${events[dateString]}">								
 									${dayEvent.eventName}
 							
 								</c:forEach>
-							</a>
-							<p class="center">
-									
-								<a href="/weekly-day-event?date=${date }&month=${dayMonthString}&year=2022&day=${date.dayOfMonth}"><i class="far fa-caret-square-right"></i></a>
-							</p>
-						</td>
+						</a>
+							</td>
 					</c:forEach>
 				</tr>
 			</table>
@@ -120,27 +114,58 @@
 
 
 		<div class="daily-info-section">
-			<h3 id="day-info-header">${curDayMonthString} ${curDayDate.dayOfMonth}</h3>
+			<h3 id="day-info-header">${curDayMonthString}
+				${curDayDate.dayOfMonth}</h3>
 			<ul>
 				<c:forEach var="event" items="${dayEvents}">
-					<li>
-						${event.eventName}	(${event.startTime} - ${event.endTime}) 
-						Attendees: ${event.employees}<a href="/delete/${event.id}">   <i class="fa fa-trash" aria-hidden="true"></i></a>
+					<li>${event.eventName} <a href="/delete/${event.id}"> <i
+							class="fa fa-trash" aria-hidden="true"></i></a>
+							 <a href="#divOne1"> <i
+							class="fa fa-pencil" aria-hidden="true"></i></a>
+							<ul> 
+							<li>(${event.startTime} - ${event.endTime})</li>
+						<li>Attendees: ${event.employeesString}</li>
+						</ul>
 					</li>
+					
+					
+					
+					
+					<div class="overlay" id="divOne1">
+		<div class="wrapper">
+
+			<a href="#" class="close">&times;</a>
+			<div class="content">
+				<div class="container">
+	
+<form class="form" action="/postEvent/${event.id }" method="post">
+<input type="hidden" value="${event.id}" name="id">
+Event Name: <input type="text" value="${event.eventName}" name="eventName" required /><br>
+Start Time: <input type="datetime-local" value="${event.start}" name="start" required /><br>
+End Time: <input type="datetime-local" value="${event.end}" name="end" required /><br>
+Employees: <input type="text" value="${event.employeesString}" name="employees" required />
+<input type="submit" class="btn-success" value="Update">
+
+</form>
+</div>
+			</div>
+		</div>
+	</div>
+					
 				</c:forEach>
 			</ul>
-
-			<a href="${dayEventUrl }" target="_blank" rel="noopener noreferrer">${dayEventName}</a>
+			<br><br>
+			<div class ="center"><a href="${dayEventUrl }" target="_blank" rel="noopener noreferrer">${dayEventName} <i class="far fa-caret-square-right"></i></a></div>
 			
-			<a href="/delete-event" id="delete-button">Delete</a>
+
+			
 		</div>
 	</div>
 	<div class="center">
-	<p>Click on a <i class="far fa-caret-square-right"></i> button to see more weird, funny, unknown and bizarre daily events!</p>
 		Powered by <a title="Days Of The Year"
 			href="https://www.daysoftheyear.com">Days Of The Year</a>
 	</div>
-	
+
 
 </body>
 </html>

@@ -1,9 +1,32 @@
 @charset "ISO-8859-1";
 
+
 .navbar{
 	display:flex;
 	justify-content: space-between;
 	align-items: center;
+}
+
+/*
+*/
+
+.nav-links li{
+	border-radius: 20px;
+	margin: 10px;
+}
+
+.nav-links2 {
+	border-radius: 0px;
+	margin: 10px;
+}
+
+
+.navbar li a:hover {
+	/*Make the Navbar a little more fun */
+	
+	color: black;
+	transition: background-color 0.5s;
+
 }
 
 nav {
@@ -15,6 +38,7 @@ nav {
 
 /* Container for navbar items */
 .nav-links {
+	font-family: 'Poppins';
 	margin-top:5px;
   	margin-bottom:5px;
   	list-style: none;
@@ -23,16 +47,20 @@ nav {
 
 /* 3 link buttons on navbar */
 .nav-item a {
+	font-family: 'Poppins';
+	font-size: 22px;
   	display: inline-block;
   	padding: 10px 15px;
   	margin-right: 5px;
   	margin-left: 5px;
   	text-decoration: none;
-  	color: white;
+  	/*color: white;*/
 }
 
 /* "[Company Name]" on navbar */
 .nav-item p{
+	font-family: 'Poppins';
+	font-size: 40px;
 	display: inline-block;
   	padding: 10px 15px;
   	margin-right: 5px;
@@ -45,6 +73,11 @@ nav {
 	border-radius: 26px;
 }
 
+#logoutButton:hover {
+	font-weight: bolder;
+	box-shadow: 0px 0px 10px 10px black;
+}
+
 #companyNameText{
 	font-size: 30px;
 	text-align: center;
@@ -55,6 +88,7 @@ table, th, td{
 }
 
 th{
+	font-family: 'Poppins';
 	background-color: grey;
 	color: white;
 	font-size:20px;
@@ -76,18 +110,30 @@ h1{
 }
 
 .calendar-and-daily-info{
+	font-family: 'Poppins';
 	display:flex;
 	justify-content:space-around;
 	margin: 5% 2% 5% 2%;
+}
+
+/* */
+.calendar-and-daily-info td a:hover {
+	/*background-color: #f26d66; */
+	transition: background-color 0.5s;
+	font-weight: 900;
+	box-shadow: 0px 0px 2px 2px black;
 }
 
 .daily-info-section{
 	display:flex;
 	flex-direction: column;
 	justify-content:space-between;
-	background-color: lightgrey;
+	background-color: #ffefd7;
 	padding:20px;
 	width: 20%;
+	border-radius: 25px;
+	border-color: black;
+	border-width: 2px; 
 }
 
 #day-info-header{
@@ -95,11 +141,17 @@ h1{
 	font-size: 24px;
 }
 
+.daily-info-section li:hover {
+	font-weight: 600;
+}
+
 #delete-button{
-	background-color:#D15656;
+	background-color: #e3f0ff; /* */
 	padding:5px;
 	text-align:center;
 	display:inline;
+	color: black;
+	border-radius: 15px;
 }
 
 .month-navigation{
@@ -138,6 +190,7 @@ h1{
 }
 
 .overlay {
+	font-family: 'Poppins';	
 	position: fixed;
 	top: 0;
 	bottom: 0;
@@ -209,10 +262,12 @@ input[type="text"], textarea{
 }
 
 input[type="submit"]{
-	background-color: #412b3b;
-	color: #fff;
+	background-color: #d2e7ff;
+	font-family: 'Poppins';
+	color: black;
 	padding: 15px 50px;
-	border: none;
+	border-width: 2px;
+	border-color: black;
 	border-radius: 50px;
 	cursor: pointer;
 	font-size: 15px;
@@ -227,4 +282,56 @@ td a {
 
 .center {
 	text-align:center;
+}
+
+
+.week1 {
+	background-color: #fff6e9;
+}
+
+.week2 {
+	background-color: #ffefd7;
+}
+
+.week3 {
+	background-color: #fffef9;
+}
+
+.week4 {
+	background-color: #e3f0ff;
+}
+
+.week5 {
+	background-color: #d2e7ff;
+}
+
+#nav1 {
+	background-color: #d2e7ff;
+	color: black;
+}
+
+
+#nav2 {
+	background-color: #e3f0ff;
+	color: black;
+}
+
+#nav3 {
+	background-color: #d2e7ff;
+	color: black;
+}
+
+#nav1:hover {
+	font-weight: bolder;
+	box-shadow: 0px 0px 10px 10px black;
+}
+
+#nav2:hover {
+	font-weight: bolder;
+	box-shadow: 0px 0px 10px 10px black;
+}
+
+#nav3:hover {
+	font-weight: bolder;
+	box-shadow: 0px 0px 10px 10px black;
 }

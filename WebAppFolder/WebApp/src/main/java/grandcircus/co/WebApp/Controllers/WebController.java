@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -138,6 +139,21 @@ public class WebController {
 		} else {
 			sidebarDate = LocalDate.parse(dayDate);
 		}
+		// Used for generating data for DaysOfYearApi call on jsp
+		if (dayDate == null) {
+			dayDate = LocalDate.now().toString();
+		}
+		String dayMonthString = dayDate.substring(5, 7);
+		String dayDayString = dayDate.substring(8, 10);
+			String dayEventName = "";
+			String dayEventUrl = "";
+			DayEvent[] dayEvents = dayService.getSpecificDateEvents("2022", dayMonthString, dayDayString);
+					for (DayEvent d : dayEvents) {
+						dayEventName = d.getName();
+						dayEventUrl = d.getUrl();
+					}
+			model.addAttribute("dayEventName", dayEventName);
+			model.addAttribute("dayEventUrl", dayEventUrl);
 
 		// find the number of days in the currently viewed month
 		int numDaysInMonth = numDaysInMonth(today.getMonthValue(), today.getYear());
@@ -190,7 +206,7 @@ public class WebController {
 			}
 		}
 
-		return "month";
+		return "month";	
 	}
 
 	@RequestMapping("/weekly-calendar")
@@ -205,7 +221,20 @@ public class WebController {
 			today = LocalDate.parse(date);
 		}
 		date = today.toString();
-
+		
+		// Used for generating data for DaysOfYearApi call on jsp
+		String dayMonthString = monthToString(today.getMonthValue());
+		String dayDayString = dayToString(today.getDayOfMonth());
+		String dayEventName = "";
+		String dayEventUrl = "";
+		DayEvent[] dayEvents = dayService.getSpecificDateEvents("2022", dayMonthString, dayDayString);
+				for (DayEvent d : dayEvents) {
+					dayEventName = d.getName();
+					dayEventUrl = d.getUrl();
+				}
+		model.addAttribute("dayEventName", dayEventName);
+		model.addAttribute("dayEventUrl", dayEventUrl);
+		
 		// Stores the numbers to be printed for the current week
 		List<LocalDate> dates = new ArrayList<LocalDate>(7);
 		HashMap<String, ArrayList<Event>> events;
@@ -222,13 +251,7 @@ public class WebController {
 		}
 		events = eventService.getEventsByTimeRange(dates.get(0).toString(), dates.get(dates.size() - 1).toString());
 		
-		// Used for generating data for DaysOfYearApi call on jsp
-		String dayMonthString = monthToString(today.getMonthValue());
-		String dayDayString = dayToString(today.getDayOfMonth());
-		String dayEventName = "";
-		String dayEventUrl = "";
-		model.addAttribute("dayEventName", dayEventName);
-		model.addAttribute("dayEventUrl", dayEventUrl);
+	
 
 		// Set today to the first day of this week
 		today = today.minusDays(7);
@@ -276,7 +299,7 @@ public class WebController {
 	@PostMapping("/submitEvent")
 	public String submitEvent(@RequestParam String eventName, @RequestParam String start, @RequestParam String end,
 			@RequestParam String addEmployees) {
-		List<String> employees = new ArrayList<>(Arrays.asList(addEmployees.split(",")));
+		List<String> employees = new ArrayList<>(Arrays.asList(addEmployees.split(", ")));
 		LocalDateTime startTime = LocalDateTime.parse(start);
 		LocalDateTime endTime = LocalDateTime.parse(end);
 
@@ -500,29 +523,97 @@ public class WebController {
 
 	@GetMapping("/schedule-finder1")
 	public String displayTimes(@RequestParam String start, @RequestParam String end,
-			@RequestParam List<String> employees, Model model) {
+			@RequestParam String employees, Model model) {
 
+		//call all events to be able to search for conflicts
 		Event[] events = eventService.getAllEvents();
-		List<String> availableTimes = new ArrayList<>();
-		LocalDate searchStart = LocalDate.parse(start);
-		LocalDate searchEnd = LocalDate.parse(end);
+		
+		//parse employees to search as an arraylist
+		List<String> parsedEmployeeList = new ArrayList<>(Arrays.asList(employees.split(", ")));
+		
+		//instantiate initial messages, to be filled below upon conflict
+		StringBuilder conflictMessage = new StringBuilder();
+		String conflictMessageString = "";
 
+		
+		//turning the start and end time Strings into LDT format
+		LocalDateTime searchStart = LocalDateTime.parse(start);
+		LocalDateTime searchEnd = LocalDateTime.parse(end);
+		
+		//search each event for conflict
 		for (Event e : events) {
-			String eventStart = "";
-			String eventEnd = "";
-			if (e.getStart().length() > 9) {
-				eventStart = e.getStart().substring(0, 10);
-				eventEnd = e.getEnd().substring(0, 10);
-			}
+			//get start/end of event time (String) and convert to LDT
+			LocalDateTime eventStart = LocalDateTime.parse(e.getStart());
+			LocalDateTime eventEnd = LocalDateTime.parse(e.getEnd());
+			
+			//get employee list from event
+			List<String> employeeList = e.getEmployees();
+			
+			//calculate duration of event
+			Long d = ChronoUnit.MINUTES.between(eventStart, eventEnd);
+			Long duration = (long) ((d.doubleValue()) / 60);
+			
+			//set suggested start and end times to 5 min before/after each event
+			LocalDateTime suggestStart1 = eventStart.plusHours(-duration);
+			LocalDateTime suggestEnd1 = eventStart.plusMinutes(-5);
+			LocalDateTime suggestStart2 = eventEnd.plusMinutes(5);
+			LocalDateTime suggestEnd2 = eventEnd.plusHours(duration);
+			
+			//check if start/end times conflict with event times on calendar
+			//these are all different time search conditions
+			if ((searchStart.isAfter(eventStart) && (searchEnd.isBefore(eventEnd))) || 
+					(searchStart.isEqual(eventStart) && searchEnd.isEqual(eventEnd)) ||
+					searchStart.isEqual(eventStart) || searchStart.isEqual(eventEnd) ||
+					searchEnd.isEqual(eventStart) || searchEnd.isEqual(eventEnd) ||
+					(searchEnd.isAfter(eventStart) && searchEnd.isBefore(eventEnd)) ||
+					(searchStart.isBefore(eventStart) && searchEnd.isAfter(eventEnd)) ||
+					(searchStart.isAfter(eventStart) && searchStart.isBefore(eventEnd)) ||
+					(searchStart.isEqual(eventEnd) && searchEnd.isAfter(eventEnd))) {
+				
+				for (int i = 0; i < parsedEmployeeList.size(); i++) {
+				
+					for (String name : employeeList) {
+						
+						//if there is a conflict, check to see if there is an employee who matches the conflict
+						if (parsedEmployeeList.get(i).equalsIgnoreCase(name)) {
+							conflictMessage.append("This time conflicts with " + parsedEmployeeList.get(i) + "'s event named " + e.getEventName() + " on " + eventStart.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")) + "<br>");
+							conflictMessage.append("1. Suggested Start Time: " + suggestStart1.format(DateTimeFormatter.ofPattern("hh:mm a")) + " Suggested End Time: " + suggestEnd1.format(DateTimeFormatter.ofPattern("hh:mm a")) + "<br>");
+							conflictMessage.append("2. Suggested Start Time: " + suggestStart2.format(DateTimeFormatter.ofPattern("hh:mm a"))+ " Suggested End Time: " + suggestEnd2.format(DateTimeFormatter.ofPattern("hh:mm a")) + "<br><br>");
+							conflictMessageString = conflictMessage.toString();
 
-			if (searchStart.equals(LocalDate.parse(eventStart)) || (searchEnd.equals(LocalDate.parse(eventEnd)))) {
-				// suggest times
-				availableTimes.add("This time conflicts with " + e.getEventName() + " on " + eventStart);
-			}
-		}
+						}
+						
+					}
+				}
+			} 
 
-		model.addAttribute("availableTimes", availableTimes);
+	}
+		//return data to the view
+		model.addAttribute("conflictMessage", conflictMessage);
+		model.addAttribute("conflictMessageString", conflictMessageString);
+		model.addAttribute("searchEnd",searchEnd);
+		model.addAttribute("searchStart", searchStart);
+		model.addAttribute("employees", employees);
+		
 
 		return "/schedule-finder";
+	}
+	
+	@PostMapping("/postEvent/{id}")
+	public String saveEvent(Model model, @PathVariable("id") String id,
+											@RequestParam(required=false) String start,
+											@RequestParam(required=false) String end,
+											@RequestParam(required=false) String eventName,
+											@RequestParam(required=false) Double duration,
+											@RequestParam(required=false) List<String> employees) {
+		Event event = eventService.getEventById(id);
+		
+		event.setStart(start);
+		event.setEnd(end);
+		event.setEventName(eventName);
+		event.setDuration(duration);
+		event.setEmployees(employees);
+		eventService.updateEvent(id, event);
+		return "redirect:/";
 	}
 }

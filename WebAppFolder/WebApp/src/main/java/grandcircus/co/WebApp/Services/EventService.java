@@ -49,5 +49,10 @@ public class EventService {
 		Event[] response = restTemplate.getForObject(url, Event[].class);
 		return response;
 	}
+	
+	public void updateEvent(String id, Event event) {
+		String url = "http://localhost:8080/event" + "/{id}";
+		restTemplate.put(url, event, id);
+	}
 
 }

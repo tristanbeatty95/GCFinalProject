@@ -1,5 +1,7 @@
 package grandcircus.co.WebApp.Models;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class Event {
@@ -9,6 +11,7 @@ public class Event {
 	private String eventName;
 	private Double duration;
 	private List<String> employees;
+	private String employeesString;
 
 	public String getId() {
 		return id;
@@ -20,12 +23,14 @@ public class Event {
 
 	// Getter for time, without the date portion
 	public String getStartTime() {
-		return this.getStart().substring(11);
+		LocalDateTime startString = LocalDateTime.parse(start);
+		return startString.format(DateTimeFormatter.ofPattern("hh:mm a"));
 	}
 
 	// Getter for time, without the date portion
 	public String getEndTime() {
-		return this.getEnd().substring(11);
+		LocalDateTime endString = LocalDateTime.parse(end);
+		return endString.format(DateTimeFormatter.ofPattern("hh:mm a"));
 	}
 
 	public String getStart() {
@@ -66,6 +71,17 @@ public class Event {
 
 	public void setEmployees(List<String> employees) {
 		this.employees = employees;
+	}
+	
+	
+
+	public String getEmployeesString() {
+		employeesString = employees.toString().substring(1, employees.toString().length()-1);
+		return employeesString;
+	}
+
+	public void setEmployeesString(String employeesString) {
+		this.employeesString = employeesString;
 	}
 
 	public Event(String start, String end, String eventName, List<String> employees, Double duration) {
