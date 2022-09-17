@@ -537,4 +537,22 @@ public class WebController {
 
 		return "/schedule-finder";
 	}
+	
+	@PostMapping("/postEvent/{id}")
+	public String saveEvent(Model model, @PathVariable("id") String id,
+											@RequestParam(required=false) String start,
+											@RequestParam(required=false) String end,
+											@RequestParam(required=false) String eventName,
+											@RequestParam(required=false) Double duration,
+											@RequestParam(required=false) List<String> employees) {
+		Event event = eventService.getEventById(id);
+		
+		event.setStart(start);
+		event.setEnd(end);
+		event.setEventName(eventName);
+		event.setDuration(duration);
+		event.setEmployees(employees);
+		eventService.updateEvent(id, event);
+		return "redirect:/";
+	}
 }

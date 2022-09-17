@@ -11,6 +11,7 @@ public class Event {
 	private String eventName;
 	private Double duration;
 	private List<String> employees;
+	private String employeesString;
 
 	public String getId() {
 		return id;
@@ -70,6 +71,17 @@ public class Event {
 
 	public void setEmployees(List<String> employees) {
 		this.employees = employees;
+	}
+	
+	
+
+	public String getEmployeesString() {
+		employeesString = employees.toString().substring(1, employees.toString().length()-1);
+		return employeesString;
+	}
+
+	public void setEmployeesString(String employeesString) {
+		this.employeesString = employeesString;
 	}
 
 	public Event(String start, String end, String eventName, List<String> employees, Double duration) {

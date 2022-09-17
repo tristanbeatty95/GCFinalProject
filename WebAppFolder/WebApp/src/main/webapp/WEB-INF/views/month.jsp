@@ -189,12 +189,36 @@
 				<c:forEach var="event" items="${dayEvents}">
 					<li>${event.eventName} <a href="/delete/${event.id}"> <i
 							class="fa fa-trash" aria-hidden="true"></i></a>
+							 <a href="#divOne1"> <i
+							class="fa fa-pencil" aria-hidden="true"></i></a>
 						<ul>
 						<li>(${event.startTime}-${event.endTime})</li>
-						<li>Attendees: ${event.employees}</li>
+						<li>Attendees: ${event.employeesString}</li>
 						</ul>
 				
 					</li>
+					
+					
+							<div class="overlay" id="divOne1">
+		<div class="wrapper">
+
+			<a href="#" class="close">&times;</a>
+			<div class="content">
+				<div class="container">
+	
+<form class="form" action="/postEvent/${event.id }" method="post">
+<input type="hidden" value="${event.id}" name="id">
+Event Name: <input type="text" value="${event.eventName}" name="eventName" required /><br>
+Start Time: <input type="datetime-local" value="${event.start}" name="start" required /><br>
+End Time: <input type="datetime-local" value="${event.end}" name="end" required /><br>
+Employees: <input type="text" value="${event.employeesString}" name="employees" required />
+<input type="submit" class="btn-success" value="Update">
+
+</form>
+</div>
+			</div>
+		</div>
+	</div>
 				</c:forEach>
 			</ul>
 			<br><br>
