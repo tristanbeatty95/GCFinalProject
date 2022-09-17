@@ -27,7 +27,7 @@
 				<label for="password">Password</label> <input type="password"
 					id="password" placeholder="Enter Password" name="password">
 			</div>
-			<a href="/login/create">Create an Account</a>
+			<a href="/login/create" style="color:black">Create an Account</a>
 			<p>${error}</p>
 			<div class="form-element">
 				<button>Sign in</button>

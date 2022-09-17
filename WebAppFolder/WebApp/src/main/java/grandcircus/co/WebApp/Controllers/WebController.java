@@ -1,5 +1,7 @@
 package grandcircus.co.WebApp.Controllers;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -9,8 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,7 +54,7 @@ public class WebController {
 	
 	@PostMapping("/new-login-submit")
 	public String newAccountCreation(@RequestParam String email, @RequestParam String name,
-										@RequestParam String password, @RequestParam String retypePassword) {
+										@RequestParam String password, @RequestParam String retypePassword) throws NoSuchAlgorithmException {
 		//validation
 		if(accountService.getAccountByEmail(email) != null) {
 			return "redirect:/login/create?error=account already exists with this email";
@@ -62,36 +62,48 @@ public class WebController {
 		else if(!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
 			return "redirect:/login/create?error=email address is invalid";
 		}
-		else if(!password.equals(retypePassword) || !password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")) {
-			return "redirect:/login/create?error=password is not valid or does not match";
+		else if(!password.equals(retypePassword)) {
+			// regex for password requirements:
+			//!password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")
+			return "redirect:/login/create?error=passwords do not match";
 		}
 		
-		Account newAccount = new Account(name, email, password);
+		// Hash password for comparison with database
+		MessageDigest md = MessageDigest.getInstance("SHA-512");
+		md.update(password.getBytes());
+		byte[] bytes = md.digest();
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < bytes.length; i++) {
+			sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+		}
+		String hashedPassword = sb.toString();
+
+		Account newAccount = new Account(name, email, hashedPassword);
 		accountService.addNewAccount(newAccount);
-		
+
 		return "redirect:/monthly-calendar";
 	}
 	
 	@PostMapping("/login-submit")
 	public String verifyLogin(@RequestParam String email, @RequestParam String password,
-								RedirectAttributes redirectAttributes) {
+								RedirectAttributes redirectAttributes) throws NoSuchAlgorithmException {
 		
 		Account account = accountService.getAccountByEmail(email);
-		PasswordEncoder passwordEncoder =
-			    PasswordEncoderFactories.createDelegatingPasswordEncoder();
-		String pword = passwordEncoder.encode(password);
-		System.out.println(pword);
 		
-		if(account == null || !account.getPassword().equals(password)) {
+		//Hash password for comparison with database
+		MessageDigest md = MessageDigest.getInstance("SHA-512");
+		md.update(password.getBytes());
+		byte[] bytes = md.digest();
+		StringBuilder sb = new StringBuilder();
+	    	for (int i = 0; i < bytes.length; i++) {
+	    		sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+	    }
+	    String hashedPassword = sb.toString();
+		
+		if(account == null || !account.getPassword().equals(hashedPassword)) {
 			return "redirect:/login?error=" + "Password incorrect or account doesn't exist";
 		}
 		
-		
-		//set this to the hashed password later
-		//String password = password;
-		
-//		redirectAttributes.addAttribute("email", email);
-//		redirectAttributes.addAttribute("password", password);
 		return "redirect:/monthly-calendar";
 	}
 	

@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="styles-login.css">
+<link rel="stylesheet" href="styles-register.css">
 <title>Welcome</title>
 </head>
 <body>
