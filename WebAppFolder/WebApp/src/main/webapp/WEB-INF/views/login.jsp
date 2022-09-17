@@ -21,13 +21,13 @@
 			<h2>Log in</h2>
 			<div class="form-element">
 				<label for="email">Email</label> <input type="text" id="email"
-					placeholder="Enter email" name="email">
+					placeholder="Enter email" required name="email">
 			</div>
 			<div class="form-element">
 				<label for="password">Password</label> <input type="password"
-					id="password" placeholder="Enter Password" name="password">
+					id="password" placeholder="Enter Password" required name="password">
 			</div>
-			<a href="/login/create" style="color:black">Create an Account</a>
+			<a href="/login-create" style="color:black">Create an Account</a>
 			<p>${error}</p>
 			<div class="form-element">
 				<button>Sign in</button>

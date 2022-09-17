@@ -47,7 +47,7 @@ public class WebController {
 		return "login";
 	}
 	
-	@RequestMapping("/login/create")
+	@RequestMapping("/login-create")
 	public String createAccount(@RequestParam(required=false) String error, Model model) {
 		model.addAttribute("error", error);
 		return "login-create";
@@ -58,15 +58,15 @@ public class WebController {
 										@RequestParam String password, @RequestParam String retypePassword) throws NoSuchAlgorithmException {
 		//validation
 		if(accountService.getAccountByEmail(email) != null) {
-			return "redirect:/login/create?error=account already exists with this email";
+			return "redirect:/login-create?error=account already exists with this email";
 		}
 		else if(!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-			return "redirect:/login/create?error=email address is invalid";
+			return "redirect:/login-create?error=email address is invalid";
 		}
 		else if(!password.equals(retypePassword)) {
 			// regex for password requirements:
 			//!password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")
-			return "redirect:/login/create?error=passwords do not match";
+			return "redirect:/login-create?error=passwords do not match";
 		}
 		
 		// Hash password for comparison with database

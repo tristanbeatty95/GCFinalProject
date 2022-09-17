@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="styles-register.css">
+<link rel="stylesheet" href="styles-login.css">
 <title>Welcome</title>
 </head>
 <body>
@@ -21,7 +21,7 @@
 			<h2>Create Account</h2>
 			<div class="form-element">
 				<label for="email">Email</label> <input type="text" id="email"
-					placeholder="Enter email" name="email">
+					placeholder="Enter email" required name="email">
 			</div>
 			<div class="form-element">
 				<label for="Name">Name</label> <input type="text" id="name"
@@ -29,13 +29,13 @@
 			</div>
 			<div class="form-element">
 				<label for="password">Password</label> <input type="password"
-					id="password" placeholder="Enter Password" name="password">
+					id="password" placeholder="Enter Password" required name="password">
 			</div>
 			<div class="form-element">
 				<label for="retypePassword">Re-Type Password</label> <input type="password"
-					id="retypePassword" placeholder="Enter Password Again" name="retypePassword">
+					id="retypePassword" placeholder="Enter Password Again" required name="retypePassword">
 			</div>
-			<a href="/login">I already have an account</a>
+			<a href="/login" style="color:black">I already have an account</a>
 			<p>${error}</p>
 			<div class="form-element">
 				<button>Create Account</button>
