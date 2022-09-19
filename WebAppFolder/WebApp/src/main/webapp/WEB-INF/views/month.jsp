@@ -197,7 +197,9 @@
 						</ul>
 				
 					</li>
-					
+					<br>
+					<br>
+					<div class ="center"><a href="${dayEventUrl }" target="_blank" rel="noopener noreferrer">${dayEventName} <i class="far fa-caret-square-right"></i></a></div>
 					
 							<div class="overlay" id="divOne1">
 		<div class="wrapper">
@@ -222,12 +224,12 @@ Employees: <input type="text" value="${event.employeesString}" name="employees" 
 				</c:forEach>
 			</ul>
 			<br><br>
-			<div class ="center"><a href="${dayEventUrl }" target="_blank" rel="noopener noreferrer">${dayEventName} <i class="far fa-caret-square-right"></i></a></div>
+			
 		</div>
 	</div>
 	<div class="center">
 		Powered by <a title="Days Of The Year"
-			href="https://www.daysoftheyear.com">Days Of The Year</a>
+			href="https://www.daysoftheyear.com" target="_blank" rel="noopener noreferrer">Days Of The Year</a>
 	</div>
 	<br><br>
 
