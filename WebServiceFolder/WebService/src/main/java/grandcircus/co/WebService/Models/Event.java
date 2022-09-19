@@ -80,7 +80,7 @@ public class Event {
 		this.employees = employees;
 		this.duration = duration;
 	}
-
+//Don't use super class method use this one. When using event.tostring it will print whatever is in this method
 	@Override
 	public String toString() {
 		return "Event [start=" + start + ", end=" + end + ", eventName=" + eventName + ", duration=" + duration

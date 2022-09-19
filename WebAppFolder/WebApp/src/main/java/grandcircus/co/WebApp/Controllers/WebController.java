@@ -293,7 +293,7 @@ public class WebController {
 	@RequestMapping("/delete/{id}")
 	public String deleteEvent(@PathVariable("id") String id) {
 		eventService.deleteEvent(id);
-		return "redirect:/";
+		return "redirect:/monthly-calendar";
 	}
 
 	@PostMapping("/submitEvent")
@@ -309,7 +309,7 @@ public class WebController {
 		Event event = new Event(start, end, eventName, employees, duration);
 		eventService.addNewEvent(event);
 
-		return "redirect:/";
+		return "redirect:/monthly-calendar";
 	}
 
 	@RequestMapping("/find-time")
@@ -614,6 +614,6 @@ public class WebController {
 		event.setDuration(duration);
 		event.setEmployees(employees);
 		eventService.updateEvent(id, event);
-		return "redirect:/";
+		return "redirect:/monthly-calendar";
 	}
 }
