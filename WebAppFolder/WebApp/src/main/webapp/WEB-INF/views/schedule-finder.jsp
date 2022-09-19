@@ -32,7 +32,7 @@
 			</li>
 		</ul>
 		<ul class="nav-links3">
-			<li style="background-color: #D15656" class="nav-item"
+			<li style="background-color: #d2e7ff" class="nav-item"
 				id="logoutButton"><a href="/logout">Logout</a></li>
 		</ul>
 	</nav>

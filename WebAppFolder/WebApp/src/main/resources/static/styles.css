@@ -133,7 +133,8 @@ h1{
 	width: 20%;
 	border-radius: 25px;
 	border-color: black;
-	border-width: 2px; 
+	border-width: 2px;
+	text-align: center; 
 }
 
 #day-info-header{
