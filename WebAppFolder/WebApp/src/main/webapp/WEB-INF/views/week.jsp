@@ -163,7 +163,7 @@ Employees: <input type="text" value="${event.employeesString}" name="employees" 
 	</div>
 	<div class="center">
 		Powered by <a title="Days Of The Year"
-			href="https://www.daysoftheyear.com">Days Of The Year</a>
+			href="https://www.daysoftheyear.com" target="_blank" rel="noopener noreferrer">Days Of The Year</a>
 	</div>
 
 
