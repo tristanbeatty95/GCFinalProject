@@ -197,9 +197,7 @@
 						</ul>
 				
 					</li>
-					<br>
-					<br>
-					<div class ="center"><a href="${dayEventUrl }" target="_blank" rel="noopener noreferrer">${dayEventName} <i class="far fa-caret-square-right"></i></a></div>
+					
 					
 							<div class="overlay" id="divOne1">
 		<div class="wrapper">
@@ -223,6 +221,8 @@ Employees: <input type="text" value="${event.employeesString}" name="employees" 
 	</div>
 				</c:forEach>
 			</ul>
+			
+					<div class ="center"><a href="${dayEventUrl }" target="_blank" rel="noopener noreferrer">${dayEventName} <i class="far fa-caret-square-right"></i></a></div>
 			<br><br>
 			
 		</div>
