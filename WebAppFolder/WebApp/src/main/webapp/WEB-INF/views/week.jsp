@@ -29,7 +29,7 @@
 		</ul>
 		<ul class="nav-links2">
 			<li class="nav-item" id="companyNameText">
-				<p>Weekly Calendar</p>
+				<p>TimelyEvents Weekly</p>
 			</li>
 		</ul>
 		<ul class="nav-links3">
@@ -95,7 +95,7 @@
 
 				<!-- Week -->
 
-				<tr>
+				<tr style="background-color: #fff6e9">
 					<c:forEach var="date" items="${dates}" begin="0" end="6"
 						varStatus="loop">
 

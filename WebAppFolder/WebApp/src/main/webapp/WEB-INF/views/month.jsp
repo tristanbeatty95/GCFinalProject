@@ -29,7 +29,7 @@
 		</ul>
 		<ul class="nav-links2">
 			<li class="nav-item" id="companyNameText">
-				<p>Monthly Calendar</p>
+				<p>TimelyEvents Monthly</p>
 			</li>
 		</ul>
 		<ul class="nav-links3">
