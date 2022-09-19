@@ -66,7 +66,7 @@
 	<div class="calendar-and-daily-info">
 		<div>
 			<div class="month-navigation">
-				<a id="prevButton" href="/monthly-calendar?date=${prevMonthDate}"><i
+				<a id="prevButton" href="/monthly-calendar?date=${prevMonthDate}&dayDate=${curDayDate}"><i
 					class="fa-solid fa-arrow-left"></i></a>
 
 				<p id="month-header-text">
@@ -74,7 +74,7 @@
 					<c:out value="${curMonthDate.year}" />
 				</p>
 
-				<a id="nextButton" href="/monthly-calendar?date=${nextMonthDate}"><i
+				<a id="nextButton" href="/monthly-calendar?date=${nextMonthDate}&dayDate=${curDayDate}"><i
 					class="fa-solid fa-arrow-right"></i></a>
 			</div>
 
