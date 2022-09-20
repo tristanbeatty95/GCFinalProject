@@ -30,7 +30,7 @@ import grandcircus.co.WebApp.Services.EventService;
 
 @Controller
 public class WebController {
-
+	
 	@Autowired
 	private EventService eventService;
 

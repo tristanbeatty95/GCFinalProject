@@ -25,6 +25,11 @@ public class EventController {
 	@Autowired
 	private EventRepo event_repo;
 	
+	@GetMapping("")
+	public String root() {
+		return "ok";
+	}
+	
 	@GetMapping("/event/{start}/{end}")
 	public HashMap<String, ArrayList<Event>> getEventsBetween(@PathVariable("start") String start, @PathVariable("end") String end){
 		List<Event> events = event_repo.findAll();

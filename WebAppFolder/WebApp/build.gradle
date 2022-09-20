@@ -7,7 +7,7 @@ plugins {
 
 group = 'grandcircus.co'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
@@ -16,10 +16,14 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+//	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	providedRuntime 'javax.servlet:jstl'
-	providedRuntime 'org.apache.tomcat.embed:tomcat-embed-jasper'
+	
+	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+	implementation 'org.springframework.boot:spring-boot-starter-tomcat'
+	
+	implementation 'javax.servlet:jstl'
+//	providedRuntime 'org.apache.tomcat.embed:tomcat-embed-jasper'
 }
 
 tasks.named('test') {

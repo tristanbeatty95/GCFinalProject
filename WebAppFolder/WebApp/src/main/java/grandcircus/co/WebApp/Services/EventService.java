@@ -3,6 +3,7 @@ package grandcircus.co.WebApp.Services;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
@@ -14,17 +15,21 @@ import grandcircus.co.WebApp.Models.Event;
 //We can add methods to the service as we require them when working in the controller
 @Service
 public class EventService {
+	
+	@Value("${api.baseUrl}")
+	private String baseUrl;
+	
 	private RestTemplate restTemplate = new RestTemplate();
 
 	public Event getEventById(String id) {
 		// !!URL will change when project is hosted on AWS!!
-		String url = "http://localhost:8080/event/" + id;
+		String url = baseUrl + "/event/" + id;
 		Event thatEvent = restTemplate.getForObject(url, Event.class, id);
 		return thatEvent;
 	}
 	
 	public HashMap<String, ArrayList<Event>> getEventsByTimeRange(String start, String end){
-		String url = "http://localhost:8080/event/" + start + "/" + end;
+		String url = baseUrl + "/event/" + start + "/" + end;
 		
 		ParameterizedTypeReference<HashMap<String, ArrayList<Event>>> responseType = 
 				new ParameterizedTypeReference<HashMap<String, ArrayList<Event>>>(){};
@@ -36,22 +41,23 @@ public class EventService {
 	}
 
 	public Event addNewEvent(Event event) {
-		return restTemplate.postForObject("http://localhost:8080/event", event, Event.class);	
+		String url = baseUrl + "/event";
+		return restTemplate.postForObject(url, event, Event.class);	
 	}
 	
 	public void deleteEvent(String id) {
-		String url = "http://localhost:8080/event/" + id;
+		String url = baseUrl + "/event/" + id;
 		restTemplate.delete(url);
 	}
 	
 	public Event[] getAllEvents() {
-		String url = "http://localhost:8080/event/";
+		String url = baseUrl + "/event";
 		Event[] response = restTemplate.getForObject(url, Event[].class);
 		return response;
 	}
 	
 	public void updateEvent(String id, Event event) {
-		String url = "http://localhost:8080/event" + "/{id}";
+		String url = baseUrl + "/event" + "/{id}";
 		restTemplate.put(url, event, id);
 	}
 
